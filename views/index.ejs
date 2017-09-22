@@ -1,0 +1,81 @@
+<% include header %>
+    <!-- Barra di Navigazione -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <!-- Ancora alla Home Page  -->
+      <a class="navbar-brand" href="#">Home</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" 
+	          aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Scegli Percorso <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Aggiungi Percorso</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Ultimi Post</a>
+          </li>
+		  <!-- Qui si definisce il drop-down
+		       Come da specifice:
+			   dropdown è la classe che indica che si ha un dropdown
+		 -->	   
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Seleziona una Lingua</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" href="#">Italiano</a>
+              <a class="dropdown-item" href="#">Inglese</a>
+            </div>
+          </li>
+		  <!-- Qui si definisce il drop-down
+          <li class="dropdown">
+             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Seleziona una lingua
+             <span class="caret"></span></button>
+             <ul class="dropdown-menu">
+               <li><a href="#">Italiano</a></li>
+               <li><a href="#">Inglese</a></li>
+             </ul>		  
+          </li>
+		  -->
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Cerca</button>
+        </form>
+      </div>
+    </nav>
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="my-jumbotron">
+      <div class="container">
+        <h1 class="display-2">My Trekking</h1>
+        <p class="my-white">per chi ama passeggiare all'aria aperta e condividere le proprie emozioni </p>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+      </div>
+    </div>
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-4">
+          <h2>Heading</h2>
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+          <h2>Heading</h2>
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+          <h2>Heading</h2>
+          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+          <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+        </div>
+      </div>
+      <hr>
+      <footer>
+        <p>Università Studi di Milano - Progetto per Esame Programmazione Web e Mobile - 2017</p>
+      </footer>
+    </div> 
+  <% include footer %>
