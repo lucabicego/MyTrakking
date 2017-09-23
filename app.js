@@ -11,7 +11,10 @@ var entries = [];
 app.locals.entries = entries;
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/css', express.static(path.join(process.cwd() + '/public/css'))); // redirect CSS bootstrap
+app.use('/images', express.static(path.join(process.cwd() + '/public/images'))); // redirect images
+app.use('/js', express.static(path.join(process.cwd() + '/public/js'))); // redirect js
+//app.use(express.static(path.join(__dirname, 'public')));
 app.get("/", function(request, response) 
    {
       response.render("index");
