@@ -22,7 +22,6 @@ app.set("views", path.resolve(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
-//app.use('/css', express.static(path.join(process.cwd() + '/public/css'))); // redirect CSS bootstrap
 app.use('/images', express.static(path.join(process.cwd() + '/public/images'))); // redirect images
 app.use('/js', express.static(path.join(process.cwd() + '/node_modules/bootstrap/dist/js'))); // redirect bootstrap JS
 app.use('/js', express.static(path.join(process.cwd() + '/node_modules/jquery/dist'))); // redirect JS jQuery
