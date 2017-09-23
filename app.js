@@ -15,8 +15,8 @@ var path = require("path");
 var express = require("express");
 var logger = require("morgan");
 var bodyParser = require("body-parser");
-var port =  process.env.OPENSHIFT_NODEJS_PORT || 3000;   // Port 3000 if you run locally 
-var address =  process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1"; // Listening to localhost if you run locally 
+var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000;
+var address = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 var app = express();
 app.set("views", path.resolve(__dirname, "views"));
 app.set("view engine", "ejs");
