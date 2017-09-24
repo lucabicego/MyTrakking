@@ -7,7 +7,7 @@
     "name": "Luca BICEGO",
     "email": "luca639.bicego@gmail.com"
   },
-  "main":"--armony app.js",
+  "main":"--harmony app.js",
   "scripts": {
     "start": "node app"
   },
