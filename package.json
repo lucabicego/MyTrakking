@@ -2,7 +2,7 @@
   "name": "MyTrakking",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app"
   },
   "dependencies": {
     "body-parser": "^1.18.1",
