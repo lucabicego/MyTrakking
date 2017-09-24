@@ -1,6 +1,13 @@
 {
   "name": "MyTrakking",
   "private": true,
+  "version": "0.0.1",
+  "description": "MyTrakking Portal -For who loves to live in contact with the nature ",  
+  "author": {
+    "name": "Luca BICEGO",
+    "email": "luca639.bicego@gmail.com"
+  },
+  "main":"app.js",
   "scripts": {
     "start": "node app"
   },
