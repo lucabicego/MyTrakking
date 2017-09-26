@@ -15,6 +15,12 @@ var path = require("path");
 var express = require("express");
 var logger = require("morgan");
 var bodyParser = require("body-parser");
+//Libreria utilizzata per le traduzioni
+var i18n=require('i18n');
+i18n.configure({
+  locales: ['it','en'],
+  directory: __dirname + '/public/locales'
+});
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000;
 var address = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 var app = express();

@@ -2,20 +2,20 @@
   "name": "MyTrakking",
   "private": true,
   "version": "0.0.1",
-  "description": "MyTrakking Portal -For who loves to live in contact with the nature ",  
+  "description": "MyTrakking Portal -For who loves to live in contact with the nature ",
   "author": {
     "name": "Luca BICEGO",
     "email": "luca639.bicego@gmail.com"
   },
-  "main":"app.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app"
   },
-  "engines": {"node": ">= 0.12.0"},
   "dependencies": {
-    "body-parser": "^1.18.1",
-    "ejs": "^2.5.7",
-    "express": "^4.15.4",
-    "morgan": "^1.8.2"
+    "body-parser": "",
+    "ejs": "",
+    "express": "",
+    "i18n": "",
+    "morgan": ""
   }
 }
