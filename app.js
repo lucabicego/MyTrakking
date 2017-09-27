@@ -16,11 +16,7 @@ var express = require("express");
 var logger = require("morgan");
 var bodyParser = require("body-parser");
 //Libreria utilizzata per le traduzioni
-var i18n=require('i18n');
-i18n.configure({
-  locales: ['it','en'],
-  directory: __dirname + '/public/locales'
-});
+var i18n=require('i18n-express');
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000;
 var address = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 var app = express();
@@ -33,12 +29,18 @@ app.use('/js', express.static(path.join(process.cwd() + '/node_modules/bootstrap
 app.use('/js', express.static(path.join(process.cwd() + '/node_modules/jquery/dist'))); // redirect JS jQuery
 app.use('/js', express.static(path.join(process.cwd() + '/node_modules/popper/dist'))); // redirect JS popper
 app.use('/css', express.static(path.join(process.cwd() + '/node_modules/bootstrap/dist/css'))); // redirect CSS bootstrap
+app.use(i18n({
+  translationsPath: path.join(__dirname, '/public/locales'), // <--- use here. Specify translations files path.
+  siteLangs: ["it","en"],
+  textsVarName: 'translation'
+}));
 app.get("/", function(request, response){
       response.render("index");
    });
 app.use(function(request, response){
 	  response.status(404).render("404");
   });
+module.exports=app;  
 var listener = app.listen(port, address, function(){
      console.log("MyTrakking app started on address "+address);
      console.log("MyTrakking app started on port "+port);

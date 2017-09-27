@@ -15,7 +15,7 @@
     "body-parser": "",
     "ejs": "",
     "express": "",
-    "i18n": "",
+    "i18n-express": "",
     "morgan": ""
   }
 }

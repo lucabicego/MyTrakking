@@ -10,23 +10,23 @@
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Scegli Percorso <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="#"><%=translation.SCEGLI_PERCORSO%><span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Aggiungi Percorso</a>
+            <a class="nav-link" href="#"><%=translation.AGGIUNGI_PERCORSO%></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled" href="#">Ultimi Post</a>
+            <a class="nav-link disabled" href="#"><%=translation.LAST_POST%></a>
           </li>
 		  <!-- Qui si definisce il drop-down
 		       Come da specifice:
 			   dropdown è la classe che indica che si ha un dropdown
 		 -->	   
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="dropdown01" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Seleziona una Lingua</a>
+            <a class="nav-link dropdown-toggle" id="dropdown01" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%=translation.SELEZIONE_LINGUA%></a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <a class="dropdown-item" href="#">Italiano</a>
-              <a class="dropdown-item" href="#">Inglese</a>
+              <a class="dropdown-item" href="/?clang=it"><%=translation.ITALIANO%></a>
+              <a class="dropdown-item" href="/?clang=en"><%=translation.INGLESE%></a>
             </div>
           </li>
         </ul>
