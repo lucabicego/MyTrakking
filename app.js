@@ -37,6 +37,9 @@ app.use(i18n({
 app.get("/", function(request, response){
       response.render("index");
    });
+app.get("/info", function(request, response){
+      response.render("info");
+   });
 app.use(function(request, response){
 	  response.status(404).render("404");
   });
