@@ -22,29 +22,33 @@
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#"><%=translation.SCEGLI_PERCORSO%><span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="#"><%=translation.__("SCEGLI_PERCORSO")%><span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><%=translation.AGGIUNGI_PERCORSO%></a>
+            <a class="nav-link" href="#"><%=translation.__("AGGIUNGI_PERCORSO")%></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled" href="#"><%=translation.LAST_POST%></a>
+            <a class="nav-link disabled" href="#"><%=translation.__("LAST_POST")%></a>
           </li>
-		  <!-- Qui si definisce il drop-down
-		       Come da specifice:
-			   dropdown è la classe che indica che si ha un dropdown
+		  <!-- 
+		     Qui è definito un drop-down
+			 per la scelta della lingua
 		 -->	   
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="dropdown01" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%=translation.SELEZIONE_LINGUA%></a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <a class="dropdown-item" href="/?clang=it"><%=translation.ITALIANO%></a>
-              <a class="dropdown-item" href="/?clang=en"><%=translation.INGLESE%></a>
+			  <!---
+              <a class="dropdown-item" href="/?clang=it"><%=translation.__("ITALIANO")%></a>
+              <a class="dropdown-item" href="/?clang=en"><%=translation.__("INGLESE")%></a>
+			  -->
+              <a class="dropdown-item" href="/it"><%=translation.__("ITALIANO")%></a>
+              <a class="dropdown-item" href="/en"><%=translation.__("INGLESE")%></a>
             </div>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><%=translation.CERCA%></button>
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label=<%=translation.__("CERCA")%>>
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><%=translation.__("CERCA")%></button>
         </form>
       </div>
     </nav>

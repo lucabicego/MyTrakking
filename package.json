@@ -12,10 +12,14 @@
     "start": "node app"
   },
   "dependencies": {
+    "bcrypt-nodejs": "",
     "body-parser": "",
+    "connect-flash": "",
+    "cookie-parser": "",
     "ejs": "",
+    "express-session": "",
     "express": "",
-    "i18n-express": "",
+    "i18n": "",
     "morgan": ""
   }
 }
