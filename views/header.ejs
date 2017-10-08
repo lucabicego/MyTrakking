@@ -10,7 +10,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/jumbotron.css" rel="stylesheet">
   </head>
-  <body>
+  <body >
     <!-- Barra di Navigazione -->
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <!-- Ancora alla Home Page  -->
@@ -19,10 +19,13 @@
 	          aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+	  <!--
+	     Qui è definito il menù principale
+	  -->
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#"><%=translation.__("SCEGLI_PERCORSO")%><span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/elencoPercorsi"><%=translation.__("SCEGLI_PERCORSO")%><span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#"><%=translation.__("AGGIUNGI_PERCORSO")%></a>
@@ -37,10 +40,6 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="dropdown01" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%=translation.__("SELEZIONE_LINGUA")%></a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
-			  <!---
-              <a class="dropdown-item" href="/?clang=it"><%=translation.__("ITALIANO")%></a>
-              <a class="dropdown-item" href="/?clang=en"><%=translation.__("INGLESE")%></a>
-			  -->
               <a class="dropdown-item" href="/it"><%=translation.__("ITALIANO")%></a>
               <a class="dropdown-item" href="/en"><%=translation.__("INGLESE")%></a>
             </div>

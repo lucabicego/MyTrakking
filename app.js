@@ -17,9 +17,9 @@ var logger = require("morgan");
 var bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
 var session = require("express-session");
-var flash = require("connect-flash");
 //Libreria utilizzata per le traduzioni
 var translation= require("i18n");
+var flash = require("connect-flash");
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000;
 var address = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 var app = express();
@@ -75,6 +75,12 @@ app.get("/info", function(request, response){
 	  response.setLocale(request.cookies.translation);
       response.render("info",{translation:response});
    });
+//Pagina Elenco Percorsi   
+app.get("/elencoPercorsi", function(request, response){
+	  response.setLocale(request.cookies.translation);
+      response.render("elencoPercorsi",{translation:response});
+   });
+
 //Pagina cambio Lingua Italiana
 app.get("/it", function(request, response){
 	  response.cookie('translation','it');
