@@ -1,0 +1,51 @@
+<% include header %>
+<%
+  function getCimiteroMap()
+  {
+    //Mostra una mappa google dove è situato il cimitero di caltrano
+	var latlon='45.7711,11.4513';
+	var img_tmp='http://maps.googleapis.com/maps/api/staticmap?center=';
+	img_tmp=img_tmp+latlon;
+	//Putroppo il carattere & viene convertito in &amp; per cui non va messo qui
+	return img_tmp;
+  }
+  showCimiteroMap=getCimiteroMap();
+%>  
+    <!-- Intestazione -->
+    <div class="my-jumbotron-malgasunio">
+      <div class="container">
+        <h1 class="display-2 my-white">My Trekking</h1>
+        <p class="my-white"><%=translation.__("INCIPIT")%></p>
+      </div>
+    </div>
+	<!-- Vari campi che descrivono il percorso -->
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2><%=translation.__("671-673-681-677")%></h2>
+        </div>
+		<!-- Qui descrivo come arrivarci e pongo un riferimento alla mappa -->
+		<div class="row">
+           <div class="col-md-8">
+              <h3><%=translation.__("COMEARRIVARCI")%></h3>
+		      <%=translation.__("COMEARRIVARCI-1")%>
+           </div>
+           <div class="col-md-4">
+			  <img src='http://maps.googleapis.com/maps/api/staticmap?center=45.7711,11.4513&zoom=14&size=400x500&sensor=false' class="img-thumbnail" alt="Come arrivare al Cimitero" > 
+           </div>
+	    </div>
+        <div class="row">
+           <div class="col-md-8">
+              <h2><%=translation.__("DESCRIZIONEPERCORSO")%></h2>
+		      <%=translation.__("CALTRANOSUNIOCOSTOLA")%>
+		      <%=translation.__("CALTRANOSUNIOCOSTOLA1")%>
+		      <%=translation.__("CALTRANOSUNIOCOSTOLA2")%>
+		      <%=translation.__("CALTRANOSUNIOCOSTOLA3")%>
+           </div>
+           <div class="col-md-4">
+			  <img src='/images/BocchettaPau.jpg' class="img-thumbnail" alt="Bocchetta Pau'" > 
+           </div>
+        </div>
+      </div>
+    </div> 
+  <% include footer %>
