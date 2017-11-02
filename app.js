@@ -85,7 +85,6 @@ app.get("/CaltranoSunioCostola", function(request, response){
 	  response.setLocale(request.cookies.translation);
       response.render("CaltranoSunioCostola",{translation:response});
    });
-
 //Pagina cambio Lingua Italiana
 app.get("/it", function(request, response){
 	  response.cookie('translation','it');
