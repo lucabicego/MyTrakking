@@ -24,8 +24,16 @@
 	  -->
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="/elencoPercorsi"><%=translation.__("SCEGLI_PERCORSO")%><span class="sr-only">(current)</span></a>
+          <li class="nav-item active dropdown">
+		    <!--
+			   Qui e' definita un drop-down
+			   per la scelta del percorso
+            -->			
+            <a class="nav-link dropdown-toggle" id="dropdown01" href="/" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%=translation.__("SCEGLI_PERCORSO")%></a>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" href="/CaltranoSunioCostola">Caltrano - Capitello Costola - Malga Sunio</a>
+              <a class="dropdown-item" href="/NovegnoPriafora">Contrà Rossi - Monte Novegno - Monte Priaforà</a>
+            </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#"><%=translation.__("AGGIUNGI_PERCORSO")%></a>
@@ -38,7 +46,7 @@
 			 per la scelta della lingua
 		 -->	   
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="dropdown01" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%=translation.__("SELEZIONE_LINGUA")%></a>
+            <a class="nav-link dropdown-toggle" id="dropdown01" href="/" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%=translation.__("SELEZIONE_LINGUA")%></a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
               <a class="dropdown-item" href="/it"><%=translation.__("ITALIANO")%></a>
               <a class="dropdown-item" href="/en"><%=translation.__("INGLESE")%></a>

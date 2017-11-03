@@ -85,6 +85,10 @@ app.get("/CaltranoSunioCostola", function(request, response){
 	  response.setLocale(request.cookies.translation);
       response.render("CaltranoSunioCostola",{translation:response});
    });
+app.get("/NovegnoPriafora", function(request, response){
+	  response.setLocale(request.cookies.translation);
+      response.render("NovegnoPriafora",{translation:response});
+   });
 //Pagina cambio Lingua Italiana
 app.get("/it", function(request, response){
 	  response.cookie('translation','it');

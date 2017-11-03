@@ -1,6 +1,6 @@
 <% include header %>
     <!-- Intestazione -->
-    <div class="my-jumbotron-malgasunio">
+    <div class="my-jumbotron-novegnopriafora">
       <div class="container">
         <h1 class="display-2 my-white">My Trekking</h1>
         <p class="my-white"><%=translation.__("INCIPIT")%></p>
@@ -10,7 +10,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h2><%=translation.__("671-673-681-677")%></h2>
+          <h2><%=translation.__("433-455-435")%></h2>
 		  <br/>
         </div>
 		<!-- Qui descrivo come arrivarci e pongo un riferimento alla mappa -->
@@ -20,9 +20,9 @@
 		</div>
 		<div class="row">
            <div class="col-md-4">
-		      <%=translation.__("COMEARRIVARCI-1")%>
+		      <%=translation.__("COMEARRIVARCI-2")%>
            </div>
-           <div class="col-md-8 my-second" id="ComeArrivareCimitero" >
+           <div class="col-md-8 my-second" id="ComeArrivareCerbaro" >
            </div>
 		   <div class="col-md-12 text-right">
 		     <br/>
@@ -105,9 +105,9 @@
 	      //alert("Prova2");
 	      try{
 		     //Coordinate del punto
-		     var uluru = {lat: 45.7755, lng: 11.45};
+		     var uluru = {lat: 45.7531, lng: 11.3235};
              var myOptions = {center: new google.maps.LatLng(uluru),zoom: 12,mapTypeId: google.maps.MapTypeId.ROADMAP};
-             var map = new google.maps.Map(document.getElementById("ComeArrivareCimitero"),myOptions);
+             var map = new google.maps.Map(document.getElementById("ComeArrivareCerbaro"),myOptions);
              var marker = new google.maps.Marker({position: uluru,map: map});
 			 
 	         //alert("Prova3");
