@@ -99,18 +99,14 @@
       </div>
     </div> 
 	<script type="text/javascript">
-	   //alert("Prova1");
        var loadMap = function() 
        {
-	      //alert("Prova2");
 	      try{
 		     //Coordinate del punto
 		     var uluru = {lat: 45.7531, lng: 11.3235};
              var myOptions = {center: new google.maps.LatLng(uluru),zoom: 12,mapTypeId: google.maps.MapTypeId.ROADMAP};
              var map = new google.maps.Map(document.getElementById("ComeArrivareCerbaro"),myOptions);
              var marker = new google.maps.Marker({position: uluru,map: map});
-			 
-	         //alert("Prova3");
 		  }
 		  catch(err)
 		  {
@@ -119,5 +115,5 @@
        };
        window.onload= loadMap;	
 	</script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1QXRond8kCPr7sKf_9BQc5bcnA2hgUyQ&callback=initMap" async defer</script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1QXRond8kCPr7sKf_9BQc5bcnA2hgUyQ&callback=initMap" async defer></script>
   <% include footer %>

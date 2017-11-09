@@ -20,6 +20,8 @@ var session = require("express-session");
 //Libreria utilizzata per le traduzioni
 var translation= require("i18n");
 var flash = require("connect-flash");
+//Per le interrogazioni al db
+var MapPolylines = require('./public/mymodules/mymongodb.js');
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000;
 var address = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 var app = express();
@@ -31,6 +33,7 @@ app.use('/images', express.static(path.join(process.cwd() + '/public/images')));
 app.use('/js', express.static(path.join(process.cwd() + '/node_modules/bootstrap/dist/js'))); // redirect bootstrap JS
 app.use('/js', express.static(path.join(process.cwd() + '/node_modules/jquery/dist'))); // redirect JS jQuery
 app.use('/js', express.static(path.join(process.cwd() + '/node_modules/popper/dist'))); // redirect JS popper
+app.use('/js', express.static(path.join(process.cwd() + '/public/mymodules'))); // Definizione di moduli JS personali
 app.use('/css', express.static(path.join(process.cwd() + '/node_modules/bootstrap/dist/css'))); // redirect CSS bootstrap
 //Inizializzazione libreria traduzioni
 translation.configure({
@@ -82,6 +85,22 @@ app.get("/elencoPercorsi", function(request, response){
    });
 //Pagina dettagli Percorso
 app.get("/CaltranoSunioCostola", function(request, response){
+	  var urlMongo = process.env.MONGOLAB_URI; 
+	  console.log("urlMongo :"+urlMongo);
+	  /*
+      MapPolilynes.findOne({title":"PartenzaCimitero","maptitle":"CaltranoSunioCostola" }, function(err, user) 
+	  {
+          if (err) 
+		  { 
+	         response.status(404).render("404");
+		  }
+		  else
+	      {
+	         response.setLocale(request.cookies.translation);
+             response.render("CaltranoSunioCostola",{translation:response,MapPolilynes:MapPolilynes});
+		  }		  
+      });
+	  */
 	  response.setLocale(request.cookies.translation);
       response.render("CaltranoSunioCostola",{translation:response});
    });

@@ -96,28 +96,16 @@
 			  </figure>
            </div>
         </div>
+           <div class="col-md-12 text-center">
+		         <h3><%=translation.__("CALTRANOSUNIOCOSTOLA11")%></h3>
+           </div>
+           <div class="col-md-12 my-second" id="TracciatoCaltranoSunio">
+           </div>
       </div>
     </div> 
-	<script type="text/javascript">
-	   //alert("Prova1");
-       var loadMap = function() 
-       {
-	      //alert("Prova2");
-	      try{
-		     //Coordinate del punto
-		     var uluru = {lat: 45.7755, lng: 11.45};
-             var myOptions = {center: new google.maps.LatLng(uluru),zoom: 12,mapTypeId: google.maps.MapTypeId.ROADMAP};
-             var map = new google.maps.Map(document.getElementById("ComeArrivareCimitero"),myOptions);
-             var marker = new google.maps.Marker({position: uluru,map: map});
-			 
-	         //alert("Prova3");
-		  }
-		  catch(err)
-		  {
-		     alert(err);
-		  }
-       };
+    <script src="js/myroutine.js"></script>
+    <script type="text/javascript">
        window.onload= loadMap;	
 	</script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1QXRond8kCPr7sKf_9BQc5bcnA2hgUyQ&callback=initMap" async defer</script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1QXRond8kCPr7sKf_9BQc5bcnA2hgUyQ&callback=initMap" async defer></script>
   <% include footer %>
