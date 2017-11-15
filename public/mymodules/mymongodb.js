@@ -12,10 +12,19 @@
  *
  ****************************************************************************/
 var mongoose = require('mongoose');
-var url = process.env.MONGOLAB_URI; 
+//Estrapola l'url di connessione al db MONGO
+var urlMongoDb = process.env.MONGOLAB_URI;
+console.log("urlMongoDB : "+urlMongoDb); 
+//Esegue la connessione al db MONGO
+mongoose.connect(urlMongoDb,function(err, db) 
+{
+   if (err) throw err;
+   console.log("Database opened!");
+});  
 var Schema = mongoose.Schema;
 //Definisce uno schema per leggerele polyline
 var polylineSchema = new Schema({
+  _id: String,	
   title: String,
   maptitle: String,
   position: {
@@ -24,6 +33,28 @@ var polylineSchema = new Schema({
   },
   created: Date,
   updated: Date
-});
-var MapPolylines = mongoose.model('mytrakking', polylineSchema);
-module.exports = MapPolylines;
+},{ collection : 'mytrakking' });
+var MapPolylines = mongoose.model('mytrakking', polylineSchema); 
+//Questa funzione è utilizzata per effettuare l'interrogazione dei dati   
+var QueryData=function(dataReq,res)
+{
+   MapPolylines.findOne({'title': dataReq.mapValue.title,'maptitle':dataReq.mapValue.maptitle}, {_id: 0 }).exec(function(err, MapData) 
+   {
+      if(err) 
+	  { 
+           console.log("MapPoly :error");
+	  }
+	  else
+	  {
+	      //Invia le coordinate del punto di Partenza	
+	      var data = {'mapValue':{'lat': MapData.position.latitude,'lng':MapData.position.longitude}};
+	      data.id=dataReq.id;
+	      data.showMarker=dataReq.showMarker;
+          res.header('Content-type','application/json');
+	      res.header('Charset','utf8');
+	      res.send(JSON.stringify(data));
+	  }		  
+   });
+	
+}
+module.exports = QueryData;

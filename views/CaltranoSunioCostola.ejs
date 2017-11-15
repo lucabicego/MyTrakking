@@ -105,6 +105,23 @@
     </div> 
     <script src="js/myroutine.js"></script>
     <script type="text/javascript">
+       var loadMap = function() 
+       {
+	      try{
+		     //Carica la mappa del punto di partenza
+		     var data={'mapValue':{'title':'PartenzaCimitero','maptitle':'CaltranoSunioCostola'},'id':'ComeArrivareCimitero','showMarker':'SI'};
+		     //Fa una chiamata ajax per richiedere le coordinate
+		     ajaxCall(data);
+			 //Carica la mappa del tracciato
+		     data={'mapValue':{'title':'PartenzaCimitero','maptitle':'CaltranoSunioCostola'},'id':'TracciatoCaltranoSunio','showMarker':'NO'};
+		     //Fa una chiamata ajax per richiedere le coordinate
+		     ajaxCall(data);
+	      }
+	      catch(err)
+	      {
+	         alert(err);
+	      }
+       };
        window.onload= loadMap;	
 	</script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1QXRond8kCPr7sKf_9BQc5bcnA2hgUyQ&callback=initMap" async defer></script>

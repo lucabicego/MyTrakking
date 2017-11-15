@@ -98,20 +98,20 @@
         </div>
       </div>
     </div> 
-	<script type="text/javascript">
+    <script src="js/myroutine.js"></script>
+    <script type="text/javascript">
        var loadMap = function() 
        {
 	      try{
-		     //Coordinate del punto
-		     var uluru = {lat: 45.7531, lng: 11.3235};
-             var myOptions = {center: new google.maps.LatLng(uluru),zoom: 12,mapTypeId: google.maps.MapTypeId.ROADMAP};
-             var map = new google.maps.Map(document.getElementById("ComeArrivareCerbaro"),myOptions);
-             var marker = new google.maps.Marker({position: uluru,map: map});
-		  }
-		  catch(err)
-		  {
-		     alert(err);
-		  }
+		     //Definisci il punto di Vista
+		     var data={'mapValue':{'title':'PartenzaCerbaro', 'maptitle':'NovegnoPriafora'},'id':'ComeArrivareCerbaro','showMarker':'SI'};
+		     //Fa una chiamata ajax per richiedere le coordinate
+		     ajaxCall(data);
+	      }
+	      catch(err)
+	      {
+	         alert(err);
+	      }
        };
        window.onload= loadMap;	
 	</script>

@@ -21,14 +21,15 @@ var session = require("express-session");
 var translation= require("i18n");
 var flash = require("connect-flash");
 //Per le interrogazioni al db
-var MapPolylines = require('./public/mymodules/mymongodb.js');
+var QueryData=require('./public/mymodules/mymongodb.js');
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000;
 var address = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 var app = express();
 app.set("views", path.resolve(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(logger("dev"));
-app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json())
 app.use('/images', express.static(path.join(process.cwd() + '/public/images'))); // redirect images
 app.use('/js', express.static(path.join(process.cwd() + '/node_modules/bootstrap/dist/js'))); // redirect bootstrap JS
 app.use('/js', express.static(path.join(process.cwd() + '/node_modules/jquery/dist'))); // redirect JS jQuery
@@ -85,22 +86,6 @@ app.get("/elencoPercorsi", function(request, response){
    });
 //Pagina dettagli Percorso
 app.get("/CaltranoSunioCostola", function(request, response){
-	  var urlMongo = process.env.MONGOLAB_URI; 
-	  console.log("urlMongo :"+urlMongo);
-	  /*
-      MapPolilynes.findOne({title":"PartenzaCimitero","maptitle":"CaltranoSunioCostola" }, function(err, user) 
-	  {
-          if (err) 
-		  { 
-	         response.status(404).render("404");
-		  }
-		  else
-	      {
-	         response.setLocale(request.cookies.translation);
-             response.render("CaltranoSunioCostola",{translation:response,MapPolilynes:MapPolilynes});
-		  }		  
-      });
-	  */
 	  response.setLocale(request.cookies.translation);
       response.render("CaltranoSunioCostola",{translation:response});
    });
@@ -118,9 +103,15 @@ app.get("/en", function(request, response){
 	  response.cookie('translation','en');
       response.redirect('/');
    });
+//Riceve una richiesta per le coordinate
+app.post('/getGeoPoints', function(req, res){
+	var dataReq=req.body;
+	QueryData(dataReq , res);
+}); 
 //Pagina messaggio di Errore   
 app.use(function(request, response){
-	  response.status(404).render("404");
+	  response.setLocale(request.cookies.translation);
+	  response.status(404).render("404",{translation:response});
   });
 module.exports=app;  
 var listener = app.listen(port, address, function(){

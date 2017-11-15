@@ -11,24 +11,46 @@
  * authorisation of the copyright holder
  *
  ****************************************************************************/
-var loadMap = function() 
+
+//*******************************************************************************************************************
+function ajaxCall(data)
+{
+   var xhttp = new XMLHttpRequest();
+   xhttp.onreadystatechange = function() 
+   {
+      if (this.readyState == 4 && this.status == 200) 
+	  {
+         var uluru = JSON.parse(this.responseText);		 
+		 showMap(uluru);  
+       }
+   };
+   xhttp.open("POST", "/getGeoPoints");
+   xhttp.setRequestHeader("Content-Type", "application/json");   
+   xhttp.send(JSON.stringify(data));   
+}
+//*******************************************************************************************************************
+/*
+   Visualizza la mappa indicando in uluru le coordinate della mappa da visualizzare
+*/
+function showMap(uluru)
 {
 	try{
-		//Carica lamappa che mostra il punto dove partire
+		//Fa una chiamata ajax per richiedere le coordinate
+		//Carica la mappa che mostra il punto dove partire
 		//Coordinate del punto
-		//alert(urlMongo);
-		var uluru = {lat: 45.7755, lng: 11.45};
-        var myOptions = {center: new google.maps.LatLng(uluru),zoom: 12,mapTypeId: google.maps.MapTypeId.ROADMAP};
-        var map = new google.maps.Map(document.getElementById("ComeArrivareCimitero"),myOptions);
+        var myOptions = {center: new google.maps.LatLng(uluru.mapValue),zoom: 12,mapTypeId: google.maps.MapTypeId.ROADMAP};
+        var map = new google.maps.Map(document.getElementById(uluru.id),myOptions);
 		//Inserisce un marcker
-        var marker = new google.maps.Marker({position: uluru,map: map});
-		//Carica la mappa del Tracciato Caltrano Sunio
-		uluru = {lat: 45.8005, lng: 11.4494};
-        myOptions = {center: new google.maps.LatLng(uluru),zoom: 14,mapTypeId: google.maps.MapTypeId.ROADMAP};
-        map = new google.maps.Map(document.getElementById("TracciatoCaltranoSunio"),myOptions);
+		if(uluru.showMarker == 'SI')
+	    {
+           var marker = new google.maps.Marker({position: uluru.mapValue,map: map});
+		}		
 	}
 	catch(err)
 	{
 	     alert(err);
 	}
-};
+}
+
+
+
