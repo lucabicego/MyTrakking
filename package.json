@@ -20,6 +20,7 @@
     "express-session": "",
     "express": "",
     "i18n": "",
+    "mongoose": "",
     "morgan": ""
   }
 }
