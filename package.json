@@ -14,13 +14,16 @@
   "dependencies": {
     "bcrypt-nodejs": "",
     "body-parser": "",
+    "bootstrap":"",
     "connect-flash": "",
     "cookie-parser": "",
     "ejs": "",
     "express-session": "",
     "express": "",
     "i18n": "",
+	"jquery":"",
     "mongoose": "",
-    "morgan": ""
+    "morgan": "",
+	"popper":""
   }
 }
