@@ -74,11 +74,12 @@ var QueryArrayData=function(dataReq,res)
 	      data.showMarker=dataReq.showMarker;
 		  //Crea un array
 		  data.Waypoints=new Array();
+		  console.log("Ricevuti "+MapData.length+" documenti per i WayPoints");
 		  //Vengono aggiunti i Waypoints letti dal db all'array.
 		  for(i=0;i<MapData.length;i++)
 		  {
 		      data.Waypoints.push({'lat':MapData[i].position.latitude,'lng':MapData[i].position.longitude});
-			  console.log("data.Waypoints["+i+"]{"+data.Waypoints[i].lat+","+data.Waypoints[i].lng+"}");
+			  //console.log("data.Waypoints["+i+"]{"+data.Waypoints[i].lat+","+data.Waypoints[i].lng+"}");
 		  }
           res.header('Content-type','application/json');
 	      res.header('Charset','utf8');
