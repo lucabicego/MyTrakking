@@ -42,7 +42,7 @@ var QueryData=function(dataReq,res)
    {
       if(err) 
 	  { 
-           console.log("MapPoly :error");
+           console.log("MapPoly.findOne :error");
 	  }
 	  else
 	  {
@@ -57,4 +57,38 @@ var QueryData=function(dataReq,res)
    });
 	
 }
-module.exports = QueryData;
+//Estrapola un array di documenti che contengono i Waypoints da visualizzare nella mappa
+var QueryArrayData=function(dataReq,res)
+{
+   MapPolylines.find({'title': dataReq.mapValue.title,'maptitle':dataReq.mapValue.maptitle}, {_id: 0 }).exec(function(err, MapData)
+   {
+      if(err) 
+	  { 
+           console.log("MapPoly.find :error");
+	  }
+	  else
+	  {
+		  var i=0;
+	      //Invia le coordinate del punto di Partenza	
+	      var data = {'mapValue':{'lat': MapData[0].position.latitude,'lng':MapData[0].position.longitude},'id':dataReq.id};
+	      data.showMarker=dataReq.showMarker;
+		  //Crea un array
+		  data.Waypoints=new Array();
+		  //Vengono aggiunti i Waypoints letti dal db all'array.
+		  for(i=0;i<MapData.length;i++)
+		  {
+		      data.Waypoints.push({'lat':MapData[i].position.latitude,'lng':MapData[i].position.longitude});
+			  console.log("data.Waypoints["+i+"]{"+data.Waypoints[i].lat+","+data.Waypoints[i].lng+"}");
+		  }
+          res.header('Content-type','application/json');
+	      res.header('Charset','utf8');
+	      res.send(JSON.stringify(data));
+	  }		  
+   });
+}
+//Funzioni che vengono esportata ai restanti moduli
+module.exports = 
+{
+QueryData,
+QueryArrayData
+};

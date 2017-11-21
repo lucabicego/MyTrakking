@@ -21,7 +21,7 @@ var session = require("express-session");
 var translation= require("i18n");
 var flash = require("connect-flash");
 //Per le interrogazioni al db
-var QueryData=require('./public/mymodules/mymongodb.js');
+var MyMongo=require('./public/mymodules/mymongodb.js');
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000;
 var address = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 var app = express();
@@ -106,8 +106,13 @@ app.get("/en", function(request, response){
 //Riceve una richiesta per le coordinate
 app.post('/getGeoPoints', function(req, res){
 	var dataReq=req.body;
-	QueryData(dataReq , res);
+	MyMongo.QueryData(dataReq , res);
 }); 
+app.post('/getGeoTrace', function(req, res){
+	var dataReq=req.body;
+	MyMongo.QueryArrayData(dataReq , res);
+}); 
+
 //Pagina messaggio di Errore   
 app.use(function(request, response){
 	  response.setLocale(request.cookies.translation);
