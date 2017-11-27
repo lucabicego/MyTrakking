@@ -96,6 +96,11 @@
 			  </figure>
            </div>
         </div>
+        <div class="col-md-12 text-center">
+		         <h3><%=translation.__("TRACCIATOPERCORSO")%></h3>
+        </div>
+        <div class="col-md-12 my-second" id="TracciatoNovegnoPriafora">
+        </div>
       </div>
     </div> 
     <script src="js/myroutine.js"></script>
@@ -105,6 +110,10 @@
 	      try{
 		     //Definisci il punto di Vista
 		     var data={'mapValue':{'title':'PartenzaCerbaro', 'maptitle':'NovegnoPriafora'},'id':'ComeArrivareCerbaro','showMarker':'SI','AJaxCallBack':'/getGeoPoints'};
+		     //Fa una chiamata ajax per richiedere le coordinate
+		     ajaxCall(data);
+			 //Carica la mappa del tracciato
+		     data={'mapValue':{'title':'435480455433PLT','maptitle':'NovegnoPriafora'},'id':'TracciatoNovegnoPriafora','showMarker':'NO','AJaxCallBack':'/getGeoTrace'};
 		     //Fa una chiamata ajax per richiedere le coordinate
 		     ajaxCall(data);
 	      }
