@@ -24,6 +24,8 @@
 	"jquery":"",
     "mongoose": "",
     "morgan": "",
+	"passport":"",
+	"passport-local":"",
 	"popper":""
   }
 }
