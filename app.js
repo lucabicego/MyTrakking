@@ -20,16 +20,20 @@ var session = require("express-session");
 //Libreria utilizzata per le traduzioni
 var translation= require("i18n");
 var flash = require("connect-flash");
+//Libreria per effettuare l'autenticazione
+var passport = require("passport");
 //Per le interrogazioni al db
 var MyMongo=require('./public/mymodules/mymongodb.js');
+var setUpPassport = require("./public/mymodules/setuppassport.js");
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000;
 var address = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 var app = express();
 app.set("views", path.resolve(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(logger("dev"));
-//app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json())
+//Queste due direttive servono per effettuare il parsing json
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use('/images', express.static(path.join(process.cwd() + '/public/images'))); // redirect images
 app.use('/js', express.static(path.join(process.cwd() + '/node_modules/bootstrap/dist/js'))); // redirect bootstrap JS
 app.use('/js', express.static(path.join(process.cwd() + '/node_modules/jquery/dist'))); // redirect JS jQuery
@@ -49,8 +53,9 @@ translation.configure({
 });
 //Imposta l'utilizzo dei cookies
 app.use(cookieParser("i18n_demo"));
+//Qui si imposta la sessione e i valori da passare
 app.use(session({
-   secret: "i18n_demo",
+   secret: "TKRv0IJs=HYqrvagQ#&!F!%V]Ww/4KiVs$s,<<MX",
    resave: true,
    saveUninitialized: true,
    cookie:{maxAge: 60000}
@@ -58,6 +63,16 @@ app.use(session({
 app.use(translation.init);
 //Imposta l'utilizzo di flash
 app.use(flash());
+//Inizializza passport per l'autenticazione
+setUpPassport();
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(function(request, response, next) {
+   response.locals.currentUser = request.user;
+   response.locals.errors = request.flash("error");
+   response.locals.infos = request.flash("info");
+   next();
+});
 //Pagina principale
 app.get("/", function(request, response){
 	  if(request.cookies.translation == undefined)
@@ -71,9 +86,49 @@ app.get("/", function(request, response){
       {
          console.log("Cookies :"+request.cookies.translation);		  
 	     response.setLocale(request.cookies.translation);
-	  }	
+	  }
       response.render("index",{translation:response});
    });
+//Pagina per il LogIn
+app.get("/signup", function(request, response) {
+   response.setLocale(request.cookies.translation);
+   response.render("signup",{translation:response});
+});
+//Questo viene eseguito dopo il login
+//Verifica se l'utente è già presente in archivio, nel qual caso fa comparire un errore
+//Salva in archivio il nuovo utente
+//Effettua l'autenticazione dell'utente
+app.post("/signup", function(request, response, next) 
+   {
+      var username = request.body.username;
+      var password = request.body.password;
+	  //Verifica che non ci sia già l'utente, altrimenti lo salva
+      MyMongo.User.findOne({ username: username }, 
+      function(err, user) 
+	  {
+         if (err) 
+	     { 
+            return next(err); 
+	     }
+	     //Ritorna dall'interrogazione un utente 
+         if (user) 
+	     {
+            request.flash("error", "User already exists");
+            return response.redirect("/signup");
+         }
+	     //Salva il nuovo utente
+         var newUser = new MyMongo.User({username: username,password: password});
+         newUser.save(next);
+      });
+   }, 
+   passport.authenticate("login", {successRedirect: "/",failureRedirect: "/signup",failureFlash: true})
+   );
+//Eseguito dopo il login   
+app.post("/login", passport.authenticate("login", {successRedirect: "/",failureRedirect: "/login",failureFlash: true}));  
+app.get("/logout", function(request, response){
+	request.logout();
+    response.redirect("/");
+}); 
 //Pagina Info   
 app.get("/info", function(request, response){
 	  response.setLocale(request.cookies.translation);
@@ -112,7 +167,6 @@ app.post('/getGeoTrace', function(req, res){
 	var dataReq=req.body;
 	MyMongo.QueryArrayData(dataReq , res);
 }); 
-
 //Pagina messaggio di Errore   
 app.use(function(request, response){
 	  response.setLocale(request.cookies.translation);

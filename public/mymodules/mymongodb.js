@@ -11,6 +11,9 @@
  * authorisation of the copyright holder
  *
  ****************************************************************************/
+var bcrypt = require("bcrypt-nodejs");
+//Questa è una variabile utilizzzata per generare il SALT della funzione di HASH
+var SALT_FACTOR = 10; 
 var mongoose = require('mongoose');
 //Estrapola l'url di connessione al db MONGO
 var urlMongoDb = process.env.MONGOLAB_URI;
@@ -22,6 +25,8 @@ mongoose.connect(urlMongoDb,function(err, db)
    console.log("Database opened!");
 });  
 var Schema = mongoose.Schema;
+
+//***************************************************************************************************************
 //Definisce uno schema per leggerele polyline
 var polylineSchema = new Schema({
   _id: String,	
@@ -34,7 +39,58 @@ var polylineSchema = new Schema({
   created: Date,
   updated: Date
 },{ collection : 'mytrakking' });
-var MapPolylines = mongoose.model('mytrakking', polylineSchema); 
+//***************************************************************************************************************
+var MapPolylines = mongoose.model('mytrakking', polylineSchema);
+//***************************************************************************************************************
+//Definizione di uno Schema per l'utente
+var userSchema = mongoose.Schema(
+   {
+      username: { type: String, required: true, unique: true },
+      password: { type: String, required: true },
+      createdAt: { type: Date, default: Date.now },
+      displayName: String,
+      bio: String
+    });
+//***************************************************************************************************************
+//Qui aggiungiamo metodi per lo schema utente
+userSchema.methods.name = function() {
+   return this.displayName || this.username;
+};
+//Questa è una funzione dummy 
+var noop = function() {};
+//Questa funzione effettua il salvataggio dell'hash della password
+userSchema.pre("save", function(done) {
+   var user = this;
+   if (!user.isModified("password")) 
+   {
+      return done();
+   }
+   bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
+     if (err) 
+	 { 
+        return done(err); 
+	 }
+     bcrypt.hash(user.password, salt, noop,function(err, hashedPassword) 
+	 {
+        if (err) 
+		{ 
+	       return done(err); 
+		}
+		//Salva la password conil suo valore di hash
+        user.password = hashedPassword;
+        done();
+     });
+   });
+});
+//Vede se la password inserita dall'utente corrisponde a quella presente nel db
+userSchema.methods.checkPassword = function(guess, done) {
+   bcrypt.compare(guess, this.password, function(err, isMatch) {
+      done(err, isMatch);
+   });
+};	
+//Associamo lo schema User al db mytrakking
+var User = mongoose.model("User", userSchema);
+//***************************************************************************************************************
 //Questa funzione è utilizzata per effettuare l'interrogazione dei dati   
 var QueryData=function(dataReq,res)
 {
@@ -57,6 +113,7 @@ var QueryData=function(dataReq,res)
    });
 	
 }
+//***************************************************************************************************************
 //Estrapola un array di documenti che contengono i Waypoints da visualizzare nella mappa
 var QueryArrayData=function(dataReq,res)
 {
@@ -91,5 +148,6 @@ var QueryArrayData=function(dataReq,res)
 module.exports = 
 {
 QueryData,
-QueryArrayData
+QueryArrayData,
+User
 };

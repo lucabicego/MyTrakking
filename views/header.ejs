@@ -53,12 +53,29 @@
             <a class="nav-link disabled" href="#"><%=translation.__("LAST_POST")%></a>
           </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="text" placeholder=<%=translation.__("USER")%> aria-label=<%=translation.__("USER")%>>
-          <input class="form-control mr-sm-2" type="text" placeholder=<%=translation.__("PASSWORD")%> aria-label=<%=translation.__("PASSWORD")%>>
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><%=translation.__("ACCEDI")%></button>
-          <button class="btn btn-outline-info my-2 mx-2 my-sm-1" type="submit"><%=translation.__("ISCRIVITI")%></button>
-        </form>
+		<!-- Vede si c'è un utente profilato -->
+		<% if (currentUser) { %>
+		   <!-- Gestione del LogOut -->
+           <form class="form-inline my-2 my-lg-0" action="/logout" method="get">
+		      <a class="navbar-brand" href="/"><%=translation.__("BENVENUTO")%> <%= currentUser.name() %> </a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" 
+	             aria-expanded="false" aria-label="Toggle navigation">
+                 <span class="navbar-toggler-icon"></span>
+              </button>
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><%=translation.__("ESCI")%></button>
+           </form>
+		   -->
+ 	    <% } else { %>
+		   <!-- Gestione del LogIn -->
+           <form class="form-inline my-2 my-lg-0" action="/login" method="post">
+              <input class="form-control mr-sm-2" type="text" name="username" placeholder=<%=translation.__("USER")%> aria-label=<%=translation.__("USER")%>>
+              <input class="form-control mr-sm-2" type="password" name="password" placeholder=<%=translation.__("PASSWORD")%> aria-label=<%=translation.__("PASSWORD")%>>
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><%=translation.__("ACCEDI")%></button>
+           </form>
+           <form class="form-inline my-2 my-lg-0" action="/signup">
+              <button class="btn btn-outline-info my-2 mx-2 my-sm-1" type="submit"><%=translation.__("ISCRIVITI")%></button>
+           </form>
+		<% } %>
       </div>
     </nav>
   
