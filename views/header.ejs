@@ -14,7 +14,11 @@
     <!-- Barra di Navigazione -->
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <!-- Ancora alla Home Page  -->
-      <a class="navbar-brand" href="/">Home</a>
+	  <% if (currentUser) { %>
+	     <a class="navbar-brand" href="/"><%=translation.__("BENVENUTO")%> <%= currentUser.name() %> </a>
+ 	  <% } else { %>
+         <a class="navbar-brand" href="/">Home</a>
+ 	  <% }%>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" 
 	          aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -57,7 +61,6 @@
 		<% if (currentUser) { %>
 		   <!-- Gestione del LogOut -->
            <form class="form-inline my-2 my-lg-0" action="/logout" method="get">
-		      <a class="navbar-brand" href="/"><%=translation.__("BENVENUTO")%> <%= currentUser.name() %> </a>
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" 
 	             aria-expanded="false" aria-label="Toggle navigation">
               </button>
