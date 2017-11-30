@@ -1,15 +1,15 @@
 <% include header %>
    <div class="row">
       <div class="col-xs-7 col-sm-6 col-lg-6" >
-            <img src='/images/PonteTibetano.jpg' class="img-thumbnail" alt="PonteTibetano" vspace="20" hspace="20"> 
+            <img src='/images/PonteTibetano.jpg' class="img-thumbnail" alt="PonteTibetano" vspace="20" hspace="10"> 
       </div>
-      <div class="col-xs-5 col-sm-6 col-lg-6 ">
+      <div class="col-xs-5 col-sm-6 col-lg-6 col-md-offset-2">
 	        </br>
             <h1 class="display-2">My Trekking</h1>
 			</br>
-	        <p class="display-6"><%=translation.__("OPPSERRORE")%></P>
+	        <p class="h3"><%=translation.__("OPPSERRORE")%></P>
             <% if (errors.length > 0) { %>
-			  <p class="text-danger"><%=errors %></p>
+			  <p class="h4 text-danger"><%=errors %></p>
             <% } %>
       </div>
    </div>
