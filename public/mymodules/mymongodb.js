@@ -58,6 +58,7 @@ userSchema.methods.name = function() {
 };
 //Questa è una funzione dummy 
 var noop = function() {};
+//***************************************************************************************************************
 //Questa funzione effettua il salvataggio dell'hash della password
 userSchema.pre("save", function(done) {
    var user = this;
@@ -82,6 +83,7 @@ userSchema.pre("save", function(done) {
      });
    });
 });
+//***************************************************************************************************************
 //Vede se la password inserita dall'utente corrisponde a quella presente nel db
 userSchema.methods.checkPassword = function(guess, done) {
    bcrypt.compare(guess, this.password, function(err, isMatch) {

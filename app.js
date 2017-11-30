@@ -51,8 +51,9 @@ translation.configure({
    // define a custom cookie name to parse locale settings from 
    cookie: 'translation'
 });
+app.use(translation.init);
 //Imposta l'utilizzo dei cookies
-app.use(cookieParser("i18n_demo"));
+app.use(cookieParser());
 //Qui si imposta la sessione e i valori da passare
 app.use(session({
    secret: "TKRv0IJs=HYqrvagQ#&!F!%V]Ww/4KiVs$s,<<MX",
@@ -60,7 +61,6 @@ app.use(session({
    saveUninitialized: true,
    cookie:{maxAge: 60000}
 }));
-app.use(translation.init);
 //Imposta l'utilizzo di flash
 app.use(flash());
 //Inizializza passport per l'autenticazione

@@ -1,3 +1,16 @@
 <% include header %>
-<h2>404! Page not found.</h2>
+   <div class="row">
+      <div class="col-xs-7 col-sm-6 col-lg-6" >
+            <img src='/images/PonteTibetano.jpg' class="img-thumbnail" alt="PonteTibetano" vspace="20" hspace="20"> 
+      </div>
+      <div class="col-xs-5 col-sm-6 col-lg-6 ">
+	        </br>
+            <h1 class="display-2">My Trekking</h1>
+			</br>
+	        <p class="display-6"><%=translation.__("OPPSERRORE")%></P>
+            <% if (errors.length > 0) { %>
+			  <p class="text-danger"><%=errors %></p>
+            <% } %>
+      </div>
+   </div>
 <% include footer %>
