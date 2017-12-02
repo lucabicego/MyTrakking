@@ -47,7 +47,7 @@ translation.configure({
    //define the path to language json files, default is /locales
    directory: path.join(__dirname, '/public/locales'),
    //define the default language
-   defaultLocale: 'en',
+   defaultLocale: 'it',
    // define a custom cookie name to parse locale settings from 
    cookie: 'translation'
 });
@@ -77,17 +77,24 @@ app.use(function(request, response, next) {
 app.get("/", function(request, response){
 	  if(request.cookies.translation == undefined)
 	  {
-         console.log("Cookies not set");
          //Crea un Cookie con la lingua italiana		 
 	     response.cookie('translation','it');
 	     response.setLocale('it');
 	  }	 
       else
       {
-         console.log("Cookies :"+request.cookies.translation);		  
 	     response.setLocale(request.cookies.translation);
 	  }
-      response.render("index",{translation:response});
+	  if(request.user == undefined)
+	  {
+		 //Fai comparire la pagina iniziale di mytrakking 
+         response.render("index",{translation:response});
+	  }
+      else
+      {
+		 //Fai comparire la pagina che mostra la posizione ei percorsi vicini 
+         response.render("info",{translation:response});
+	  }		  
    });
 //Pagina per il LogIn
 app.get("/signup", function(request, response) {
@@ -113,7 +120,8 @@ app.post("/signup", function(request, response, next)
 	     //Ritorna dall'interrogazione un utente 
          if (user) 
 	     {
-            request.flash("error", "User already exists");
+			//Utente esiste gia'  
+            request.flash("error", translation.__("ERRORE-03"));
             return response.redirect("/signup");
          }
 	     //Salva il nuovo utente
@@ -124,7 +132,7 @@ app.post("/signup", function(request, response, next)
    passport.authenticate("login", {successRedirect: "/",failureRedirect: "/signup",failureFlash: true})
    );
 //Eseguito dopo il login   
-app.post("/login", passport.authenticate("login", {successRedirect: "/",failureRedirect: "/login",failureFlash: true}));  
+app.post("/login",passport.authenticate("login", {successRedirect: "/",failureRedirect: "/login",failureFlash: true}));  
 app.get("/logout", function(request, response){
 	request.logout();
     response.redirect("/");
@@ -150,11 +158,13 @@ app.get("/NovegnoPriafora", function(request, response){
    });
 //Pagina cambio Lingua Italiana
 app.get("/it", function(request, response){
+	  translation.setLocale('it');
 	  response.cookie('translation','it');
       response.redirect('/');
    });
 //Pagina cambio Lingua Inglese
 app.get("/en", function(request, response){
+	  translation.setLocale('en');
 	  response.cookie('translation','en');
       response.redirect('/');
    });
@@ -171,8 +181,7 @@ app.post('/getGeoTrace', function(req, res){
 app.use(function(request, response){
 	  response.setLocale(request.cookies.translation);
 	  response.status(404).render("404",{translation:response});
-  });
-module.exports=app;  
+});
 var listener = app.listen(port, address, function(){
      console.log("MyTrakking app started on address "+address);
      console.log("MyTrakking app started on port "+port);

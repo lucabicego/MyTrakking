@@ -12,6 +12,7 @@
  *
  ****************************************************************************/
 var passport = require("passport");
+var translation=require("i18n");
 var MyMongo=require('./mymongodb.js');
 var LocalStrategy = require("passport-local").Strategy;
 //**************************************************************************************
@@ -29,7 +30,8 @@ passport.use("login", new LocalStrategy(function(username, password, done)
 		 }
          if (!user) 
 		 {
-           return done(null, false,{ message: "No user has that username!" });
+		   //Non esiste un utente con questo username! 	 
+           return done(null, false,{ message: translation.__("ERRORE-01" )});
          }
 		 //Definita in mymondodb.js
          user.checkPassword(password, function(err, isMatch) 
@@ -44,7 +46,8 @@ passport.use("login", new LocalStrategy(function(username, password, done)
             } 
 			else 
 			{
-               return done(null, false,{ message: "Invalid password." });
+			   //Password non valida	
+               return done(null, false,{ message: translation.__("ERRORE-02") });
             }
          });
       });
@@ -56,12 +59,10 @@ module.exports = function()
 {
    passport.serializeUser(function(user, done) 
    {
-     console.log("passport.serializeUser()");
      done(null, user._id);
    });
    passport.deserializeUser(function(id, done) 
    {
-     console.log("passport.deserializeUser()");
       MyMongo.User.findById(id, function(err, user) 
 	  {
          done(err, user);
