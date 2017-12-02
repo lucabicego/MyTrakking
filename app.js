@@ -73,7 +73,7 @@ app.use(function(request, response, next) {
    response.locals.infos = request.flash("info");
    next();
 });
-//Pagina principale
+//Pagina principale 
 app.get("/", function(request, response){
 	  if(request.cookies.translation == undefined)
 	  {
@@ -87,13 +87,13 @@ app.get("/", function(request, response){
 	  }
 	  if(request.user == undefined)
 	  {
-		 //Fai comparire la pagina iniziale di mytrakking 
+		 //Fai comparire la pagina iniziale di mytrakking per utente non profilato
          response.render("index",{translation:response});
 	  }
       else
       {
 		 //Fai comparire la pagina che mostra la posizione ei percorsi vicini 
-         response.render("info",{translation:response});
+         response.render("main",{translation:response});
 	  }		  
    });
 //Pagina per il LogIn

@@ -12,6 +12,7 @@
  *
  ****************************************************************************/
 var passport = require("passport");
+//Per poter gestire le traduzioni
 var translation=require("i18n");
 var MyMongo=require('./mymongodb.js');
 var LocalStrategy = require("passport-local").Strategy;
@@ -30,7 +31,7 @@ passport.use("login", new LocalStrategy(function(username, password, done)
 		 }
          if (!user) 
 		 {
-		   //Non esiste un utente con questo username! 	 
+		   //ERRORE-01 = Non esiste un utente con questo username! 	 
            return done(null, false,{ message: translation.__("ERRORE-01" )});
          }
 		 //Definita in mymondodb.js
@@ -46,7 +47,7 @@ passport.use("login", new LocalStrategy(function(username, password, done)
             } 
 			else 
 			{
-			   //Password non valida	
+			   //ERRORE-02 = Password non valida	
                return done(null, false,{ message: translation.__("ERRORE-02") });
             }
          });

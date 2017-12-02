@@ -1,0 +1,40 @@
+<% include header %>
+    <!-- Pagina Main per utente profilato -->
+    <div class="my-jumbotron-main">
+      <div class="container">
+        <h1 class="display-2">My Trekking</h1>
+        <p class="my-red"><%=translation.__("INCIPIT")%></p>
+        <p><a class="btn btn-primary btn-lg" href="/info" role="button"><%=translation.__("MAGGIORI_DETTAGLI")%> &raquo;</a></p>
+      </div>
+    </div>
+    <div class="container">
+      <!-- Due colonne -->
+      <div class="row">
+        <div class="col-md-6">
+          <h2><%=translation.__("LAMIAPOSIZIONE")%></h2>
+          <p><%=translation.__("LATITUDINE")%><h3 id="mialatitudine"></h3></p>
+          <p><%=translation.__("LONGITUDINE")%><h3 id="mialongitudine"></h3></p>
+        </div>
+        <div class="col-md-6">
+          <h2><%=translation.__("PERCORSIVICINI")%></h2>
+          <p><%=translation.__("CONDIVIDI-1")%></p>
+          <p><a class="btn btn-secondary" href="#" role="button"><%=translation.__("MAGGIORI_DETTAGLI")%> &raquo;</a></p>
+        </div>
+      </div>
+    </div> 
+    <script src="js/myroutine.js"></script>
+    <script type="text/javascript">
+       var loadMap = function() 
+       {
+	      try{
+		     getLocation();
+	      }
+	      catch(err)
+	      {
+	         alert(err);
+	      }
+       };
+       window.onload= loadMap;	
+	</script>   
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1QXRond8kCPr7sKf_9BQc5bcnA2hgUyQ&callback=initMap" async defer></script>
+  <% include footer %>
