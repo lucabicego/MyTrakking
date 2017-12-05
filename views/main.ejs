@@ -54,7 +54,7 @@
 	         {
 			    //showPosition viene eseguita dopo che l'utente ha dato il consenso
 				//ad accedere alla prorpia posizione
-		        navigator.geolocation.getCurrentPosition(showPosition);
+		        navigator.geolocation.getCurrentPosition(showPosition,errorPosition,{enableHighAccuracy: false,timeout: 10000,maximumAge: 10000});
 	         }
 	         else
 	         {
@@ -108,6 +108,14 @@
 	      }
 	      return;
        }
+	   //*********************************************************************
+	   /*
+	      Mostra l'errore che si è verificato
+	   */
+       function errorPosition(err)
+       {
+	      alert("main::errorPosition: "+err);
+	   }
        window.onload= loadMap;	
 	</script>   
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1QXRond8kCPr7sKf_9BQc5bcnA2hgUyQ&callback=initMap" async defer></script>
