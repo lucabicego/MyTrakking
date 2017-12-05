@@ -57,7 +57,7 @@ function showMap(uluru)
 	}
 	catch(err)
 	{
-	     alert(err);
+	     alert("showMap: "+err);
 	}
 }
 
@@ -88,52 +88,10 @@ function showMapTrace(uluru)
 	}
 	catch(err)
 	{
-	     alert(err);
+	     alert("showMapTrace:"+err);
 	}
 }
 
-//*******************************************************************************************************************
-/*
-   Interroga la posiione attuale del dispositivo
-*/
-function getLocation()
-{
-	if(navigator.geolocation)
-	{
-		navigator.geolocation.getCurrentPosition(showPosition);
-	}
-	else
-	{
-		var x=document.getElementById("mialatitudine");
-		//ERRORE-04 = GeoLocation non supportata!
-		x.innerHtmp=translation.__("ERRORE-04" );
-	}
-}
-//*******************************************************************************************************************
-function showPosition(position)
-{
-	var txtCoord=parseFloat(position.coords.latitude).toFixed(2)+"° ";
-	if(position.coords.latitude >= 0)
-	{
-       txtCoord=txtCoord+"Nord <br>";		    
-	}
-	else
-	{
-        txtCoord=txtCoord+"Sud <br>";		    
-	}
-	document.getElementById("mialatitudine").innerHTML=txtCoord;
-	txtCoord=parseFloat(position.coords.longitude).toFixed(2)+"° ";
-	if(position.coords.longitude >= 0)
-	{
-        txtCoord=txtCoord+"Est <br>";		    
-	}
-	else
-	{
-        txtCoord=txtCoord+"Ovest <br>";		    
-	}
-	document.getElementById("mialongitudine").innerHTML=txtCoord;
-}
-	  
 
 
 

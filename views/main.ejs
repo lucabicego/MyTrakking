@@ -2,14 +2,14 @@
     <!-- Pagina Main per utente profilato -->
     <div class="my-jumbotron-main">
       <div class="container">
-        <h1 class="display-2">My Trekking</h1>
+        <h1 class="display-2 my-white">My Trekking</h1>
         <p class="my-red"><%=translation.__("INCIPIT")%></p>
         <p><a class="btn btn-primary btn-lg" href="/info" role="button"><%=translation.__("MAGGIORI_DETTAGLI")%> &raquo;</a></p>
       </div>
     </div>
     <div class="container">
-      <!-- Due colonne -->
       <div class="row">
+        <!-- Due colonne -->
         <div class="col-md-6">
           <h2><%=translation.__("LAMIAPOSIZIONE")%></h2>
           <p><%=translation.__("LATITUDINE")%><h3 id="mialatitudine"></h3></p>
@@ -20,10 +20,17 @@
           <p><%=translation.__("CONDIVIDI-1")%></p>
           <p><a class="btn btn-secondary" href="#" role="button"><%=translation.__("MAGGIORI_DETTAGLI")%> &raquo;</a></p>
         </div>
+        <!-- Visualizza la mappa -->
+        <div class="col-md-12 my-second" id="MiaPosizioneMap">
+        </div>
       </div>
     </div> 
     <script src="js/myroutine.js"></script>
     <script type="text/javascript">
+	   //*********************************************************************
+	   /*
+	      Funzione eseguita al caricamento della pagina
+	   */
        var loadMap = function() 
        {
 	      try{
@@ -31,9 +38,76 @@
 	      }
 	      catch(err)
 	      {
-	         alert(err);
+	         alert("main.ejs: "+err);
 	      }
        };
+	   //*********************************************************************
+	   /*
+	      Restituisce le coordinate attuali
+		  Attenzione. getCurrentPosition() restituisce il valore solo dopo il consenso 
+		  da parte dell'utilizzatore del dispositivo
+	   */
+       function getLocation()
+       {
+	      try{
+	         if(navigator.geolocation)
+	         {
+			    //showPosition viene eseguita dopo che l'utente ha dato il consenso
+				//ad accedere alla prorpia posizione
+		        navigator.geolocation.getCurrentPosition(showPosition);
+	         }
+	         else
+	         {
+		        var x=document.getElementById("mialatitudine");
+		        //ERRORE-04 = GeoLocation non supportata!
+		         x.innerHtmp=translation.__("ERRORE-04" );
+	         }
+	      }
+	      catch(err)
+	      {
+	         alert("main::getLocation: "+err);
+	      }
+	      return;
+       }
+	   //*********************************************************************
+	   /*
+	      Mostra le coordinate e carica la mappa
+	   */
+       function showPosition(position)
+       {
+	      try{
+	         var txtCoord=parseFloat(position.coords.latitude).toFixed(2)+"° ";
+	         if(position.coords.latitude >= 0)
+	         {
+                txtCoord=txtCoord+"Nord <br>";		    
+	         }
+	         else
+	         {
+                txtCoord=txtCoord+"Sud <br>";		    
+	         }
+	         document.getElementById("mialatitudine").innerHTML=txtCoord;
+	         txtCoord=parseFloat(position.coords.longitude).toFixed(2)+"° ";
+	         if(position.coords.longitude >= 0)
+	         {
+                txtCoord=txtCoord+"Est <br>";		    
+	         }
+	         else
+	         {
+                txtCoord=txtCoord+"Ovest <br>";		    
+	         }
+	         document.getElementById("mialongitudine").innerHTML=txtCoord;
+	         var data = {'mapValue':{'lat': position.coords.latitude,'lng':position.coords.longitude}};
+	         data.id="MiaPosizioneMap";
+	         data.showMarker="SI";
+			 //Richiama la funzione che fa vedere la mappa
+             showMap(data);
+	      }
+	      catch(err)
+	      {
+	         alert("main::showPosition: "+err);
+	      }
+	      return;
+       }
        window.onload= loadMap;	
 	</script>   
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1QXRond8kCPr7sKf_9BQc5bcnA2hgUyQ&callback=initMap" async defer></script>
