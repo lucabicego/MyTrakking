@@ -40,7 +40,7 @@ https.createServer(
 	},app).listen(portHTTPS, address, function()
 	{
       console.log("MyTrakking https app started on address "+address);
-      console.log("MyTrakking https app started on port "+port);
+      console.log("MyTrakking https app started on port "+portHTTPS);
     });  
 app.set("views", path.resolve(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -198,5 +198,5 @@ app.use(function(request, response){
 });
 var listener = app.listen(portHTTP, address, function(){
      console.log("MyTrakking app started on address "+address);
-     console.log("MyTrakking app started on port "+port);
+     console.log("MyTrakking app started on port "+portHTTP);
 });  
