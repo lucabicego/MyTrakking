@@ -14,6 +14,7 @@
 var path = require("path");
 //Per la gestione dell'https
 var https=require("https");
+var http = require('http');	
 var express = require("express");
 var logger = require("morgan");
 var bodyParser = require("body-parser");
@@ -41,6 +42,10 @@ https.createServer(
 	{
       console.log("MyTrakking https app started on address "+address);
       console.log("MyTrakking https app started on port "+portHTTPS);
+    });  
+http.createServer(app).listen(portHTTP, address, function(){
+     console.log("MyTrakking app started on address "+address);
+     console.log("MyTrakking app started on port "+portHTTP);	
     });  
 app.set("views", path.resolve(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -196,7 +201,9 @@ app.use(function(request, response){
 	  response.setLocale(request.cookies.translation);
 	  response.status(404).render("404",{translation:response});
 });
+/*
 var listener = app.listen(portHTTP, address, function(){
      console.log("MyTrakking app started on address "+address);
      console.log("MyTrakking app started on port "+portHTTP);
 });  
+*/
