@@ -32,7 +32,7 @@ var MyMongo=require('./public/mymodules/mymongodb.js');
 var setUpPassport = require("./public/mymodules/setuppassport.js");
 var portHTTPS = process.env.PORT || 8080;
 var portHTTP = process.env.PORT || 3000;
-var address = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
+var address = process.env.IP || '0.0.0.0';
 var app = express();
 https.createServer(
     {
@@ -42,10 +42,6 @@ https.createServer(
 	{
       console.log("MyTrakking https app started on address "+address);
       console.log("MyTrakking https app started on port "+portHTTPS);
-    });  
-http.createServer(app).listen(portHTTP, address, function(){
-     console.log("MyTrakking app started on address "+address);
-     console.log("MyTrakking app started on port "+portHTTP);	
     });  
 app.set("views", path.resolve(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -201,6 +197,13 @@ app.use(function(request, response){
 	  response.setLocale(request.cookies.translation);
 	  response.status(404).render("404",{translation:response});
 });
+app.use((req, res, next) => {
+	var schema = req.headers["x-forwarded-proto"];
+    if (schema !== 'https')
+      res.redirect(`https://${req.header('host')}${req.url}`)
+    else
+      next()
+  });
 /*
 var listener = app.listen(portHTTP, address, function(){
      console.log("MyTrakking app started on address "+address);
