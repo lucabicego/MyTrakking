@@ -30,8 +30,7 @@ var fs=require("fs");
 //Per le interrogazioni al db
 var MyMongo=require('./public/mymodules/mymongodb.js');
 var setUpPassport = require("./public/mymodules/setuppassport.js");
-var portHTTPS = process.env.PORT || 8080;
-var portHTTP = process.env.PORT || 3000;
+var portHTTPS = process.env.PORT || 3000;
 var address = process.env.IP || '0.0.0.0';
 var app = express();
 https.createServer(
