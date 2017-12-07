@@ -29,7 +29,7 @@ var fs=require("fs");
 //Per le interrogazioni al db
 var MyMongo=require('./public/mymodules/mymongodb.js');
 var setUpPassport = require("./public/mymodules/setuppassport.js");
-var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000;
+var port = process.env.PORT || 8080;
 var address = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 var app = express();
 https.createServer(
