@@ -32,6 +32,15 @@ var setUpPassport = require("./public/mymodules/setuppassport.js");
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000;
 var address = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 var app = express();
+https.createServer(
+    {
+	   key: fs.readFileSync("./public/certificati/privkey.pem"),
+	   cert: fs.readFileSync("./public/certificati/pubcert.pem")
+	},app).listen(port, address, function()
+	{
+      console.log("MyTrakking https app started on address "+address);
+      console.log("MyTrakking https app started on port "+port);
+    });  
 app.set("views", path.resolve(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(logger("dev"));
@@ -186,15 +195,6 @@ app.use(function(request, response){
 	  response.setLocale(request.cookies.translation);
 	  response.status(404).render("404",{translation:response});
 });
-https.createServer(
-    {
-	   key: fs.readFileSync("./public/certificati/privkey.pem"),
-	   cert: fs.readFileSync("./public/certificati/pubcert.pem")
-	},app).listen(port, address, function()
-	{
-      console.log("MyTrakking https app started on address "+address);
-      console.log("MyTrakking https app started on port "+port);
-    });  
 /*
 var listener = app.listen(port, address, function(){
      console.log("MyTrakking app started on address "+address);
