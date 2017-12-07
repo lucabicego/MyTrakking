@@ -14,18 +14,18 @@
   "dependencies": {
     "bcrypt-nodejs": "",
     "body-parser": "",
-    "bootstrap":"",
+    "bootstrap": "",
     "connect-flash": "",
     "cookie-parser": "",
     "ejs": "",
-    "express-session": "",
     "express": "",
+    "express-session": "",
     "i18n": "",
-	"jquery":"",
+    "jquery": "",
     "mongoose": "",
     "morgan": "",
-	"passport":"",
-	"passport-local":"",
-	"popper":""
+    "passport": "",
+    "passport-local": "",
+    "popper": ""
   }
 }

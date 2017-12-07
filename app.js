@@ -12,6 +12,8 @@
  *
  ****************************************************************************/
 var path = require("path");
+//Per la gestione dell'https
+var https=require("https");
 var express = require("express");
 var logger = require("morgan");
 var bodyParser = require("body-parser");
@@ -22,6 +24,8 @@ var translation= require("i18n");
 var flash = require("connect-flash");
 //Libreria per effettuare l'autenticazione
 var passport = require("passport");
+//Per poter leggere i file dei certificati
+var fs=require("fs");
 //Per le interrogazioni al db
 var MyMongo=require('./public/mymodules/mymongodb.js');
 var setUpPassport = require("./public/mymodules/setuppassport.js");
@@ -182,7 +186,18 @@ app.use(function(request, response){
 	  response.setLocale(request.cookies.translation);
 	  response.status(404).render("404",{translation:response});
 });
+https.createServer(
+    {
+	   key: fs.readFileSync("./public/certificati/privkey.pem"),
+	   cert: fs.readFileSync("./public/certificati/pubcert.pem")
+	},app).listen(port, address, function()
+	{
+      console.log("MyTrakking https app started on address "+address);
+      console.log("MyTrakking https app started on port "+port);
+    });  
+/*
 var listener = app.listen(port, address, function(){
      console.log("MyTrakking app started on address "+address);
      console.log("MyTrakking app started on port "+port);
 });  
+*/
