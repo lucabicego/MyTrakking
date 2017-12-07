@@ -34,8 +34,8 @@ var address = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 var app = express();
 https.createServer(
     {
-	   key: fs.readFileSync("./public/certificati/privkey.pem"),
-	   cert: fs.readFileSync("./public/certificati/pubcert.pem")
+	   key: fs.readFileSync(path.join(process.cwd() +"/public/certificati/privkey.pem")),
+	   cert: fs.readFileSync(path.join(process.cwd() +"/public/certificati/pubcert.pem"))
 	},app).listen(port, address, function()
 	{
       console.log("MyTrakking https app started on address "+address);
