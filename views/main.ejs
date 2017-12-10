@@ -9,19 +9,21 @@
     </div>
     <div class="container">
       <div class="row">
-        <!-- Due colonne -->
-        <div class="col-md-6">
-          <h2><%=translation.__("LAMIAPOSIZIONE")%></h2>
-          <p><%=translation.__("LATITUDINE")%><h3 id="mialatitudine"></h3></p>
-          <p><%=translation.__("LONGITUDINE")%><h3 id="mialongitudine"></h3></p>
+        <div class="col-md-12">
+          <h2 class="text-center"><%=translation.__("LAMIAPOSIZIONE")%></h2>
         </div>
-        <div class="col-md-6">
-          <h2><%=translation.__("PERCORSIVICINI")%></h2>
-          <p><%=translation.__("CONDIVIDI-1")%></p>
-          <p><a class="btn btn-secondary" href="#" role="button"><%=translation.__("MAGGIORI_DETTAGLI")%> &raquo;</a></p>
+        <!-- Due colonne -->
+        <div class="col-md-3">
+          <h3><%=translation.__("LEMIECOORDINATE")%></h3>
+          <p id="mialatitudine"><%=translation.__("LATITUDINE")%></p>
+          <p id="mialongitudine"><%=translation.__("LONGITUDINE")%></p>
         </div>
         <!-- Visualizza la mappa -->
-        <div class="col-md-12 my-second" id="MiaPosizioneMap">
+        <div class="col-md-9 my-second" id="MiaPosizioneMap">
+        </div>
+        <div class="col-md-12">
+          <h2 class="text-center"><%=translation.__("PERCORSIVICINI")%></h2>
+          <div id="TabellaPercorsi"></div>
         </div>
       </div>
     </div> 
@@ -31,10 +33,11 @@
 	   /*
 	      Funzione eseguita al caricamento della pagina
 	   */
-       var loadMap = function() 
+       var doOperation = function() 
        {
 	      try{
 		     getLocation();
+			 tabellaPercorsi();
 	      }
 	      catch(err)
 	      {
@@ -60,7 +63,7 @@
 	         {
 		        var x=document.getElementById("mialatitudine");
 		        //ERRORE-04 = GeoLocation non supportata!
-		         x.innerHtmp=translation.__("ERRORE-04" );
+		         x.innerHtmp=translation.__("ERRORE-04");
 	         }
 	      }
 	      catch(err)
@@ -85,7 +88,7 @@
 	         {
                 txtCoord=txtCoord+"Sud <br>";		    
 	         }
-	         document.getElementById("mialatitudine").innerHTML=txtCoord;
+	         document.getElementById("mialatitudine").innerHTML+=txtCoord;
 	         txtCoord=parseFloat(position.coords.longitude).toFixed(2)+"° ";
 	         if(position.coords.longitude >= 0)
 	         {
@@ -95,7 +98,7 @@
 	         {
                 txtCoord=txtCoord+"Ovest <br>";		    
 	         }
-	         document.getElementById("mialongitudine").innerHTML=txtCoord;
+	         document.getElementById("mialongitudine").innerHTML+=txtCoord;
 	         var data = {'mapValue':{'lat': position.coords.latitude,'lng':position.coords.longitude}};
 	         data.id="MiaPosizioneMap";
 	         data.showMarker="SI";
@@ -116,7 +119,35 @@
        {
 	      alert("main::errorPosition:\nError code:"+err.code+"\nError message: "+err.message);
 	   }
-       window.onload= loadMap;	
+	   //*********************************************************************
+	   /*
+	      Mostra la tabella con i nome dei percorsi e la distanza in Km
+		  dalla posizione attuale
+	   */
+	   function tabellaPercorsi()
+	   {  
+	      try{
+		     var htmlStr="<table width='100%' cellspacing='0'>";
+			 htmlStr+="<thead>";
+			 htmlStr+="<th><%=translation.__("NOMEPERCORSO")%></th>";
+			 htmlStr+="<th><%=translation.__("DISTANZA")%></th>";
+			 htmlStr+="</thead>";
+			 htmlStr+="<tfoot>";
+			 htmlStr+="<th><%=translation.__("NOMEPERCORSO")%></th>";
+			 htmlStr+="<th><%=translation.__("DISTANZA")%></th>";
+			 htmlStr+="</tfoot>";
+			 htmlStr+="<tbody>";
+			 htmlStr+="</tbody>";
+			 htmlStr+="</table>";
+	         document.getElementById("TabellaPercorsi").innerHTML=htmlStr;
+	      }
+	      catch(err)
+	      {
+	         alert("main::tabellaPercorsi: "+err);
+	      }
+	      return;
+	   }
+       window.onload= doOperation;	
 	</script>   
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1QXRond8kCPr7sKf_9BQc5bcnA2hgUyQ&callback=initMap" async defer></script>
   <% include footer %>

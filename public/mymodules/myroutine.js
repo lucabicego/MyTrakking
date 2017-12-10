@@ -11,8 +11,6 @@
  * authorisation of the copyright holder
  *
  ****************************************************************************/
-//Per poter gestire le traduzioni
-var translation=require("i18n");
 //*******************************************************************************************************************
 /*
    Fa una chiamata ajax per richiedere le coordinate
