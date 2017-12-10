@@ -11,11 +11,13 @@
  * authorisation of the copyright holder
  *
  ****************************************************************************/
- var path = require("path");
+var path = require("path");
 var webServer = require(path.join(process.cwd() + '/public/mymodules/webServer.js'));
 var server_port = process.env.PORT || 3000;
 var server_ip_address = undefined;//process.env.IP || '0.0.0.0';
 //Crea il server
 var ws = new webServer();
+//Per forzare https
 var force_https = false;
+//Apre la ricezione 
 ws.open(server_port, server_ip_address,force_https);

@@ -30,7 +30,6 @@ var fs=require("fs");
 //Per le interrogazioni al db
 var MyMongo=require(path.join(process.cwd() + '/public/mymodules/mymongodb.js'));
 var setUpPassport = require(path.join(process.cwd() + '/public/mymodules/setuppassport.js'));
-
 //**********************************************************************************************************************
 function webServer() 
 {
@@ -38,18 +37,14 @@ function webServer()
 	this.initRouting();    
 }
 //**********************************************************************************************************************
+/*
+   Inizializzazione percorsi, traduzioni, sessioni e rendering pagine ejs
+*/
 function initWebServer() 
 {
     app = express(); //HTTP
-}
-//**********************************************************************************************************************
-
-webServer.prototype.initRouting = function() 
-{
-    //CORS (just in case)
     //reg expression to replace path backslash with the opposite (depending on OS)
     var rgReplace = new RegExp('/', 'g');
-    //app.set('views', path.join(__dirname, 'www'));
     app.set("views", path.resolve(process.cwd() +"/views"));
     app.set("view engine", "ejs");
     app.use(logger("dev"));
@@ -96,14 +91,21 @@ webServer.prototype.initRouting = function()
        response.locals.infos = request.flash("info");
        next();
     });
-	
+}
+//**********************************************************************************************************************
+/*
+   Definizione del routing delle pagine
+*/
+webServer.prototype.initRouting = function() 
+{
     //========= PAGES ===================
-   
+    /*
     app.all('/*', function (req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "X-Requested-With");
         next();
     })
+	*/
     //Pagina principale 
     app.get("/", function(request, response){
 	   if(request.cookies.translation == undefined)
