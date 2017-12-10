@@ -33,15 +33,18 @@ var setUpPassport = require("./public/mymodules/setuppassport.js");
 var portHTTPS = process.env.PORT || 3000;
 var address = process.env.IP || '0.0.0.0';
 var app = express();
+console.log("Path Certificati PEM : "+path.join(process.cwd() +"/public/certificati/privkey.pem"));
+console.log("Path Certificati CERT: "+path.join(process.cwd() +"/public/certificati/privkey.pem"));
 https.createServer(
     {
 	   key: fs.readFileSync(path.join(process.cwd() +"/public/certificati/privkey.pem")),
 	   cert: fs.readFileSync(path.join(process.cwd() +"/public/certificati/pubcert.pem"))
-	},app).listen(portHTTPS, address, function()
+	},app).listen(portHTTPS,function()
 	{
       console.log("MyTrakking https app started on address "+address);
       console.log("MyTrakking https app started on port "+portHTTPS);
     });  
+	
 app.set("views", path.resolve(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(logger("dev"));
