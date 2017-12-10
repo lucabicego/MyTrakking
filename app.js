@@ -34,7 +34,7 @@ var portHTTPS = process.env.PORT || 3000;
 var address = process.env.IP || '0.0.0.0';
 var app = express();
 console.log("Path Certificati PEM : "+path.join(process.cwd() +"/public/certificati/privkey.pem"));
-console.log("Path Certificati CERT: "+path.join(process.cwd() +"/public/certificati/privkey.pem"));
+console.log("Path Certificati CERT: "+path.join(process.cwd() +"/public/certificati/pubcert.pem"));
 https.createServer(
     {
 	   key: fs.readFileSync(path.join(process.cwd() +"/public/certificati/privkey.pem")),
@@ -90,6 +90,11 @@ app.use(function(request, response, next) {
    response.locals.infos = request.flash("info");
    next();
 });
+app.all('/*', function (request, response, next) {
+   response.header("Access-Control-Allow-Origin", "*");
+   response.header("Access-Control-Allow-Headers", "X-Requested-With");
+   next();
+})
 //Pagina principale 
 app.get("/", function(request, response){
 	  if(request.cookies.translation == undefined)
