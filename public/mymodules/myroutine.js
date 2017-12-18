@@ -31,6 +31,10 @@ function ajaxCall(data)
 		 {
 		    showMapTrace(uluru);  
 		 }
+         else if(data.AJaxCallBack == '/getGeoDistanceTrace')		 
+		 {
+		    showTabellaPercorsi(uluru);  
+		 }
        }
    };
    xhttp.open("POST",data.AJaxCallBack);
@@ -89,6 +93,34 @@ function showMapTrace(uluru)
 	     alert("showMapTrace:"+err);
 	}
 }
+
+//*********************************************************************
+/*
+   Mostra i dati nella tabella con i nome dei percorsi e la distanza in Km
+   dalla posizione attuale
+*/
+function showTabellaPercorsi(uluru)
+{  
+   try{
+	  var i=0; 
+      var htmlStr="";
+	  for(i=0;i<uluru.length;i++)
+	  {
+         htmlStr+="<tr scope='row'>";
+         htmlStr+="<td>"+uluru[i].maptitle+"</td>";
+		 //Visualizzo la distanza in km
+         htmlStr+="<td>"+(uluru[i].distance/1000).toFixed(2)+"</td>";
+		 htmlStr+="</tr>";
+	  }
+	  document.getElementById(uluru[0].id).innerHTML=htmlStr;
+	}
+	catch(err)
+	{
+	   alert("main::tabellaPercorsi: "+err);
+	}
+	return;
+}
+
 
 
 

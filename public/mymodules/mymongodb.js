@@ -11,12 +11,15 @@
  * authorisation of the copyright holder
  *
  ****************************************************************************/
+var async=require('async');
 var bcrypt = require("bcrypt-nodejs");
 //Questa è una variabile utilizzzata per generare il SALT della funzione di HASH
 var SALT_FACTOR = 10; 
 var mongoose = require('mongoose');
 //Estrapola l'url di connessione al db MONGO
 var urlMongoDb = process.env.MONGOLAB_URI;
+var mapDistance;
+var fromCord;
 console.log("urlMongoDB : "+urlMongoDb); 
 //Esegue la connessione al db MONGO
 mongoose.connect(urlMongoDb,function(err, db) 
@@ -113,7 +116,6 @@ var QueryData=function(dataReq,res)
 	      res.send(JSON.stringify(data));
 	  }		  
    });
-	
 }
 //***************************************************************************************************************
 //Estrapola un array di documenti che contengono i Waypoints da visualizzare nella mappa
@@ -146,10 +148,225 @@ var QueryArrayData=function(dataReq,res)
 	  }		  
    });
 }
+//***************************************************************************************************************
+/*
+   Restituisce un elenco dei nomi delle mappe con la distanza in km
+   Operazioni:
+   1. Interroga il db con aggregate per avere i nomi delle mappe
+   2. Per ogni nome della mappa (field = maptitle) calcola la distanza
+   3. inserisce i dati in una collezione da restituire
+   
+   Parametri di ingresso:
+   dataReq contiene la posizione attuale. Il formato dei dati contenuti è il seguente
+   {
+	'mapValue':{'lat': latitude,'lng':longitude},
+	'id':'MiaPosizioneMap',
+	'showMarker':'SI'
+   };
+*/
+var QueryNearMaps=function(dataReq,res)
+{
+	try{
+	   mapDistance= new Array();
+	   //Imposta l'id del documento HTML
+       fromCord = new LatLon(dataReq.mapValue.lat,dataReq.mapValue.lng);
+	   QueryMapsName(res,dataReq.id);
+	}
+   catch(err)
+   {
+       console.log("QueryNearMaps::error"+err);
+   }
+}
+//***************************************************************************************************************
+var QueryMapsName=function(res,id)
+{
+   try{
+      MapPolylines.aggregate({"$group":{_id:"$maptitle"}},function(err,MapDatas)
+      {
+	     //Esecuzione della funzione in modo syncrono 
+	     async.each(MapDatas,function(MapData,callback)
+	     {
+			//Per ogni dato letto va ad aggiungersi il titolo in mapTitle 
+		    mapDistance.push({'maptitle':MapData._id,'id':id,'distance':0,'done':false});
+			//Chiama la funzione di callback se si verifica un errore
+			callback(err);
+	     },
+         function(err)
+         {
+	        if(err)
+	        {
+               console.log("QueryNearMaps::MapPolylines.aggregate :error = "+err);
+	        }
+	        else
+	        {
+				QueryDistance(res);
+	        }
+         });
+	  });
+   }
+   catch(err)
+   {
+       console.log("QueryMapsName::error"+err);
+   }
+}
+//***************************************************************************************************************
+var QueryDistance=function(res)
+{
+   try{
+      var num=0,i=0;
+      var distance=0,distanceR=0;
+	  for(num=0;num<mapDistance.length;num++)
+	  {
+	     MapPolylines.find({'maptitle': mapDistance[num].maptitle}, {_id: 0},function(err,MapDatas)
+	     {
+	        //Esecuzione della funzione in modo syncrono 
+	        async.each(MapDatas,function(MapData,callback)
+	        {
+			   //Chiama la funzione di callback se si verifica un errore
+			   var toCord = new LatLon(MapData.position.latitude,MapData.position.longitude);				 
+			   for(i=0;i<mapDistance.length;i++)
+			   {
+                  if(MapData.maptitle == mapDistance[i].maptitle)
+				  {
+			         distance=mapDistance[i].distance;		  
+			         distanceR=fromCord.distanceTo(toCord);
+			         if(distance == 0 || distance > distanceR)
+			         {
+			           mapDistance[i].distance=distanceR;
+				       mapDistance[i].done=true;
+					 }
+				  }
+			   }
+			   callback(err);
+	        },
+            function(err)
+            {
+	           if(err)
+	           {
+                  console.log("QueryDistance::error = "+err);
+	           }
+	           else
+	           {
+				  var procedi=true;
+				  var l=0;
+			      for(l=0;l<mapDistance.length;l++)
+			      {
+                     if(mapDistance[l].done == false)
+				     {
+						 procedi=false;
+					 }
+				  }
+				  if(procedi == true)
+				  {
+			         for(l=0;l<mapDistance.length;l++)
+			         {
+                        console.log("QueryDistance -> {"+mapDistance[l].id+","+mapDistance[l].maptitle+","+mapDistance[l].distance+","+mapDistance[l].done+"}");
+					 }
+                     res.header('Content-type','application/json');
+	                 res.header('Charset','utf8');
+	                 res.send(JSON.stringify(mapDistance));
+				  }
+	           }
+            });
+	     });
+	  }
+   }
+   catch(err)
+   {
+       console.log("QueryDistance::error"+err);
+   }
+   return;
+}
+//***************************************************************************************************************
+/**
+ * Creates a LatLon point on the earth's surface at the specified latitude / longitude.
+ *
+ * @constructor
+ * @param {number} lat - Latitude in degrees.
+ * @param {number} lon - Longitude in degrees.
+ *
+ * @example
+ *     var p1 = new LatLon(52.205, 0.119);
+ */
+function LatLon(lat, lon) 
+{
+	try{
+       // allow instantiation without 'new'
+       if (!(this instanceof LatLon))
+       {
+		  return new LatLon(lat, lon);
+	   }		   
+       this.lat = Number(lat);
+       this.lon = Number(lon);
+	}
+	catch(err)
+	{
+	   console.log("LatLon::err = "+err);
+		
+	}
+    return;
+}
+//***************************************************************************************************************
+/**
+ * Returns the distance from ‘this’ point to destination point (using haversine formula).
+ *
+ * @param   {LatLon} point - Latitude/longitude of destination point.
+ * @param   {number} [radius=6371e3] - (Mean) radius of earth (defaults to radius in metres).
+ * @returns {number} Distance between this point and destination point, in same units as radius.
+ *
+ * @example
+ *     var p1 = new LatLon(52.205, 0.119);
+ *     var p2 = new LatLon(48.857, 2.351);
+ *     var d = p1.distanceTo(p2); // 404.3 km
+ */
+LatLon.prototype.distanceTo = function(point, radius) 
+{
+	try{
+       if (!(point instanceof LatLon)) 
+		   throw new TypeError('point is not LatLon object');
+       radius = (radius === undefined) ? 6371e3 : Number(radius);
+
+       // a = sin²(Δφ/2) + cos(φ1)⋅cos(φ2)⋅sin²(Δλ/2)
+       // tanδ = √(a) / √(1−a)
+       // see mathforum.org/library/drmath/view/51879.html for derivation
+
+       var R = radius;
+       var phi1 = this.lat.toRadians(),  lambda1 = this.lon.toRadians();
+       var phi2 = point.lat.toRadians(), lambda2 = point.lon.toRadians();
+       var DeltaPhi = phi2 - phi1;
+       var DeltaLambda = lambda2 - lambda1;
+       var a = Math.sin(DeltaPhi/2) * Math.sin(DeltaPhi/2)
+          + Math.cos(phi1) * Math.cos(phi2)
+          * Math.sin(DeltaLambda/2) * Math.sin(DeltaLambda/2);
+       var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+       var d = R * c;
+	}
+	catch(err)
+	{
+	     console.log("LatLon.prototype.distanceTo::err = "+err);
+		
+	}
+    return d;
+};
+//***************************************************************************************************************
+/** Extend Number object with method to convert numeric degrees to radians */
+if (Number.prototype.toRadians === undefined) 
+{
+    Number.prototype.toRadians = function() { return this * Math.PI / 180; };
+}
+//***************************************************************************************************************
+/** Extend Number object with method to convert radians to numeric (signed) degrees */
+if (Number.prototype.toDegrees === undefined) 
+{
+    Number.prototype.toDegrees = function() { return this * 180 / Math.PI; };
+}
+
+//***************************************************************************************************************
 //Funzioni che vengono esportata ai restanti moduli
 module.exports = 
 {
 QueryData,
 QueryArrayData,
+QueryNearMaps,
 User
 };

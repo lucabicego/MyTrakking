@@ -219,6 +219,12 @@ webServer.prototype.initRouting = function()
 	      var dataReq=req.body;
 	      MyMongo.QueryArrayData(dataReq , res);
     }); 
+    //Calcola la distanza delle tracce dalla posizione attuale	
+    app.post('/getGeoDistanceTrace', function(req, res)
+	   {
+	      var dataReq=req.body;
+	      MyMongo.QueryNearMaps(dataReq , res);
+    }); 
     //Pagina messaggio di Errore   
     app.use(function(request, response)
 	   {

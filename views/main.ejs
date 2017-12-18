@@ -21,9 +21,23 @@
         <!-- Visualizza la mappa -->
         <div class="col-md-9 my-second" id="MiaPosizioneMap">
         </div>
+		<!-- Visualizza la tabella dei percorsi Vicini -->
         <div class="col-md-12">
           <h2 class="text-center"><%=translation.__("PERCORSIVICINI")%></h2>
-          <div id="TabellaPercorsi"></div>
+          <div>
+             <table width='100%' cellspacing='0' class='table table-striped'>
+                <thead>
+				   <th><%=translation.__('NOMEPERCORSO')%></th>
+                   <th><%=translation.__('DISTANZA')%></th>
+                </thead>
+		        <tbody id="TabellaPercorsi">
+                </tbody>
+                <tfoot>
+				   <th><%=translation.__('NOMEPERCORSO')%></th>
+                   <th><%=translation.__('DISTANZA')%></th>
+                </tfoot>
+		    </table>		
+		  </div>
         </div>
       </div>
     </div> 
@@ -37,7 +51,6 @@
        {
 	      try{
 		     getLocation();
-			 tabellaPercorsi();
 	      }
 	      catch(err)
 	      {
@@ -104,6 +117,10 @@
 	         data.showMarker="SI";
 			 //Richiama la funzione che fa vedere la mappa
              showMap(data);
+	         data.id="TabellaPercorsi";
+		     data.AJaxCallBack='/getGeoDistanceTrace';
+		     //Fa una chiamata ajax per richiedere le coordinate
+		     ajaxCall(data);
 	      }
 	      catch(err)
 	      {
@@ -118,34 +135,6 @@
        function errorPosition(err)
        {
 	      alert("main::errorPosition:\nError code:"+err.code+"\nError message: "+err.message);
-	   }
-	   //*********************************************************************
-	   /*
-	      Mostra la tabella con i nome dei percorsi e la distanza in Km
-		  dalla posizione attuale
-	   */
-	   function tabellaPercorsi()
-	   {  
-	      try{
-		     var htmlStr="<table width='100%' cellspacing='0'>";
-			 htmlStr+="<thead>";
-			 htmlStr+="<th><%=translation.__("NOMEPERCORSO")%></th>";
-			 htmlStr+="<th><%=translation.__("DISTANZA")%></th>";
-			 htmlStr+="</thead>";
-			 htmlStr+="<tfoot>";
-			 htmlStr+="<th><%=translation.__("NOMEPERCORSO")%></th>";
-			 htmlStr+="<th><%=translation.__("DISTANZA")%></th>";
-			 htmlStr+="</tfoot>";
-			 htmlStr+="<tbody>";
-			 htmlStr+="</tbody>";
-			 htmlStr+="</table>";
-	         document.getElementById("TabellaPercorsi").innerHTML=htmlStr;
-	      }
-	      catch(err)
-	      {
-	         alert("main::tabellaPercorsi: "+err);
-	      }
-	      return;
 	   }
        window.onload= doOperation;	
 	</script>   

@@ -12,6 +12,7 @@
     "start": "node app"
   },
   "dependencies": {
+    "async":"",
     "bcrypt-nodejs": "",
     "body-parser": "",
     "bootstrap": "",
