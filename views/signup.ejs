@@ -10,13 +10,28 @@
         <div class="col-md-4">
            <h1><%=translation.__("ISCRIZIONE")%></h1>
 	    </div>
-        <div class="col-md-8">
-           <form action="/signup" method="post">
+        <div class="col-md-4">
+           <form action="/signedit" method="post">
               <input name="username" type="text" class="form-control my-sm-1" placeholder="Username" required autofocus>
               <input name="password" type="password" class="form-control my-sm-1" placeholder="Password" required>
-              <input type="submit" value="Sign up" class="btn btn-outline-success my-2 my-sm-2">
+              <input type="submit" value="<%=translation.__("ISCRIZIONE")%>" class="btn btn-outline-success my-2 my-sm-2">
            </form>
 		</div>   
+		<div class="col-md-4">
+		   <div class="my-camera">
+		      <video id="picturevideo">Video stream not available</video>
+		      <button id="takepicture" class="btn btn-outline-success my-2 my-sm-2">Take photo</button>
+		   </div>
+		   <canvas id="picturecanvas"></canvas>
+		   <div class="my-output">
+		      <img id="picturephoto">
+		   </div>
+		</div>
 	  </div> 
-    </div>	  
-<% include footer %>
+    </div>	
+	<script src="js/myroutine.js"></script>
+    <script type="text/javascript">
+	   //Acquisice una foto
+	   getPicture();
+    </script>	
+ <% include footer %>

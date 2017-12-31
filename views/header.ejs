@@ -19,6 +19,7 @@
  	  <% } else { %>
          <a class="navbar-brand" href="/">Home</a>
  	  <% }%>
+	  <!-- Qui è definito un pulsante per la navigazione -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" 
 	          aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -61,6 +62,10 @@
         </ul>
 		<!-- Vede si c'è un utente profilato -->
 		<% if (currentUser) { %>
+		   <!-- Gestione Modifica Profilo utente -->
+           <form class="form-inline my-2 my-lg-0" action="/signedit" method="get">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><%=translation.__("MODIFICA")%></button>
+          </form>
 		   <!-- Gestione del LogOut -->
            <form class="form-inline my-2 my-lg-0" action="/logout" method="get">
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" 
@@ -81,4 +86,3 @@
 		<% } %>
       </div>
     </nav>
-  

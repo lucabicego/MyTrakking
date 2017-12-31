@@ -1,0 +1,30 @@
+<% include header %>
+    <div class="my-jumbotron-signup">
+      <div class="container">
+        <h1 class="display-2 my-white">My Trekking</h1>
+        <p class="my-white"><%=translation.__("INCIPIT")%></p>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+           <h1><%=translation.__("MODIFICAPROFILO")%></h1>
+	    </div>
+        <div class="col-md-8">
+           <form action="/signedit" method="post">
+              <label class="form-control my-sm-1" placeholder="Username"><%= currentUser.name() || "" %></label>
+              <input name="password" type="password" class="form-control my-sm-1" placeholder="Password" required autofocus>
+              <input type="submit" value="<%=translation.__("MODIFICA")%>" class="btn btn-outline-success my-2 my-sm-2">
+           </form>
+		   <div>
+		      <video id="video"></video>
+			  <button id="takepicture">Take photo</button>
+		   </div>
+		</div>   
+	  </div> 
+    </div>	 
+    <scipt>
+	   //Acquisice una foto
+	   //getPicture();
+    </script>	
+<% include footer %>

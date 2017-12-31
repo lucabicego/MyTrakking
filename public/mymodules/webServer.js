@@ -134,6 +134,11 @@ webServer.prototype.initRouting = function()
       response.setLocale(request.cookies.translation);
       response.render("signup",{translation:response});
    });
+   //Pagina per modificare le impostazioni del profilo utente 
+   app.get("/signedit", ensureAuthenticated, function(request, response) {
+      response.setLocale(request.cookies.translation);
+      response.render("signedit",{translation:response});
+   });
    //Questo viene eseguito dopo il signup
    //Verifica se l'utente è già presente in archivio, nel qual caso fa comparire un errore
    //Salva in archivio il nuovo utente
@@ -288,5 +293,22 @@ webServer.prototype.open = function (port, ip_address, force_https)
 		}
     }
 }
+//**********************************************************************************************************************
+/*
+   Verifica che l'utente sia autenticato
+*/
+function ensureAuthenticated(request, response, next) 
+{
+   if (request.isAuthenticated()) 
+   {
+      next();
+   } 
+   else 
+   {
+      request.flash("info", "You must be logged in to see this page.");
+      response.redirect("/login");
+   }
+}
+
 
 module.exports = webServer;

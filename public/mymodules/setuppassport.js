@@ -54,6 +54,7 @@ passport.use("login", new LocalStrategy(function(username, password, done)
       });
     }
 ));
+
 //**************************************************************************************
 //Funzioni che vengono esportate
 module.exports = function() 
