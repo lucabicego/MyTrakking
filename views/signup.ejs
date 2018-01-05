@@ -21,7 +21,10 @@
 		   <img class="img-responsive center-block" id="pictureuser">
 		   <div>
 		      <button id="takepicture" class="btn btn-outline-success my-2 my-sm-2"><%=translation.__("SCATTAFOTO")%></button>
-		      <button id="selectpicture" class="btn btn-outline-success my-2 my-sm-2"><%=translation.__("SELEZIONAFOTO")%></button>
+			  <input accept="image/*"  class="btn btn-outline-success my-2 my-sm-2" type="file" id="selectpicture" onchange="" />
+			  <!---
+		      <button id="selectpicture" class="btn btn-outline-success my-2 my-sm-2" ><%=translation.__("SELEZIONAFOTO")%></button>
+			  --->
 		   </div>
 		</div>
 	  </div> 

@@ -113,10 +113,12 @@ webServer.prototype.initRouting = function()
           //Crea un Cookie con la lingua italiana		 
 	      response.cookie('translation','it');
 	      response.setLocale('it');
+		  console.log("lingua default = it");
 	   }	 
        else
        {
 	      response.setLocale(request.cookies.translation);
+		  console.log("lingua = "+request.cookies.translation);
 	   }
 	   if(request.user == undefined)
 	   {
