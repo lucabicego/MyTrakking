@@ -50,6 +50,7 @@ var userSchema = mongoose.Schema(
    {
       username: { type: String, required: true, unique: true },
       password: { type: String, required: true },
+	  imageurl: { type: String, required:true},
       createdAt: { type: Date, default: Date.now },
       displayName: String,
       bio: String
@@ -59,8 +60,10 @@ var userSchema = mongoose.Schema(
 userSchema.methods.name = function() {
    return this.displayName || this.username;
 };
-//Questa è una funzione dummy 
-var noop = function() {};
+//***************************************************************************************************************
+userSchema.methods.imageUrl = function() {
+   return this.imageurl;
+};
 //***************************************************************************************************************
 //Questa funzione effettua il salvataggio dell'hash della password
 userSchema.pre("save", function(done) {
@@ -80,7 +83,7 @@ userSchema.pre("save", function(done) {
 		{ 
 	       return done(err); 
 		}
-		//Salva la password conil suo valore di hash
+		//Salva la password con il suo valore di hash
         user.password = hashedPassword;
         done();
      });
@@ -95,6 +98,47 @@ userSchema.methods.checkPassword = function(guess, done) {
 };	
 //Associamo lo schema User al db mytrakking
 var User = mongoose.model("User", userSchema);
+//***************************************************************************************************************
+/*
+   Restituisce il percorso dell'immagine della foto dell'utente
+*/
+var getUserPicture=function(dataReq , res)
+{
+   var username = dataReq.username;
+   var data={'username':username,'id':dataReq.id,'urlImg':'/images/UserPlaceholder.png'};
+   User.findOne({username: username}).exec(function(err, user) 
+   {
+         if (err) 
+	     { 
+	        //Utente nuovo
+			console.log("getUserPicture user.imageurl = "+data.urlImg);
+            res.header('Content-type','application/json');
+	        res.header('Charset','utf8');
+	        res.send(JSON.stringify(data));
+	     }
+	     //Ritorna dall'interrogazione un utente 
+         if (user) 
+	     {
+			//Utente esiste gia'  
+			if(user.imageurl.length > 0)
+			{
+               data.urlImg=user.imageurl; 
+			}
+			console.log("getUserPicture user.imageurl = "+urlImg.urlImg);
+            res.header('Content-type','application/json');
+	        res.header('Charset','utf8');
+	        res.send(JSON.stringify(data));
+         }
+		 else
+		 {
+	        //Utente nuovo
+			console.log("getUserPicture data.urlImg = "+data.urlImg);
+            res.header('Content-type','application/json');
+	        res.header('Charset','utf8');
+	        res.send(JSON.stringify(data));
+		 }
+   });
+}
 //***************************************************************************************************************
 //Questa funzione è utilizzata per effettuare l'interrogazione dei dati   
 var QueryData=function(dataReq,res)
@@ -366,6 +410,7 @@ if (Number.prototype.toDegrees === undefined)
 module.exports = 
 {
 QueryData,
+getUserPicture,
 QueryArrayData,
 QueryNearMaps,
 User

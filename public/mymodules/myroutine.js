@@ -35,6 +35,10 @@ function ajaxCall(data)
 		 {
 		    showTabellaPercorsi(uluru);  
 		 }
+         else if(data.AJaxCallBack == '/getUserPicture')		 
+		 {
+		    showUserPicture(uluru);  
+		 }
        }
    };
    xhttp.open("POST",data.AJaxCallBack);
@@ -116,10 +120,26 @@ function showTabellaPercorsi(uluru)
 	}
 	catch(err)
 	{
-	   alert("main::tabellaPercorsi: "+err);
+	   alert("showTabellaPercorsi: "+err);
 	}
 	return;
 }
+//*********************************************************************
+/*
+   Visualizza l'immagine il cui url è ottenuto dal server
+*/
+function showUserPicture(uluru)
+{  
+   try{
+	  document.getElementById(uluru.id).src=uluru.urlImg;
+	}
+	catch(err)
+	{
+	   alert("showUserPicture: "+err);
+	}
+	return;
+}
+
 //*********************************************************************
 /*
    Gestisce la fotocamera per acquisire una immagine
