@@ -51,7 +51,7 @@
 "PROFILOALTIMETRICO":"Altimeter profile of the path",
 "SCATTAFOTO":"Take Picture",
 "SCEGLI_PERCORSO":"Choose a Path",
-"SELEZIONAFOTO":"Select a Picture"
+"SELEZIONAFOTO":"Select a Picture",
 "SELEZIONE_LINGUA":"Choose a Language",
 "TRACCIATOPERCORSO":"Route tracking",
 "USER":"User",
@@ -64,5 +64,4 @@
 "433-455-435":"Contrà Rossi - Monte Novegno - Monte Priaforà",
 "433-455-435-1":"After parking the car in Contrà Rossi, continue for the Busa Novegno along path 433.",
 "433-455-435-2":"Continue for Passo Campedello and then reach Monte Priaforà ..."
-
 }
