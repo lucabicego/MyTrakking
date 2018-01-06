@@ -193,10 +193,17 @@ webServer.prototype.initRouting = function()
 	      response.setLocale(request.cookies.translation);
           response.render("CaltranoSunioCostola",{translation:response});
     });
+	//Pagina per il percorso Novegno Priaforà
     app.get("/NovegnoPriafora", function(request, response)
 	   {
 	      response.setLocale(request.cookies.translation);
           response.render("NovegnoPriafora",{translation:response});
+    });
+	//Fa comparire una schermata dove è possibile farsi una selfie
+    app.get("/takePicture", function(request, response)
+	   {
+	      response.setLocale(request.cookies.translation);
+          response.render("takePicture",{translation:response});
     });
     //Pagina cambio Lingua Italiana
     app.get("/it", function(request, response)
@@ -230,6 +237,7 @@ webServer.prototype.initRouting = function()
 	      var dataReq=req.body;
 	      MyMongo.QueryNearMaps(dataReq , res);
     }); 
+	//Vede in archivio se all'utente è associata una foto
 	app.post('/getUserPicture',function(req,res)
 	   {
 	      var dataReq=req.body;

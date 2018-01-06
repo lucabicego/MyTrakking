@@ -1,0 +1,33 @@
+<% include header %>
+    <div class="my-jumbotron-signup">
+      <div class="container">
+        <h1 class="display-2 my-white">My Trekking</h1>
+        <p class="my-white"><%=translation.__("INCIPIT")%></p>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+           <h2><%=translation.__("SCEGLIFOTOPROFILO")%></h2>
+	    </div>
+		<div class="col-md-4">
+		   <div class="my-camera">
+		      <video id="picturevideo">Video stream not available</video>
+		      <button id="takepicture" class="btn btn-outline-success my-2 my-sm-2"><%=translation.__("SCATTAFOTO")%></button>
+		   </div>
+		   <canvas id="picturecanvas"></canvas>
+		</div>
+		<div class="col-md-4">
+		   <div class="my-output">
+		      <img id="picturephoto">
+		   </div>
+		   <button id="takepicture" class="btn btn-outline-success my-2 my-sm-2"><%=translation.__("SELEZIONAFOTO")%></button>
+		</div>
+	  </div> 
+    </div>	
+	<script src="js/myroutine.js"></script>
+    <script type="text/javascript">
+	   //Acquisice una foto
+	   getPicture();
+    </script>	
+ <% include footer %>

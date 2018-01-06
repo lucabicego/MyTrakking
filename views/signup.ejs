@@ -20,11 +20,9 @@
         <div class="col-md-4">		
 		   <img class="img-responsive center-block" id="pictureuser">
 		   <div>
-		      <button id="takepicture" class="btn btn-outline-success my-2 my-sm-2"><%=translation.__("SCATTAFOTO")%></button>
-			  <input accept="image/*"  class="btn btn-outline-success my-2 my-sm-2" type="file" id="selectpicture" onchange="" />
-			  <!---
-		      <button id="selectpicture" class="btn btn-outline-success my-2 my-sm-2" ><%=translation.__("SELEZIONAFOTO")%></button>
-			  --->
+              <form class="form-inline my-2 my-lg-0" action="/takePicture" method="get">
+                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><%=translation.__("SCATTAFOTO")%></button>
+              </form>		   
 		   </div>
 		</div>
 	  </div> 
