@@ -240,7 +240,7 @@ webServer.prototype.initRouting = function()
 	      MyMongo.QueryArrayData(dataReq , response);
     }); 
     //Calcola la distanza delle tracce dalla posizione attuale	
-    app.post('/getGeoDistanceTrace', function(request, res)
+    app.post('/getGeoDistanceTrace', function(request, response)
 	   {
 	      var dataReq=request.body;
 	      MyMongo.QueryNearMaps(dataReq , response);
