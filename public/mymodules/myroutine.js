@@ -165,6 +165,7 @@ function getPicture()
   var canvas = null;
   var photo = null;
   var startbutton = null;
+  var savephoto = null;
 
   function startup() 
   {
@@ -172,6 +173,7 @@ function getPicture()
     canvas = document.getElementById('picturecanvas');
     photo = document.getElementById('picturephoto');
     startbutton = document.getElementById('takepicture');
+	savephoto = document.getElementById('savepicture');
     navigator.getMedia = ( navigator.getUserMedia ||
                            navigator.webkitGetUserMedia ||
                            navigator.mozGetUserMedia ||
@@ -196,7 +198,6 @@ function getPicture()
         console.log("An error occured! " + err);
       }
     );
-
     video.addEventListener('canplay', function(ev){
       if (!streaming) 
 	  {
@@ -220,6 +221,10 @@ function getPicture()
       takepicture();
       ev.preventDefault();
     }, false);
+	savephoto.addEventListener('click',function(ev){
+		savepicture();
+		ev.preventDefault();
+	},false);
     clearphoto();
   }
   // Fill the photo with an indication that none has been
@@ -231,6 +236,7 @@ function getPicture()
     context.fillRect(0, 0, canvas.width, canvas.height);
     var data = canvas.toDataURL('image/png');
     photo.setAttribute('src', data);
+	blob=null;
   }
   // Capture a photo by fetching the current contents of the video
   // and drawing it into a canvas, then converting that to a PNG
@@ -245,7 +251,6 @@ function getPicture()
       canvas.width = width;
       canvas.height = height;
       context.drawImage(video, 0, 0, width, height);
-    
       var data = canvas.toDataURL('image/png');
       photo.setAttribute('src', data);
     } 
@@ -254,6 +259,31 @@ function getPicture()
       clearphoto();
     }
   }
+  //Carica nel canvas la foto selezionata ela invia con una chiamata Ajax
+  function savepicture()
+  {
+    var context = canvas.getContext('2d');
+    if (width && height) 
+	{
+      canvas.width = photo.width;
+      canvas.height = photo.height;
+      context.drawImage(photo, 0, 0, photo.width, photo.height);
+      canvas.toBlob(function(blob) {
+         var xhttp = new XMLHttpRequest();
+         xhttp.onreadystatechange = function() 
+         {
+            if (this.readyState == XMLHttpRequest.DONE && this.status == 200) 
+	        {
+		    }		
+         }
+         xhttp.open('POST','/fileUpload');
+         xhttp.setRequestHeader("Content-Type", "image/jpeg");   
+         //xhttp.setRequestHeader("Content-Type", "multipart/form-data");   
+         xhttp.send(blob);
+      });
+	}
+  }
+
   // Set up our event listener to run the startup process
   // once loading is complete.
   window.addEventListener('load', startup, false);

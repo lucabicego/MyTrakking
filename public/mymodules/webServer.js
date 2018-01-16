@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  * Luca BICEGO
- * Copyright (c) 2017
+ * Copyright (c) 2017-2018
  *
  * via San Giorgio, 46
  * 36030 Caltrano (VI) ITALY
@@ -27,6 +27,8 @@ var flash = require("connect-flash");
 var passport = require("passport");
 //Per poter leggere i file dei certificati
 var fs=require("fs");
+//Per creare nomi di file temporanei
+var crypto = require('crypto');
 //Per le interrogazioni al db
 var MyMongo=require(path.join(process.cwd() + '/public/mymodules/mymongodb.js'));
 var setUpPassport = require(path.join(process.cwd() + '/public/mymodules/setuppassport.js'));
@@ -49,7 +51,13 @@ function initWebServer()
     app.set("view engine", "ejs");
     app.use(logger("dev"));
     //Queste due direttive servono per effettuare il parsing json
-    app.use(bodyParser.urlencoded({ extended: false }));
+	app.use(bodyParser.json({limit: '50mb'}));
+    app.use(bodyParser.urlencoded({
+       limit: '50mb',
+       extended: false,
+       parameterLimit:50000
+    }));	
+    //app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
 	//Definizione dei percorsi dei moduli
     app.use('/images', express.static(path.join(process.cwd() + '/public/images'))); // redirect images
@@ -220,29 +228,50 @@ webServer.prototype.initRouting = function()
           response.redirect('/');
     });
     //Riceve una richiesta per le coordinate
-    app.post('/getGeoPoints', function(req, res)
+    app.post('/getGeoPoints', function(request, response)
 	   {
-	      var dataReq=req.body;
-	      MyMongo.QueryData(dataReq , res);
+	      var dataReq=request.body;
+	      MyMongo.QueryData(dataReq , response);
     });
     //Visualizza una traccia sulla Mappa	
-    app.post('/getGeoTrace', function(req, res)
+    app.post('/getGeoTrace', function(request, response)
 	   {
-	      var dataReq=req.body;
-	      MyMongo.QueryArrayData(dataReq , res);
+	      var dataReq=request.body;
+	      MyMongo.QueryArrayData(dataReq , response);
     }); 
     //Calcola la distanza delle tracce dalla posizione attuale	
-    app.post('/getGeoDistanceTrace', function(req, res)
+    app.post('/getGeoDistanceTrace', function(request, res)
 	   {
-	      var dataReq=req.body;
-	      MyMongo.QueryNearMaps(dataReq , res);
+	      var dataReq=request.body;
+	      MyMongo.QueryNearMaps(dataReq , response);
     }); 
 	//Vede in archivio se all'utente è associata una foto
-	app.post('/getUserPicture',function(req,res)
+	app.post('/getUserPicture',function(request,response)
 	   {
-	      var dataReq=req.body;
-	      MyMongo.getUserPicture(dataReq , res);
+	      var dataReq=request.body;
+	      MyMongo.getUserPicture(dataReq , response);
     }); 
+	//Salva nella cartella Upload un file 
+	app.post('/fileUpload',function(request,response)
+	   {
+		  //console.dir(request);
+		  var path=process.cwd() +'/public/upload'; 
+		  var filename = 'foo'+crypto.randomBytes(4).readUInt32LE(0)+'bar';
+		  var data=request;
+		  path=path+'/'+filename+'.png';
+		  //Salva il file
+		  fs.writeFile(path,data,'binary',function(err)
+		  {
+			    if(err)
+			    {
+				   console.log("fileUpload error = "+err);
+			    }   	  
+			    else
+			    {
+				   console.log("fileUpload saved to "+path);
+			    }
+		   });				
+       });
     //Pagina messaggio di Errore   
     app.use(function(request, response)
 	   {
@@ -287,7 +316,6 @@ webServer.prototype.open = function (port, ip_address, force_https)
         // === HTTPS ===
         console.log("Path Certificati PEM : "+privKey);
         console.log("Path Certificati CERT: "+pubCert);
-		
         var hskey = fs.readFileSync(privKey);
         var hscert = fs.readFileSync(pubCert);
         var options = {
@@ -322,6 +350,5 @@ function ensureAuthenticated(request, response, next)
       response.redirect("/login");
    }
 }
-
 
 module.exports = webServer;

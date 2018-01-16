@@ -10,23 +10,38 @@
         <div class="col-md-4">
            <h1><%=translation.__("MODIFICAPROFILO")%></h1>
 	    </div>
-        <div class="col-md-8">
+        <div class="col-md-4">
            <form action="/signedit" method="post">
               <label class="form-control my-sm-1" placeholder="Username"><%= currentUser.name() || "" %></label>
               <input name="password" type="password" class="form-control my-sm-1" placeholder="Password" required autofocus>
               <input type="submit" value="<%=translation.__("MODIFICA")%>" class="btn btn-outline-success my-2 my-sm-2">
            </form>
+		<div>
+        <div class="col-md-4">		
+		   <img class="img-responsive center-block" id="pictureuser">
 		   <div>
-		      <video id="video"></video>
-			  <button id="takepicture">Take photo</button>
+              <form class="form-inline my-2 my-lg-0" action="/takePicture" method="get">
+                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><%=translation.__("SCATTAFOTO")%></button>
+              </form>		   
 		   </div>
-		</div>   
+		</div>
 	  </div> 
-    </div>	 
-    <scipt>
-	   //Imposta la foto dell'utente
-	   function setUserPicture()
-	   {
+    </div>
+    <script type="text/javascript">
+	//Acquisice la foto dell'utente
+    var loadUserPicture = function() 
+    {
+	   try{
+		  //Carica la foto dell'utente
+		  var data={'username':'new-undef','id':'pictureuser','AJaxCallBack':'/getUserPicture'};
+		  //Fa una chiamata ajax per richiedere le coordinate
+		  ajaxCall(data);
 	   }
+	   catch(err)
+	   {
+	      alert(err);
+	   }
+    };
+    window.onload= loadUserPicture;	
     </script>	
 <% include footer %>
