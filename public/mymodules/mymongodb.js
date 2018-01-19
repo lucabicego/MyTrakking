@@ -238,6 +238,7 @@ var QueryMapsName=function(res,id)
 		    mapDistance.push({'maptitle':MapData._id,'id':id,'distance':0,'done':false});
 			//Chiama la funzione di callback function(err). Se si verifica un errore valorizzare err 
 			//come ad esempio callback("Msg di errore")
+	        console.log("mapDistance.push("+MapData._id+")");
 			callback();
 	     },
          function(err)
@@ -249,6 +250,7 @@ var QueryMapsName=function(res,id)
 	        }
 	        else
 	        {
+	            console.log("mapDistance.length = "+mapDistance.length);
 	            console.log("Execute QueryDistance(...)");
 				QueryDistance(res);
 	        }
