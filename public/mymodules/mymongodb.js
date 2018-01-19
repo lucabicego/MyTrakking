@@ -300,10 +300,12 @@ var QueryDistance=function(res)
 	           {
 				  var procedi=true;
 				  var l=0;
+				  console.log("mapDistance.length ="+mapDistance.length);
 			      for(l=0;l<mapDistance.length;l++)
 			      {
                      if(mapDistance[l].done == false)
 				     {
+						 console.log("mapDistance["+l+"].done = false");
 						 procedi=false;
 					 }
 				  }
