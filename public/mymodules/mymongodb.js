@@ -266,7 +266,8 @@ var QueryDistance=function(res)
    try{
       var num=0,i=0;
       var distance=0,distanceR=0;
-	  for(num=0;num<mapDistance.length;num++)
+	  console.log("mapDistance.length = "+mapDistance.length);
+	  for(num=0;num < mapDistance.length;num++)
 	  {
 	     MapPolylines.find({'maptitle': mapDistance[num].maptitle}, {_id: 0},function(err,MapDatas)
 	     {
@@ -275,6 +276,7 @@ var QueryDistance=function(res)
 	        {
 			   //Chiama la funzione di callback se si verifica un errore
 			   var toCord = new LatLon(MapData.position.latitude,MapData.position.longitude);				 
+			   console.log("MapData.position ["+MapData.position.latitude+","+MapData.position.longitude+"]");
 			   for(i=0;i<mapDistance.length;i++)
 			   {
                   if(MapData.maptitle == mapDistance[i].maptitle)
