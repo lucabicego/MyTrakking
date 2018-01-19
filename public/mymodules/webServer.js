@@ -243,6 +243,7 @@ webServer.prototype.initRouting = function()
     app.post('/getGeoDistanceTrace', function(request, response)
 	   {
 	      var dataReq=request.body;
+		  console.log(""Execute MyMongo.QueryNearMaps(...)");
 	      MyMongo.QueryNearMaps(dataReq , response);
     }); 
 	//Vede in archivio se all'utente è associata una foto
