@@ -214,7 +214,7 @@ var QueryNearMaps=function(dataReq,res)
 	   mapDistance= new Array();
 	   //Imposta l'id del documento HTML
        fromCord = new LatLon(dataReq.mapValue.lat,dataReq.mapValue.lng);
-	   console.log(""Execute QueryMapsName(...)");
+	   console.log("Execute QueryMapsName(...)");
 	   QueryMapsName(res,dataReq.id);
 	}
    catch(err)
@@ -249,7 +249,7 @@ var QueryMapsName=function(res,id)
 	        }
 	        else
 	        {
-	            console.log(""Execute QueryDistance(...)");
+	            console.log("Execute QueryDistance(...)");
 				QueryDistance(res);
 	        }
          });
