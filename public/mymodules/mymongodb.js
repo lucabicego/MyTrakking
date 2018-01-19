@@ -222,6 +222,9 @@ var QueryNearMaps=function(dataReq,res)
    }
 }
 //***************************************************************************************************************
+/*
+   Estrapola dalla collezione MyTrakking 
+*/
 var QueryMapsName=function(res,id)
 {
    try{
@@ -232,14 +235,16 @@ var QueryMapsName=function(res,id)
 	     {
 			//Per ogni dato letto va ad aggiungersi il titolo in mapTitle 
 		    mapDistance.push({'maptitle':MapData._id,'id':id,'distance':0,'done':false});
-			//Chiama la funzione di callback se si verifica un errore
-			callback(err);
+			//Chiama la funzione di callback function(err). Se si verifica un errore valorizzare err 
+			//come ad esempio callback("Msg di errore")
+			callback();
 	     },
          function(err)
          {
+			//Questa funzione è eseguita quanto tutto è finito 
 	        if(err)
 	        {
-               console.log("QueryNearMaps::MapPolylines.aggregate :error = "+err);
+                console.log("QueryNearMaps::MapPolylines.aggregate :error = "+err);
 	        }
 	        else
 	        {
@@ -281,7 +286,7 @@ var QueryDistance=function(res)
 					 }
 				  }
 			   }
-			   callback(err);
+			   callback();
 	        },
             function(err)
             {

@@ -128,7 +128,7 @@ webServer.prototype.initRouting = function()
 	   }
 	   if(request.user == undefined)
 	   {
-		  //Fai comparire la pagina iniziale di mytrakking per utente non profilato
+		  //Fai comparire la pagina iniziale di mytrekking per utente non profilato
           response.render("index",{translation:response});
 	   }
        else
