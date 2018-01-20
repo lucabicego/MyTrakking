@@ -32,6 +32,10 @@ function ajaxCall(data)
 		    {
 		       showMapTrace(uluru);  
 		    }
+            else if(data.AJaxCallBack == '/getTracePosition')		 
+		    {
+		       showMapTrace(uluru);  
+		    }
             else if(data.AJaxCallBack == '/getGeoDistanceTrace')		 
 		    {
 		       showTabellaPercorsi(uluru);  
@@ -105,9 +109,47 @@ function showMapTrace(uluru)
 }
 
 //*********************************************************************
+
+function showMapTraceMarker(uluru)
+{
+	try{
+		//Carica la mappa. La variabile data contiene le coordinate del punto
+        var myOptions = {center: new google.maps.LatLng(uluru.mapValue),zoom: 12,mapTypeId: google.maps.MapTypeId.ROADMAP};
+        var map = new google.maps.Map(document.getElementById(uluru.id),myOptions);
+		//Vede se inserisce un marker
+		if(uluru.showMarker == 'SI')
+	    {
+           var marker = new google.maps.Marker({position: uluru.mapValue,map: map});
+		}
+		//Effettua il disegno dei Waypoints
+        var flightPath = new google.maps.Polyline({
+           path: uluru.Waypoints,
+           geodesic: true,
+           strokeColor: '#FF0000',
+           strokeOpacity: 1.0,
+           strokeWeight: 2
+        });
+        flightPath.setMap(map);
+	}
+	catch(err)
+	{
+	     alert("showMapTrace:"+err);
+	}
+}
+
+//*********************************************************************
 /*
    Mostra i dati nella tabella con i nome dei percorsi e la distanza in Km
    dalla posizione attuale
+   
+   Valori contenuti in uluru
+   
+   uluru[l].id 		= id della table dove visualizzare le distanze
+   uluru[l].maptitle	= titolo della mappa
+   uluru[l].title		= titolo del campo
+   uluru[l].distance	= distanza minima tra la posizione attuale e quella del tracciato
+   uluru[l].done		= falg booleano che vale true se il dato è stato estratto
+
 */
 function showTabellaPercorsi(uluru)
 {  
@@ -121,7 +163,7 @@ function showTabellaPercorsi(uluru)
 		 //Visualizzo la distanza in km
          htmlStr+="<td>"+(uluru[i].distance/1000).toFixed(2)+"</td>";
 		 //Visualizzo un pulsante per accedere alla finestra della mappa
-         htmlStr+="<td><button type='button' class='btn btn-primary' onclick=window.open('/mapManage?mapTitle="+uluru[i].maptitle+"')>Go</button></td>";
+         htmlStr+="<td><button type='button' class='btn btn-primary' onclick=window.open('/mapManage?mapTitle="+uluru[i].maptitle+"&title="+uluru[i].title+"','_self')>Go</button></td>";
 		 htmlStr+="</tr>";
 	  }
 	  document.getElementById(uluru[0].id).innerHTML=htmlStr;
@@ -131,6 +173,20 @@ function showTabellaPercorsi(uluru)
 	   alert("showTabellaPercorsi: "+err);
 	}
 	return;
+}
+//*********************************************************************
+/*
+  Questa routine è utilizzata per avere il valore contenuto nella query string
+*/
+function getParameterByName(name, url) 
+{
+  if (!url) 
+	 url = window.location.href;
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 //*********************************************************************
 /*

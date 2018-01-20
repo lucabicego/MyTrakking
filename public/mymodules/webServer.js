@@ -231,7 +231,7 @@ webServer.prototype.initRouting = function()
     app.get("/mapManage", function(request, response)
 	   {
 	      response.setLocale(request.cookies.translation);
-          response.render('mapManage',{translation:response,mapTitle:request.query.mapTitle});
+          response.render('mapManage',{translation:response,mapTitle:request.query.mapTitle,title:request.query.maptitle});
     });
     //Riceve una richiesta per le coordinate
     app.post('/getGeoPoints', function(request, response)
@@ -244,6 +244,12 @@ webServer.prototype.initRouting = function()
 	   {
 	      var dataReq=request.body;
 	      MyMongo.QueryArrayData(dataReq , response);
+    }); 
+	//Visualizza la mappa con la posizione attuale e il tracciato della mappa scelta
+    app.post('/getTracePosition', function(request, response)
+	   {
+	      var dataReq=request.body;
+	      MyMongo.QueryArrayDataPosition(dataReq , response);
     }); 
     //Calcola la distanza delle tracce dalla posizione attuale	
     app.post('/getGeoDistanceTrace', function(request, response)

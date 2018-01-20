@@ -10,7 +10,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h2 class="text-center"><%=translation.__("LAMIAPOSIZIONE")%></h2>
+          <h2 class="text-center"><%=translation.__("PERCORSOSCELTO")%> <%=mapTitle%></h2>
         </div>
         <!-- Due colonne -->
         <div class="col-md-3">
@@ -111,16 +111,11 @@
 	         {
                 txtCoord=txtCoord+"Ovest <br>";		    
 	         }
+			 //Visualizza le coordinate attuali
 	         document.getElementById("mialongitudine").innerHTML+=txtCoord;
-	         var data = {'mapValue':{'lat': position.coords.latitude,'lng':position.coords.longitude}};
-	         data.id="MiaPosizioneMap";
-	         data.showMarker="SI";
-			 //Richiama la funzione che fa vedere la mappa
-             showMap(data);
-	         data.id="TabellaPercorsi";
-		     data.AJaxCallBack='/getGeoDistanceTrace';
-		     //Fa una chiamata ajax per richiedere le coordinate
-		     ajaxCall(data);
+			 //Carica la mappa il marker della posizione attuale e il tracciato
+		     var data={'mapValue':{'lat': position.coords.latitude,'lng':position.coords.longitude,'title':getParameterByName('title'),'maptitle':getParameterByName('mapTitle')},'id':'MiaPosizioneMap','showMarker':'SI','AJaxCallBack':'/getTracePosition'};
+			 ajaxCall(data);
 	      }
 	      catch(err)
 	      {

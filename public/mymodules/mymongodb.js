@@ -179,7 +179,7 @@ var QueryArrayData=function(dataReq,res)
 	      data.showMarker=dataReq.showMarker;
 		  //Crea un array
 		  data.Waypoints=new Array();
-		  console.log("Ricevuti "+MapData.length+" documenti per i WayPoints");
+		  //console.log("Ricevuti "+MapData.length+" documenti per i WayPoints");
 		  //Vengono aggiunti i Waypoints letti dal db all'array.
 		  for(i=0;i<MapData.length;i++)
 		  {
@@ -193,6 +193,42 @@ var QueryArrayData=function(dataReq,res)
    });
 }
 //***************************************************************************************************************
+//Estrapola un array di documenti che contengono i Waypoints da visualizzare nella mappa
+//Il punto con ilmarker viene passato sa dataReq
+//dataReq contiene i seguenti valori:
+//'mapValue':{'lat':,'lng':,'title':,'maptitle':},'id':,'showMarker':'SI','AJaxCallBack':'/getTracePosition'
+var QueryArrayDataPosition=function(dataReq,res)
+{
+   //console.log("title: "+dataReq.mapValue.title+" maptitle: "+dataReq.mapValue.maptitle);	
+   MapPolylines.find({'title': dataReq.mapValue.title,'maptitle':dataReq.mapValue.maptitle}, {_id: 0 }).exec(function(err, MapData)
+   {
+      if(err) 
+	  { 
+           console.log("MapPoly.find :error");
+	  }
+	  else
+	  {
+		  var i=0;
+	      //Invia le coordinate del punto di Partenza	
+	      var data = {'mapValue':{'lat': dataReq.mapValue.lat,'lng':dataReq.mapValue.lng},'id':dataReq.id};
+	      data.showMarker=dataReq.showMarker;
+		  //Crea un array
+		  data.Waypoints=new Array();
+		  //console.log("Ricevuti "+MapData.length+" documenti per i WayPoints");
+		  //Vengono aggiunti i Waypoints letti dal db all'array.
+		  for(i=0;i<MapData.length;i++)
+		  {
+		      data.Waypoints.push({'lat':MapData[i].position.latitude,'lng':MapData[i].position.longitude});
+			  //console.log("data.Waypoints["+i+"]{"+data.Waypoints[i].lat+","+data.Waypoints[i].lng+"}");
+		  }
+          res.header('Content-type','application/json');
+	      res.header('Charset','utf8');
+	      res.send(JSON.stringify(data));
+	  }		  
+   });
+}
+
+//***************************************************************************************************************
 /*
    Restituisce un elenco dei nomi delle mappe con la distanza in km
    Operazioni:
@@ -201,7 +237,9 @@ var QueryArrayData=function(dataReq,res)
    3. inserisce i dati in una collezione da restituire
    
    Parametri di ingresso:
-   dataReq contiene la posizione attuale. Il formato dei dati contenuti è il seguente
+   
+   dataReq contiene la posizione attuale, l'id dove visualizzare idati che verranno estrapolati
+   showMarker per indicare se visualizzare il marker nella cartina. Il formato dei dati contenuti è il seguente
    {
 	'mapValue':{'lat': latitude,'lng':longitude},
 	'id':'MiaPosizioneMap',
@@ -223,7 +261,7 @@ var QueryNearMaps=function(dataReq,res)
 }
 //***************************************************************************************************************
 /*
-   Estrapola dalla collezione MyTrakking
+   Estrapola dalla collezione MyTrakking i titoli delle mappe
    N.B.Nell'aggregate avevo omesso le parentesi [...]   
 */
 var QueryMapsName=function(res,id)
@@ -235,7 +273,7 @@ var QueryMapsName=function(res,id)
 	     async.each(MapDatas,function(MapData,callback)
 	     {
 			//Per ogni dato letto va ad aggiungersi il titolo in mapTitle 
-		    mapDistance.push({'maptitle':MapData._id,'id':id,'distance':0,'done':false});
+		    mapDistance.push({'maptitle':MapData._id,'title':'','id':id,'distance':0,'done':false});
 			//Chiama la funzione di callback function(err). Se si verifica un errore valorizzare err 
 			//come ad esempio callback("Msg di errore")
 			callback();
@@ -266,6 +304,13 @@ var QueryMapsName=function(res,id)
 /*
    Estrapola le coordinate in base al valore del campo maptitle
    Per ogni coordinata calcola la distanza dalla posizione attuale
+   Restituisce una array di valori json :
+   
+   mapDistance[l].id 		= id della table dove visualizzare le distanze
+   mapDistance[l].maptitle	= titolo della mappa
+   mapDistance[l].title		= titolo del campo
+   mapDistance[l].distance	= distanza minima tra la posizione attuale e quella del tracciato
+   mapDistance[l].done		= falg booleano che vale true se il dato è stato estratto
 */
 var QueryDistance=function(res)
 {
@@ -291,6 +336,7 @@ var QueryDistance=function(res)
 			         distanceR=fromCord.distanceTo(toCord);
 			         if(distance == 0 || distance > distanceR)
 			         {
+					   mapDistance[i].title=MapData.title;	 
 			           mapDistance[i].distance=distanceR;
 				       mapDistance[i].done=true;
 					 }
@@ -319,9 +365,10 @@ var QueryDistance=function(res)
 				  }
 				  if(procedi == true)
 				  {
+					 console.log("Valori calcolati in QueryDistance: "); 
 			         for(l=0;l<mapDistance.length;l++)
 			         {
-                        console.log("QueryDistance -> {"+mapDistance[l].id+","+mapDistance[l].maptitle+","+mapDistance[l].distance+","+mapDistance[l].done+"}");
+                        console.log("QueryDistance -> {"+mapDistance[l].id+","+mapDistance[l].maptitle+","+mapDistance[l].title+","+mapDistance[l].distance+","+mapDistance[l].done+"}");
 					 }
                      res.header('Content-type','application/json');
 	                 res.header('Charset','utf8');
@@ -429,6 +476,7 @@ module.exports =
 QueryData,
 getUserPicture,
 QueryArrayData,
+QueryArrayDataPosition,
 QueryNearMaps,
 User
 };
