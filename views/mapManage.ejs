@@ -1,6 +1,6 @@
 <% include header %>
-    <!-- Pagina per utente profilato ghe vuole inserire commenti o visualizzare commenti del percorso -->
-    <div class="my-jumbotron-main">
+    <!-- Pagina per utente profilato che vuole inserire commenti o visualizzare commenti del percorso -->
+    <div class="my-jumbotron-camminare">
       <div class="container">
         <h1 class="display-2 my-white">My Trekking</h1>
         <p class="my-red"><%=translation.__("INCIPIT")%></p>
@@ -17,24 +17,27 @@
           <h3><%=translation.__("LEMIECOORDINATE")%></h3>
           <p id="mialatitudine"><%=translation.__("LATITUDINE")%></p>
           <p id="mialongitudine"><%=translation.__("LONGITUDINE")%></p>
+		  <p><button type='button' class='btn btn-success' onclick=''><%=translation.__("INSERISCICOMMENTO")%></button></p>
         </div>
         <!-- Visualizza la mappa -->
         <div class="col-md-9 my-second" id="MiaPosizioneMap">
         </div>
-		<!-- Visualizza la tabella dei percorsi Vicini -->
+		<!-- Visualizza la tabella dei Commenti -->
         <div class="col-md-12">
-          <h2 class="text-center"><%=translation.__("PERCORSIVICINI")%></h2>
+          <h2 class="text-center"><%=translation.__("ICOMMENTI")%></h2>
           <div>
              <table width='100%' cellspacing='0' class='table table-striped'>
                 <thead>
-				   <th><%=translation.__('NOMEPERCORSO')%></th>
-                   <th><%=translation.__('DISTANZA')%></th>
+				   <th><%=translation.__('COMMENTO')%></th>
+                   <th><%=translation.__('DATAORA')%></th>
+                   <th><%=translation.__('USER')%></th>
                 </thead>
-		        <tbody id="TabellaPercorsi">
+		        <tbody id="TabellaCommenti">
                 </tbody>
                 <tfoot>
-				   <th><%=translation.__('NOMEPERCORSO')%></th>
-                   <th><%=translation.__('DISTANZA')%></th>
+				   <th><%=translation.__('COMMENTO')%></th>
+                   <th><%=translation.__('DATAORA')%></th>
+                   <th><%=translation.__('USER')%></th>
                 </tfoot>
 		    </table>		
 		  </div>
