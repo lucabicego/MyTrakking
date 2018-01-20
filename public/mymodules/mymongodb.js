@@ -214,7 +214,6 @@ var QueryNearMaps=function(dataReq,res)
 	   mapDistance= new Array();
 	   //Imposta l'id del documento HTML
        fromCord = new LatLon(dataReq.mapValue.lat,dataReq.mapValue.lng);
-	   console.log("Execute QueryMapsName(...)");
 	   QueryMapsName(res,dataReq.id);
 	}
    catch(err)
@@ -229,16 +228,17 @@ var QueryNearMaps=function(dataReq,res)
 var QueryMapsName=function(res,id)
 {
    try{
+	  console.log("Execute QueryMapsName(res,"+id+")");
       MapPolylines.aggregate({"$group":{_id:"$maptitle"}},function(err,MapDatas)
       {
 	     //Esecuzione della funzione in modo syncrono 
 	     async.each(MapDatas,function(MapData,callback)
 	     {
+	        console.log("mapDistance.push("+MapData._id+")");
 			//Per ogni dato letto va ad aggiungersi il titolo in mapTitle 
 		    mapDistance.push({'maptitle':MapData._id,'id':id,'distance':0,'done':false});
 			//Chiama la funzione di callback function(err). Se si verifica un errore valorizzare err 
 			//come ad esempio callback("Msg di errore")
-	        console.log("mapDistance.push("+MapData._id+")");
 			callback();
 	     },
          function(err)
@@ -259,8 +259,9 @@ var QueryMapsName=function(res,id)
    }
    catch(err)
    {
-       console.log("QueryMapsName::error"+err);
+       console.log("QueryMapsName::error = "+err);
    }
+   return;
 }
 //***************************************************************************************************************
 var QueryDistance=function(res)
@@ -268,7 +269,7 @@ var QueryDistance=function(res)
    try{
       var num=0,i=0;
       var distance=0,distanceR=0;
-	  console.log("mapDistance.length = "+mapDistance.length);
+	  console.log("QueryDistance::mapDistance.length = "+mapDistance.length);
 	  for(num=0;num < mapDistance.length;num++)
 	  {
 	     MapPolylines.find({'maptitle': mapDistance[num].maptitle}, {_id: 0},function(err,MapDatas)
