@@ -227,6 +227,12 @@ webServer.prototype.initRouting = function()
 	      response.cookie('translation','en');
           response.redirect('/');
     });
+    //Pagina inserimento e visualizzazioni commenti di una mappa scelta
+    app.get("/mapManage", function(request, response)
+	   {
+	      response.setLocale(request.cookies.translation);
+          response.render('mapManage',{translation:response,mapTitle:request.query.mapTitle});
+    });
     //Riceve una richiesta per le coordinate
     app.post('/getGeoPoints', function(request, response)
 	   {

@@ -17,33 +17,39 @@
 */   
 function ajaxCall(data)
 {
-   var xhttp = new XMLHttpRequest();
-   xhttp.onreadystatechange = function() 
-   {
-      if (this.readyState == XMLHttpRequest.DONE && this.status == 200) 
-	  {
-         var uluru = JSON.parse(this.responseText);
-         if(data.AJaxCallBack == '/getGeoPoints')		 
-		 {
-		    showMap(uluru);  
-		 }
-         else if(data.AJaxCallBack == '/getGeoTrace')		 
-		 {
-		    showMapTrace(uluru);  
-		 }
-         else if(data.AJaxCallBack == '/getGeoDistanceTrace')		 
-		 {
-		    showTabellaPercorsi(uluru);  
-		 }
-         else if(data.AJaxCallBack == '/getUserPicture')		 
-		 {
-		    showUserPicture(uluru);  
-		 }
-       }
-   };
-   xhttp.open("POST",data.AJaxCallBack);
-   xhttp.setRequestHeader("Content-Type", "application/json");   
-   xhttp.send(JSON.stringify(data));   
+   try{	
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() 
+      {
+         if (this.readyState == XMLHttpRequest.DONE && this.status == 200) 
+	     {
+            var uluru = JSON.parse(this.responseText);
+            if(data.AJaxCallBack == '/getGeoPoints')		 
+		    {
+		       showMap(uluru);  
+		    }
+            else if(data.AJaxCallBack == '/getGeoTrace')		 
+		    {
+		       showMapTrace(uluru);  
+		    }
+            else if(data.AJaxCallBack == '/getGeoDistanceTrace')		 
+		    {
+		       showTabellaPercorsi(uluru);  
+		    }
+            else if(data.AJaxCallBack == '/getUserPicture')		 
+		    {
+		       showUserPicture(uluru);  
+		    }
+         }
+      };
+      xhttp.open("POST",data.AJaxCallBack);
+      xhttp.setRequestHeader("Content-Type", "application/json");   
+      xhttp.send(JSON.stringify(data));   
+	}
+	catch(err)
+	{
+	     alert("ajaxCall: "+err);
+	}
 }
 //*******************************************************************************************************************
 /*
@@ -114,6 +120,8 @@ function showTabellaPercorsi(uluru)
          htmlStr+="<td>"+uluru[i].maptitle+"</td>";
 		 //Visualizzo la distanza in km
          htmlStr+="<td>"+(uluru[i].distance/1000).toFixed(2)+"</td>";
+		 //Visualizzo un pulsante per accedere alla finestra della mappa
+         htmlStr+="<td><button type='button' class='btn btn-primary' onclick=window.open('/mapManage?mapTitle="+uluru[i].maptitle+"')>Go</button></td>";
 		 htmlStr+="</tr>";
 	  }
 	  document.getElementById(uluru[0].id).innerHTML=htmlStr;
