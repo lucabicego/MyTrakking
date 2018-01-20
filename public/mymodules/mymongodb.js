@@ -229,7 +229,7 @@ var QueryMapsName=function(res,id)
 {
    try{
 	  console.log("Execute QueryMapsName(res,"+id+")");
-      MapPolylines.aggregate({"$group":{_id:"$maptitle"}},function(err,MapDatas)
+      MapPolylines.aggregate([{"$group":{_id:"$maptitle"}}],function(err,MapDatas)
       {
 	     //Esecuzione della funzione in modo syncrono 
 	     async.each(MapDatas,function(MapData,callback)
