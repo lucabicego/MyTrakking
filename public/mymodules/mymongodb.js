@@ -223,18 +223,17 @@ var QueryNearMaps=function(dataReq,res)
 }
 //***************************************************************************************************************
 /*
-   Estrapola dalla collezione MyTrakking 
+   Estrapola dalla collezione MyTrakking
+   N.B.Nell'aggregate avevo omesso le parentesi [...]   
 */
 var QueryMapsName=function(res,id)
 {
    try{
-	  console.log("Execute QueryMapsName(res,"+id+")");
       MapPolylines.aggregate([{"$group":{_id:"$maptitle"}}],function(err,MapDatas)
       {
 	     //Esecuzione della funzione in modo syncrono 
 	     async.each(MapDatas,function(MapData,callback)
 	     {
-	        console.log("mapDistance.push("+MapData._id+")");
 			//Per ogni dato letto va ad aggiungersi il titolo in mapTitle 
 		    mapDistance.push({'maptitle':MapData._id,'id':id,'distance':0,'done':false});
 			//Chiama la funzione di callback function(err). Se si verifica un errore valorizzare err 
@@ -250,8 +249,8 @@ var QueryMapsName=function(res,id)
 	        }
 	        else
 	        {
-	            console.log("mapDistance.length = "+mapDistance.length);
-	            console.log("Execute QueryDistance(...)");
+	            //console.log("mapDistance.length = "+mapDistance.length);
+	            //console.log("Execute QueryDistance(...)");
 				QueryDistance(res);
 	        }
          });
@@ -264,12 +263,16 @@ var QueryMapsName=function(res,id)
    return;
 }
 //***************************************************************************************************************
+/*
+   Estrapola le coordinate in base al valore del campo maptitle
+   Per ogni coordinata calcola la distanza dalla posizione attuale
+*/
 var QueryDistance=function(res)
 {
    try{
       var num=0,i=0;
       var distance=0,distanceR=0;
-	  console.log("QueryDistance::mapDistance.length = "+mapDistance.length);
+	  //console.log("QueryDistance::mapDistance.length = "+mapDistance.length);
 	  for(num=0;num < mapDistance.length;num++)
 	  {
 	     MapPolylines.find({'maptitle': mapDistance[num].maptitle}, {_id: 0},function(err,MapDatas)
@@ -279,7 +282,7 @@ var QueryDistance=function(res)
 	        {
 			   //Chiama la funzione di callback se si verifica un errore
 			   var toCord = new LatLon(MapData.position.latitude,MapData.position.longitude);				 
-			   console.log("MapData.position ["+MapData.position.latitude+","+MapData.position.longitude+"]");
+			   //console.log("MapData.position ["+MapData.position.latitude+","+MapData.position.longitude+"]");
 			   for(i=0;i<mapDistance.length;i++)
 			   {
                   if(MapData.maptitle == mapDistance[i].maptitle)
@@ -305,12 +308,12 @@ var QueryDistance=function(res)
 	           {
 				  var procedi=true;
 				  var l=0;
-				  console.log("mapDistance.length ="+mapDistance.length);
+				  //console.log("mapDistance.length ="+mapDistance.length);
 			      for(l=0;l<mapDistance.length;l++)
 			      {
                      if(mapDistance[l].done == false)
 				     {
-						 console.log("mapDistance["+l+"].done = false");
+						 //console.log("mapDistance["+l+"].done = false");
 						 procedi=false;
 					 }
 				  }
@@ -331,7 +334,7 @@ var QueryDistance=function(res)
    }
    catch(err)
    {
-       console.log("QueryDistance::error"+err);
+       console.log("QueryDistance::error = "+err);
    }
    return;
 }
