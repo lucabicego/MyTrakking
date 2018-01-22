@@ -29,9 +29,11 @@
                    </div>
                    <div class="modal-body">
                       <p><%=translation.__("SCRIVICOMMENTO")%></p>
+					  <input type="text" class="form-control" id="dialogcomment">
                    </div>
                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-default" data-dismiss="modal"><%=translation.__("CHIUDI")%></button>
+                      <button type="button" class="btn btn-default" data-dismiss="modal" onclick="doComment()"><%=translation.__("SALVA")%></button>
                    </div>
                 </div>
             </div>
@@ -72,7 +74,7 @@
        var doOperation = function() 
        {
 	      try{
-		     getLocation();
+		     getLocation(showPosition);
 	      }
 	      catch(err)
 	      {
@@ -85,14 +87,14 @@
 		  Attenzione. getCurrentPosition() restituisce il valore solo dopo il consenso 
 		  da parte dell'utilizzatore del dispositivo
 	   */
-       function getLocation()
+       function getLocation(callback)
        {
 	      try{
 	         if(navigator.geolocation)
 	         {
-			    //showPosition viene eseguita dopo che l'utente ha dato il consenso
+			    //callback viene eseguita dopo che l'utente ha dato il consenso
 				//ad accedere alla prorpia posizione
-		        navigator.geolocation.getCurrentPosition(showPosition,errorPosition,{enableHighAccuracy: false,timeout: 10000,maximumAge: 10000});
+		        navigator.geolocation.getCurrentPosition(callback,errorPosition,{enableHighAccuracy: false,timeout: 10000,maximumAge: 10000});
 	         }
 	         else
 	         {
@@ -135,9 +137,16 @@
 	         }
 			 //Visualizza le coordinate attuali
 	         document.getElementById("mialongitudine").innerHTML+=txtCoord;
+			 var title=getParameterByName('title');
+			 var maptitle=getParameterByName('mapTitle');
 			 //Carica la mappa il marker della posizione attuale e il tracciato
-		     var data={'mapValue':{'lat': position.coords.latitude,'lng':position.coords.longitude,'title':getParameterByName('title'),'maptitle':getParameterByName('mapTitle')},'id':'MiaPosizioneMap','showMarker':'SI','AJaxCallBack':'/getTracePosition'};
+		     var data={'mapValue':{'lat': position.coords.latitude,'lng':position.coords.longitude,'title':title,'maptitle':maptitle},'id':'MiaPosizioneMap','showMarker':'SI','AJaxCallBack':'/getTracePosition'};
 			 ajaxCall(data);
+			 //Visualizza la tabella con i commenti
+	         var user=document.getElementById("currentUser").innerHTML;
+	         data={'user':user,'maptitle':maptitle,'id':'TabellaCommenti','AJaxCallBack':'/getComments'};
+			 ajaxCall(data);
+			 
 	      }
 	      catch(err)
 	      {
@@ -152,6 +161,39 @@
        function errorPosition(err)
        {
 	      alert("main::errorPosition:\nError code:"+err.code+"\nError message: "+err.message);
+	   }
+	   //*********************************************************************
+	   /*
+	      Premuto il pulsante save del dialogo di inserimento del commento
+	   */
+	   function doComment()
+	   {
+	      try{
+		     getLocation(saveComment);
+		  }	 
+	      catch(err)
+	      {
+	         alert("mapManage::doComment: "+err);
+	      }
+	      return;
+	   }
+	   //*********************************************************************
+	   /*
+	      Effettua una chiamata ajax per salvare il commento
+	   */
+	   function saveComment(position)
+	   {
+	      try{
+	         var user=document.getElementById("currentUser").innerHTML;
+	         var comment=document.getElementById("dialogcomment").value;
+		     var data={'user':user,'maptitle':getParameterByName('mapTitle'),'comment':comment,'lat': position.coords.latitude,'lng':position.coords.longitude,'id':'TabellaCommenti','AJaxCallBack':'/saveComment'};
+			 ajaxCall(data);
+		  }	 
+	      catch(err)
+	      {
+	         alert("mapManage::saveComment: "+err);
+	      }
+	      return;
 	   }
        window.onload= doOperation;	
 	</script>   

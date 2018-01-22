@@ -15,7 +15,7 @@
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <!-- Ancora alla Home Page  -->
 	  <% if (currentUser) { %>
-	     <a class="navbar-brand" href="/"><%=translation.__("BENVENUTO")%> <%= currentUser.name() %> </a>
+	     <a class="navbar-brand" href="/"><%=translation.__("BENVENUTO")%><span id="currentUser"><%= currentUser.name() %></span></a>
  	  <% } else { %>
          <a class="navbar-brand" href="/">Home</a>
  	  <% }%>

@@ -30,7 +30,7 @@ mongoose.connect(urlMongoDb,function(err, db)
 var Schema = mongoose.Schema;
 
 //***************************************************************************************************************
-//Definisce uno schema per leggerele polyline
+//Definisce uno schema per leggere le polyline
 var polylineSchema = new Schema({
   _id: String,	
   title: String,
@@ -470,6 +470,50 @@ if (Number.prototype.toDegrees === undefined)
 }
 
 //***************************************************************************************************************
+//Definisce uno schema per leggere e salvare i commenti
+var mapComment = new Schema({
+  maptitle: String,
+  user: String,
+  comment: String,
+  position: {
+    latitude: Number,
+    longitude: Number
+  },
+  createdAt: { type: Date, default: Date.now },
+});
+//***************************************************************************************************************
+var MapComments = mongoose.model('comments', mapComment);
+//***************************************************************************************************************
+//***************************************************************************************************************
+//Estrapola un array di commenti
+var QueryArrayComments=function(dataReq,res)
+{
+   MapComments.find({'maptitle':dataReq.maptitle}, {_id: 0 }).exec(function(err, MapData)
+   {
+      if(err) 
+	  { 
+           console.log("MapComments.find :error");
+	  }
+	  else
+	  {
+		  var i=0;
+	      //Invia il titolo della mappa	
+	      var data = {'maptitle':dataReq.maptitle,'id':dataReq.id};
+		  //Crea un array
+		  data.Comments=new Array();
+		  //Vengono aggiunti i Commenti degli utenti letti dal db all'array.
+		  for(i=0;i<MapData.length;i++)
+		  {
+		      data.Comments.push({'user':MapData[i].user,'comment':MapData[i].comment,'data':MapData[i].createdAt,'lat':MapData[i].position.latitude,'lng':MapData[i].position.longitude});
+			  //console.log("data.Comments["+i+"]{"+data.Comments[i].user+","+data.Comments[i].comment+","+data.Comments[i].lat+","+data.Comments[i].lng+","+data.Comments[i].data+"}");
+		  }
+          res.header('Content-type','application/json');
+	      res.header('Charset','utf8');
+	      res.send(JSON.stringify(data));
+	  }		  
+   });
+}
+
 //Funzioni che vengono esportata ai restanti moduli
 module.exports = 
 {
@@ -478,5 +522,7 @@ getUserPicture,
 QueryArrayData,
 QueryArrayDataPosition,
 QueryNearMaps,
-User
+User,
+MapComments,
+QueryArrayComments
 };

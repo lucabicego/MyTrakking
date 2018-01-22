@@ -44,6 +44,14 @@ function ajaxCall(data)
 		    {
 		       showUserPicture(uluru);  
 		    }
+            else if(data.AJaxCallBack == '/getComments')		 
+		    {
+		       showTabellaCommenti(uluru);  
+		    }
+			else if(data.AJaxCallBack == '/saveComment')
+			{
+		       getComments(uluru);  
+			}	
          }
       };
       xhttp.open("POST",data.AJaxCallBack);
@@ -174,6 +182,64 @@ function showTabellaPercorsi(uluru)
 	}
 	return;
 }
+//*********************************************************************
+/*
+   Richiede l'elenco dei commenti
+   Valori contenuti in uluru
+   
+   uluru.maptitle		= titolo della mappa
+   uluru.id				= id dell'oggetto DOM dove visualizzare i dati della tabella
+*/
+function getComments(uluru)
+{
+   try{
+	  var data={'maptitle':uluru.maptitle,'id':uluru.id,'AJaxCallBack':'/getComments'}
+	  ajaxCall(data);
+	}
+	catch(err)
+	{
+	   alert("getComments: "+err);
+	}
+	return;
+	
+}
+//*********************************************************************
+/*
+   VIsualizza una tabella che contiene i commenti
+   Valori contenuti in uluru
+
+   uluru.maptitle				= titolo della mappa
+   uluru.id						= id dell'oggetto DOM che visualizza la tabella
+   uluru.Comments[i].user		= utente che ha inserito il commento
+   uluru.Comments[i].comment	= commento inserito dall'utente
+   uluru.Comments[i].data 		= data di inserimento del commento
+   uluru.Comments[i].lat		= latitidine dove è stato inserito il commento
+   uluru.Comments[i].lng		= longitudine dove è stato inserito il commento   
+
+*/
+function showTabellaCommenti(uluru)
+{  
+   try{
+	  var i=0; 
+      var htmlStr="";
+	  for(i=0;i<uluru.Comments.length;i++)
+	  {
+         htmlStr+="<tr scope='row'>";
+         htmlStr+="<td>"+uluru.Comments[i].comment+"</td>";
+		 var dataTmp = new Date(uluru.Comments[i].data);
+         htmlStr+="<td>"+dataTmp.getDay()+"/"+dataTmp.getMonth()+"/"+dataTmp.getFullYear()+" "+dataTmp.getHours()+":"+dataTmp.getMinutes()+":"+dataTmp.getSeconds()+"</td>";
+         htmlStr+="<td>"+uluru.Comments[i].user+"</td>";
+		 htmlStr+="</tr>";
+	  }
+	  document.getElementById(uluru.id).innerHTML=htmlStr;
+	}
+	catch(err)
+	{
+	   alert("showTabellaCommenti: "+err);
+	}
+	return;
+}
+
 //*********************************************************************
 /*
   Questa routine è utilizzata per avere il valore contenuto nella query string

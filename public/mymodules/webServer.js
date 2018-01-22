@@ -284,6 +284,30 @@ webServer.prototype.initRouting = function()
 			    }
 		   });				
        });
+   //Effettua il salvataggio di un commento	   
+   app.post("/saveComment", function(request, response) 
+   {
+      var user = request.body.user;
+      var maptitle = request.body.maptitle;
+	  var comment = request.body.comment;
+	  var id = request.body.id;
+	  var lat= request.body.lat;
+	  var lng= request.body.lng;
+	  //console.log("SaveComment {"+user+","+maptitle+","+comment+","+id+","+lat+","+lng+"}");
+	  //Salva il nuovo utente
+      var newComment = new MyMongo.MapComments({'maptitle':maptitle,'user':user,'comment':comment,'position':{'latitude':lat,'longitude':lng}});
+      newComment.save();                                                
+	  var data={'user':user,'maptitle':maptitle,'id':id,'AJaxCallBack':'/saveComment'};
+      response.header('Content-type','application/json');
+	  response.header('Charset','utf8');
+	  response.send(JSON.stringify(data));
+   });
+   //Leggi l'elenco dei commenti	
+    app.post('/getComments', function(request, response)
+	   {
+	      var dataReq=request.body;
+	      MyMongo.QueryArrayComments(dataReq , response);
+    }); 
     //Pagina messaggio di Errore   
     app.use(function(request, response)
 	   {
