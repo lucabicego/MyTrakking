@@ -498,7 +498,7 @@ var QueryArrayComments=function(dataReq,res)
 	  {
 		  var i=0;
 	      //Invia il titolo della mappa	
-	      var data = {'maptitle':dataReq.maptitle,'id':dataReq.id};
+	      var data = {'maptitle':dataReq.maptitle,'id_tab':dataReq.id_tab,'id_map':dataReq.id_map};
 		  //Crea un array
 		  data.Comments=new Array();
 		  //Vengono aggiunti i Commenti degli utenti letti dal db all'array.

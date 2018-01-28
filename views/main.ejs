@@ -4,7 +4,6 @@
       <div class="container">
         <h1 class="display-2 my-white">My Trekking</h1>
         <p class="my-red"><%=translation.__("INCIPIT")%></p>
-        <p><a class="btn btn-primary btn-lg" href="/info" role="button"><%=translation.__("MAGGIORI_DETTAGLI")%> &raquo;</a></p>
       </div>
     </div>
     <div class="container">
@@ -66,6 +65,10 @@
        function getLocation()
        {
 	      try{
+		     /*
+		     	var position={'coords':{'latitude':45.803,'longitude':11.4513}};
+				showPosition(position);
+			 */	
 	         if(navigator.geolocation)
 	         {
 			    //showPosition viene eseguita dopo che l'utente ha dato il consenso

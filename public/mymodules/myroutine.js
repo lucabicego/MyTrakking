@@ -46,11 +46,16 @@ function ajaxCall(data)
 		    }
             else if(data.AJaxCallBack == '/getComments')		 
 		    {
-		       showTabellaCommenti(uluru);  
+			   //Mostra la tabella commenti	
+		       showTabellaCommenti(uluru);
+			   //Mostra nella mappa i markers dove sono stati inseriti i commenti
+               showMarkerCommenti(uluru);			   
 		    }
 			else if(data.AJaxCallBack == '/saveComment')
 			{
 		       getComments(uluru);  
+			   //Mostra nella mappa i markers dove sono stati inseriti i commenti
+               showMarkerCommenti(uluru);			   
 			}	
          }
       };
@@ -88,6 +93,14 @@ function showMap(uluru)
 //*******************************************************************************************************************
 /*
    Visualizza la mappa indicando in uluru le coordinate della mappa da visualizzare e il tracciato del percorso
+   uluru contiene i seguenti valori
+   
+   	uluru.mapValue.lat			= latitudine per il punto centrale della mappa
+	uluru.mapValue.lng			= longitudine per il punto centrale della mappa
+	uluru.id					= id oggetto DOM dove visualizzare la mappa
+	uluru.showMarker			= vale SI/No per visualizzare il marker
+	uluru.Maypoints[1..n].lat	= latitudine dei punti che mostrano il percorso
+	uluru.Maypoints[1..n].lng	= longitudine dei punti che mostrano il percorso
 */
 function showMapTrace(uluru)
 {
@@ -117,7 +130,9 @@ function showMapTrace(uluru)
 }
 
 //*********************************************************************
-
+/*
+   Visualizza nella mappa 
+*/
 function showMapTraceMarker(uluru)
 {
 	try{
@@ -152,7 +167,7 @@ function showMapTraceMarker(uluru)
    
    Valori contenuti in uluru
    
-   uluru[l].id 		= id della table dove visualizzare le distanze
+   uluru[l].id 			= id della table dove visualizzare le distanze
    uluru[l].maptitle	= titolo della mappa
    uluru[l].title		= titolo del campo
    uluru[l].distance	= distanza minima tra la posizione attuale e quella del tracciato
@@ -209,7 +224,8 @@ function getComments(uluru)
    Valori contenuti in uluru
 
    uluru.maptitle				= titolo della mappa
-   uluru.id						= id dell'oggetto DOM che visualizza la tabella
+   uluru.id_tab					= id dell'oggetto DOM che visualizza la tabella dei commenti
+   uluru.id_map					= id dell'oggetto DOM che visualizza la mappa
    uluru.Comments[i].user		= utente che ha inserito il commento
    uluru.Comments[i].comment	= commento inserito dall'utente
    uluru.Comments[i].data 		= data di inserimento del commento
@@ -222,20 +238,74 @@ function showTabellaCommenti(uluru)
    try{
 	  var i=0; 
       var htmlStr="";
+	  //Ricava l'utente
+	  var user=document.getElementById("currentUser").innerHTML;
 	  for(i=0;i<uluru.Comments.length;i++)
 	  {
+	     var txtCoord=parseFloat(uluru.Comments[i].lat).toFixed(2)+"° / ";
+		 txtCoord=txtCoord+parseFloat(uluru.Comments[i].lng).toFixed(2)+"°";
          htmlStr+="<tr scope='row'>";
          htmlStr+="<td>"+uluru.Comments[i].comment+"</td>";
+         htmlStr+="<td>"+txtCoord+"</td>";
 		 var dataTmp = new Date(uluru.Comments[i].data);
-         htmlStr+="<td>"+dataTmp.getDay()+"/"+dataTmp.getMonth()+"/"+dataTmp.getFullYear()+" "+dataTmp.getHours()+":"+dataTmp.getMinutes()+":"+dataTmp.getSeconds()+"</td>";
+         htmlStr+="<td>"+prefixZeros(dataTmp.getDay(),2)+"/"+prefixZeros(dataTmp.getMonth()+1,2)+"/"+dataTmp.getFullYear()+" "+dataTmp.getHours()+":"+dataTmp.getMinutes()+":"+dataTmp.getSeconds()+"</td>";
          htmlStr+="<td>"+uluru.Comments[i].user+"</td>";
+		 if(user == uluru.Comments[i].user)
+		 {
+            htmlStr+="<td><button type='button' class='btn btn-warning' onclick=''>Edit</button></td>";
+            htmlStr+="<td><button type='button' class='btn btn-danger' onclick=''>Delete</button></td>";
+		 }	 
 		 htmlStr+="</tr>";
 	  }
-	  document.getElementById(uluru.id).innerHTML=htmlStr;
+	  document.getElementById(uluru.id_tab).innerHTML=htmlStr;
 	}
 	catch(err)
 	{
 	   alert("showTabellaCommenti: "+err);
+	}
+	return;
+}
+
+//*********************************************************************
+/*
+   VIsualizza nella mappa  i markers dove sono stati posizionati i commenti
+   Valori contenuti in uluru
+
+   uluru.maptitle				= titolo della mappa
+   uluru.id_tab					= id dell'oggetto DOM che visualizza la tabella dei commenti
+   uluru.id_map					= id dell'oggetto DOM che visualizza la mappa
+   uluru.Comments[i].user		= utente che ha inserito il commento
+   uluru.Comments[i].comment	= commento inserito dall'utente
+   uluru.Comments[i].data 		= data di inserimento del commento
+   uluru.Comments[i].lat		= latitidine dove è stato inserito il commento
+   uluru.Comments[i].lng		= longitudine dove è stato inserito il commento   
+
+*/
+function showMarkerCommenti(uluru)
+{
+   try{
+	  var i=0; 
+      var mapPosition={'lat':uluru.Comments[0].lat,'lng':uluru.Comments[0].lng};
+      var myOptions = {center: new google.maps.LatLng(mapPosition),zoom: 12,mapTypeId: google.maps.MapTypeId.ROADMAP};
+	  var map = new google.maps.Map(document.getElementById(uluru.id_map),myOptions);
+	  for(i=0;i<uluru.Comments.length;i++)
+	  {
+         mapPosition={'lat':uluru.Comments[i].lat,'lng':uluru.Comments[i].lng};
+         var marker = new google.maps.Marker({position: mapPosition,map: map});
+		 //Effettua il disegno dei Waypoints
+         var flightPath = new google.maps.Polyline({
+           path: mapPosition,
+           geodesic: true,
+           strokeColor: '#00FF00',
+           strokeOpacity: 1.0,
+           strokeWeight: 2
+         });
+         flightPath.setMap(map);
+	  }
+	}
+	catch(err)
+	{
+	   alert("showMarkerCommenti: "+err);
 	}
 	return;
 }
@@ -419,6 +489,26 @@ function getPicture()
   window.addEventListener('load', startup, false);
 }	
 
+//*********************************************************************
+/*
+   Funzione per anteporre degli zeri ad un numero
+   Esempio di utilizzo:
+   
+   prefixZeros(100, 5); 
+   
+   Restituisce:
+   
+   00100
+*/
+function prefixZeros(number, maxDigits) 
+{  
+    var length = maxDigits - number.toString().length;
+    if(length <= 0)
+        return number;
+
+    var leadingZeros = new Array(length + 1);
+    return leadingZeros.join('0') + number.toString();
+}
 
 
 
