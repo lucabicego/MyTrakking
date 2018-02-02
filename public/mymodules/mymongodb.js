@@ -582,7 +582,6 @@ var CommentiTracciaMarkers=function(dataReq,res)
 		        var i=0;
 		        //Crea un array
 		        data.Comments=new Array();
-				console.log("MapData.length = "+MapData.length);
 		        //Vengono aggiunti i Commenti degli utenti letti dal db all'array.
 		        for(i=0;i<MapData.length;i++)
 		        {

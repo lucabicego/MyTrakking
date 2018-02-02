@@ -257,6 +257,10 @@ function showTabellaCommenti(uluru)
       var htmlStr="";
 	  //Ricava l'utente
 	  var user=document.getElementById("currentUser").innerHTML;
+	  if(uluru.Comments == undefined)
+	  {
+		  return;
+	  }	  
 	  for(i=0;i<uluru.Comments.length;i++)
 	  {
 		  
@@ -281,17 +285,6 @@ function showTabellaCommenti(uluru)
 			htmlStr+=uluru.Comments[i].id_comment;
 			htmlStr+="\")'>Delete</button></td>";
 		 }	
-		 /*
-		 //Aggiungo una colonna nascosta dove metto l'id
-         htmlStr+="<td style='display:none;' ";
-		 htmlStr+="id = '";
-		 htmlStr+=uluru.id_tab;
-		 htmlStr+="_";
-		 htmlStr+=prefixZeros(i,3); 	 
-		 htmlStr+="'>";
-		 htmlStr+=uluru.Comments[i].id_comment;
-		 htmlStr+="</td>";		 
-		 */
 		 htmlStr+="</tr>";
 	  }
 	  document.getElementById(uluru.id_tab).innerHTML=htmlStr;
@@ -328,10 +321,6 @@ function showMapTraceMarkerCommenti(uluru)
 {
    try{
 	  var i=0; 
-	  if(uluru.Comments == undefined)
-	  {
-		  return;
-	  }
 	  if(uluru.Comments.length == 0)
 	  {
 		  return;
@@ -362,19 +351,28 @@ function showMapTraceMarkerCommenti(uluru)
             map: map
          });		 
 	  }
+	  if(uluru.Comments == undefined)
+	  {	  
+          return;
+      }
+	  if(uluru.Comments.length == 0)
+	  {
+		  return;
+	  }
+	  //Visualizza i markers   
 	  var infowindow = new google.maps.InfoWindow;
 	  for(i=0;i<uluru.Comments.length;i++)
 	  {
-         marker = new google.maps.Marker({
-            position: new google.maps.LatLng(uluru.Comments[i].lat, uluru.Comments[i].lng),
-            map: map
-         });		 
+            marker = new google.maps.Marker({
+               position: new google.maps.LatLng(uluru.Comments[i].lat, uluru.Comments[i].lng),
+               map: map
+            });		 
 	  }
       google.maps.event.addListener(marker, 'click', (function(marker, i) {
-         return function() {
-             infowindow.setContent(labels[i % labels.length]);
-             infowindow.open(map, marker);
-         }
+            return function() {
+                infowindow.setContent(labels[i % labels.length]);
+                infowindow.open(map, marker);
+            }
       })(marker, i));	  
 	}
 	catch(err)
