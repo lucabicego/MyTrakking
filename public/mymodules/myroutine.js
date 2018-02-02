@@ -30,10 +30,12 @@ function ajaxCall(data)
 		    }
             else if(data.AJaxCallBack == '/getGeoTrace')		 
 		    {
+			   //Mostra sulla mappa la traccia	
 		       showMapTrace(uluru);  
 		    }
             else if(data.AJaxCallBack == '/getTracePosition')		 
 		    {
+			   //Mostra sulla Mappa la Traccia e la posizione	
 		       showMapTrace(uluru);  
 		    }
             else if(data.AJaxCallBack == '/getGeoDistanceTrace')		 
@@ -48,14 +50,22 @@ function ajaxCall(data)
 		    {
 			   //Mostra la tabella commenti	
 		       showTabellaCommenti(uluru);
+		    }
+            else if(data.AJaxCallBack == '/getCommentiTracciaMarkers')		 
+		    {
+			   //Mostra la tabella commenti	
+		       showTabellaCommenti(uluru);
 			   //Mostra nella mappa i markers dove sono stati inseriti i commenti
-               showMarkerCommenti(uluru);			   
+               showMapTraceMarkerCommenti(uluru);			   
 		    }
 			else if(data.AJaxCallBack == '/saveComment')
 			{
+		       //Richiede di disegnare la traccia i percorsi e i markers		
 		       getComments(uluru);  
-			   //Mostra nella mappa i markers dove sono stati inseriti i commenti
-               showMarkerCommenti(uluru);			   
+			}	
+			else
+			{
+			   alert("ajaxCall --> "+data.AJaxCallBack+" non gestito !");	 
 			}	
          }
       };
@@ -107,7 +117,7 @@ function showMapTrace(uluru)
 	try{
 		//Carica la mappa. La variabile data contiene le coordinate del punto
         var myOptions = {center: new google.maps.LatLng(uluru.mapValue),zoom: 12,mapTypeId: google.maps.MapTypeId.ROADMAP};
-        var map = new google.maps.Map(document.getElementById(uluru.id),myOptions);
+         window.map = new google.maps.Map(document.getElementById(uluru.id),myOptions);
 		//Vede se inserisce un marker
 		if(uluru.showMarker == 'SI')
 	    {
@@ -199,16 +209,22 @@ function showTabellaPercorsi(uluru)
 }
 //*********************************************************************
 /*
-   Richiede l'elenco dei commenti
+   Richiede l'elenco dei commenti e dei tratticati dela mappa
+   
    Valori contenuti in uluru
    
+   uluru.title			= titolo
    uluru.maptitle		= titolo della mappa
-   uluru.id				= id dell'oggetto DOM dove visualizzare i dati della tabella
+   uluru.lat			= latitudine
+   uluru.lng			= longitudine
+   uluru.id_tab			= id dell'oggetto DOM dove visualizzare i dati della tabella
+   uluru.id_map			= id dell'oggetto DOM dove visualizzare i markersk sulla mappa
+   uluru.showMarker		= Vale si per mostrare i Markers
 */
 function getComments(uluru)
 {
    try{
-	  var data={'maptitle':uluru.maptitle,'id':uluru.id,'AJaxCallBack':'/getComments'}
+      var data={'lat': uluru.lat,'lng':uluru.lng,'title':uluru.title,'maptitle':uluru.maptitle,'id_map':uluru.id_map,'id_tab':uluru.id_tab,'showMarker':uluru.showMarker,'AJaxCallBack':'/getCommentiTracciaMarkers'};
 	  ajaxCall(data);
 	}
 	catch(err)
@@ -227,6 +243,7 @@ function getComments(uluru)
    uluru.id_tab					= id dell'oggetto DOM che visualizza la tabella dei commenti
    uluru.id_map					= id dell'oggetto DOM che visualizza la mappa
    uluru.Comments[i].user		= utente che ha inserito il commento
+   uluru.Comments[i].id_comment	= id del commento inserito dall'utente
    uluru.Comments[i].comment	= commento inserito dall'utente
    uluru.Comments[i].data 		= data di inserimento del commento
    uluru.Comments[i].lat		= latitidine dove è stato inserito il commento
@@ -242,19 +259,39 @@ function showTabellaCommenti(uluru)
 	  var user=document.getElementById("currentUser").innerHTML;
 	  for(i=0;i<uluru.Comments.length;i++)
 	  {
+		  
 	     var txtCoord=parseFloat(uluru.Comments[i].lat).toFixed(2)+"° / ";
 		 txtCoord=txtCoord+parseFloat(uluru.Comments[i].lng).toFixed(2)+"°";
          htmlStr+="<tr scope='row'>";
          htmlStr+="<td>"+uluru.Comments[i].comment+"</td>";
          htmlStr+="<td>"+txtCoord+"</td>";
 		 var dataTmp = new Date(uluru.Comments[i].data);
-         htmlStr+="<td>"+prefixZeros(dataTmp.getDay(),2)+"/"+prefixZeros(dataTmp.getMonth()+1,2)+"/"+dataTmp.getFullYear()+" "+dataTmp.getHours()+":"+dataTmp.getMinutes()+":"+dataTmp.getSeconds()+"</td>";
+         htmlStr+="<td>"+prefixZeros(dataTmp.getDate(),2)+"/"+prefixZeros(dataTmp.getMonth()+1,2)+"/"+dataTmp.getFullYear()+" "+dataTmp.getHours()+":"+dataTmp.getMinutes()+":"+dataTmp.getSeconds()+"</td>";
          htmlStr+="<td>"+uluru.Comments[i].user+"</td>";
 		 if(user == uluru.Comments[i].user)
 		 {
-            htmlStr+="<td><button type='button' class='btn btn-warning' onclick=''>Edit</button></td>";
-            htmlStr+="<td><button type='button' class='btn btn-danger' onclick=''>Delete</button></td>";
-		 }	 
+            htmlStr+="<td><button type='button' class='btn btn-warning' onclick='clickEdit_";
+			htmlStr+=uluru.id_tab;
+			htmlStr+="(\"";
+			htmlStr+=uluru.Comments[i].id_comment;
+			htmlStr+="\")'>Edit</button></td>";
+            htmlStr+="<td><button type='button' class='btn btn-danger' onclick='clickDelete_";
+			htmlStr+=uluru.id_tab;
+			htmlStr+="(\"";
+			htmlStr+=uluru.Comments[i].id_comment;
+			htmlStr+="\")'>Delete</button></td>";
+		 }	
+		 /*
+		 //Aggiungo una colonna nascosta dove metto l'id
+         htmlStr+="<td style='display:none;' ";
+		 htmlStr+="id = '";
+		 htmlStr+=uluru.id_tab;
+		 htmlStr+="_";
+		 htmlStr+=prefixZeros(i,3); 	 
+		 htmlStr+="'>";
+		 htmlStr+=uluru.Comments[i].id_comment;
+		 htmlStr+="</td>";		 
+		 */
 		 htmlStr+="</tr>";
 	  }
 	  document.getElementById(uluru.id_tab).innerHTML=htmlStr;
@@ -272,36 +309,73 @@ function showTabellaCommenti(uluru)
    Valori contenuti in uluru
 
    uluru.maptitle				= titolo della mappa
+   uluru.lat					= latitudine della posizione Attuale
+   uluru.lng					= longitudine della posizione Attuale
    uluru.id_tab					= id dell'oggetto DOM che visualizza la tabella dei commenti
    uluru.id_map					= id dell'oggetto DOM che visualizza la mappa
+   uluru.showMarker				= se vale si Mostra il marker della posizione di partenza
+   uluru.Maypoints[1..n].lat	= latitudine dei punti che mostrano il percorso
+   uluru.Maypoints[1..n].lng	= longitudine dei punti che mostrano il percorso
    uluru.Comments[i].user		= utente che ha inserito il commento
+   uluru.Comments[i].id_comment	= id del commento inserito dall'utente
    uluru.Comments[i].comment	= commento inserito dall'utente
    uluru.Comments[i].data 		= data di inserimento del commento
    uluru.Comments[i].lat		= latitidine dove è stato inserito il commento
    uluru.Comments[i].lng		= longitudine dove è stato inserito il commento   
 
 */
-function showMarkerCommenti(uluru)
+function showMapTraceMarkerCommenti(uluru)		   
 {
    try{
 	  var i=0; 
-      var mapPosition={'lat':uluru.Comments[0].lat,'lng':uluru.Comments[0].lng};
-      var myOptions = {center: new google.maps.LatLng(mapPosition),zoom: 12,mapTypeId: google.maps.MapTypeId.ROADMAP};
-	  var map = new google.maps.Map(document.getElementById(uluru.id_map),myOptions);
-	  for(i=0;i<uluru.Comments.length;i++)
+	  if(uluru.Comments == undefined)
 	  {
-         mapPosition={'lat':uluru.Comments[i].lat,'lng':uluru.Comments[i].lng};
-         var marker = new google.maps.Marker({position: mapPosition,map: map});
-		 //Effettua il disegno dei Waypoints
-         var flightPath = new google.maps.Polyline({
-           path: mapPosition,
+		  return;
+	  }
+	  if(uluru.Comments.length == 0)
+	  {
+		  return;
+	  }
+	  var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      var myOptions = {center: new google.maps.LatLng(uluru.lat,uluru.lng),zoom: 12,mapTypeId: google.maps.MapTypeId.ROADMAP};
+	  var map = new google.maps.Map(document.getElementById(uluru.id_map),myOptions);
+	  //Effettua il disegno dei Waypoints
+      var flightPath = new google.maps.Polyline({
+           path: uluru.Waypoints,
            geodesic: true,
-           strokeColor: '#00FF00',
+           strokeColor: '#FF0000',//Colore Rosso della traccia
            strokeOpacity: 1.0,
            strokeWeight: 2
-         });
-         flightPath.setMap(map);
+      });
+      flightPath.setMap(map);
+	  var marker;
+	  if(uluru.showMarker == 'SI')
+	  {	  
+	     //Visualizza il marker della posizione attuale
+         marker = new google.maps.Marker({
+            position: new google.maps.LatLng(uluru.lat, uluru.lng),
+            icon: {
+               path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+               strokeColor: "blue",
+               scale: 3
+            },			
+            map: map
+         });		 
 	  }
+	  var infowindow = new google.maps.InfoWindow;
+	  for(i=0;i<uluru.Comments.length;i++)
+	  {
+         marker = new google.maps.Marker({
+            position: new google.maps.LatLng(uluru.Comments[i].lat, uluru.Comments[i].lng),
+            map: map
+         });		 
+	  }
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+         return function() {
+             infowindow.setContent(labels[i % labels.length]);
+             infowindow.open(map, marker);
+         }
+      })(marker, i));	  
 	}
 	catch(err)
 	{

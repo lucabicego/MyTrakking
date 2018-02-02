@@ -289,15 +289,18 @@ webServer.prototype.initRouting = function()
    {
       var user = request.body.user;
       var maptitle = request.body.maptitle;
+	  var title=request.body.title;
 	  var comment = request.body.comment;
-	  var id = request.body.id;
+	  var id_tab = request.body.id_tab;
+	  var id_map = request.body.id_map;
 	  var lat= request.body.lat;
 	  var lng= request.body.lng;
-	  //console.log("SaveComment {"+user+","+maptitle+","+comment+","+id+","+lat+","+lng+"}");
+	  //console.log("SaveComment {"+user+","+title+","+","+maptitle+","+comment+","+id_tab+","+id_map+","+lat+","+lng+"}");
 	  //Salva il nuovo utente
       var newComment = new MyMongo.MapComments({'maptitle':maptitle,'user':user,'comment':comment,'position':{'latitude':lat,'longitude':lng}});
-      newComment.save();                                                
-	  var data={'user':user,'maptitle':maptitle,'id':id,'AJaxCallBack':'/saveComment'};
+      newComment.save(); 
+	  //Ridisegna la tabella e la mappa con la traccia e i markers
+	  var data={'title':title,'maptitle':maptitle,'lat':lat,'lng':lng,'id_tab':id_tab,'id_map':id_map,'AJaxCallBack':'/saveComment'};
       response.header('Content-type','application/json');
 	  response.header('Charset','utf8');
 	  response.send(JSON.stringify(data));
@@ -307,6 +310,28 @@ webServer.prototype.initRouting = function()
 	   {
 	      var dataReq=request.body;
 	      MyMongo.QueryArrayComments(dataReq , response);
+    }); 
+    //Leggi la traccia e i commenti
+    app.post('/getCommentiTracciaMarkers', function(request, response)
+	   {
+	      var dataReq=request.body;
+	      MyMongo.CommentiTracciaMarkers(dataReq , response);
+    }); 
+   //Leggi i dati di un commento selezionato per ID	
+    app.post('/getCommentbyId', function(request, response)
+	   {
+	      var dataReq=request.body;
+	      MyMongo.QueryCommentById(dataReq , response);
+    }); 
+    app.post('/deleteCommentbyId', function(request, response)
+	   {
+	      var dataReq=request.body;
+	      MyMongo.DeleteCommentById(dataReq , response);
+    }); 
+    app.post('/updateCommentbyId', function(request, response)
+	   {
+	      var dataReq=request.body;
+	      MyMongo.UpdateCommentById(dataReq , response);
     }); 
     //Pagina messaggio di Errore   
     app.use(function(request, response)

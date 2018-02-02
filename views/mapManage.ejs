@@ -11,14 +11,14 @@
         <div class="col-md-12">
           <h2 class="text-center"><%=translation.__("PERCORSOSCELTO")%> <%=mapTitle%></h2>
         </div>
-        <!-- Due colonne -->
+        <!-- Visualizza le coordinate su Due colonne -->
         <div class="col-md-3">
           <h3><%=translation.__("LEMIECOORDINATE")%></h3>
           <p id="mialatitudine"><%=translation.__("LATITUDINE")%></p>
           <p id="mialongitudine"><%=translation.__("LONGITUDINE")%></p>
-		  <p><button type='button' class='btn btn-success' data-toggle="modal" data-target="#myModal"><%=translation.__("INSERISCICOMMENTO")%></button></p>
-          <!-- Modal -->
-          <div class="modal fade" id="myModal" role="dialog">
+		  <p><button type='button' class='btn btn-success' data-toggle="modal" data-target="#myNewComment"><%=translation.__("INSERISCICOMMENTO")%></button></p>
+          <!-- Dialogo Modale per Inserire un Commento -->
+          <div class="modal fade" id="myNewComment" role="dialog">
              <div class="modal-dialog">
              <!-- Modal content-->
                 <div class="modal-content">
@@ -35,9 +35,81 @@
                       <button type="button" class="btn btn-default" data-dismiss="modal" onclick="doComment()"><%=translation.__("SALVA")%></button>
                    </div>
                 </div>
-            </div>
+             </div>
           </div>
-          <!-- Modal -->
+          <!-- Dialogo Modale per Eliminare un Commento -->
+          <div class="modal fade" id="myDeleteComment" role="dialog">
+             <div class="modal-dialog">
+             <!-- Modal content-->
+                <div class="modal-content">
+                   <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                     <h4 class="modal-title"><%=translation.__("ELIMINACOMMENTO")%></h4>
+                   </div>
+                   <div class="modal-body">
+					  <%=translation.__("ELIMINACOMMENTO1")%>
+					  <span id="myDeleteId" style="display:none"></span>
+                      <div class="row">
+					    <div class="col-sm-4"><%=translation.__("USER")%></div>
+						<div class="col-sm-8" id="myDeleteUser"></div>
+					  </div>
+                      <div class="row">
+					    <div class="col-sm-4"><%=translation.__("COMMENTO")%></div>
+						<div class="col-sm-8" id="myDeleteUserComment"></div>
+					  </div>
+                      <div class="row">
+					    <div class="col-sm-4"><%=translation.__("DATAORA")%></div>
+						<div class="col-sm-8" id="myDeleteData"></div>
+					  </div>
+                      <div class="row">
+					    <div class="col-sm-4"><%=translation.__("POSIZIONE")%></div>
+						<div class="col-sm-8" id="myDeletePosizione"></div>
+					  </div>
+                   </div>
+                   <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal"><%=translation.__("CHIUDI")%></button>
+                      <button type="button" class="btn btn-default" data-dismiss="modal" onclick="eraseComment()"><%=translation.__("ELIMINA")%></button>
+                   </div>
+                </div>
+             </div>
+          </div>
+          <!-- Dialogo Modale per Modificare un Commento -->
+          <div class="modal fade" id="myEditComment" role="dialog">
+             <div class="modal-dialog">
+             <!-- Modal content-->
+                <div class="modal-content">
+                   <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                     <h4 class="modal-title"><%=translation.__("MODIFICACOMMENTO")%></h4>
+                   </div>
+                   <div class="modal-body">
+					  <span id="myEditId" style="display:none"></span>
+                      <div class="row">
+					    <div class="col-sm-4"><%=translation.__("USER")%></div>
+						<div class="col-sm-8" id="myEditUser"></div>
+					  </div>
+                      <div class="row">
+					    <div class="col-sm-4"><%=translation.__("COMMENTO")%></div>
+						<div class="col-sm-8" ><input id="myEditUserComment"></input></div>
+					  </div>
+                      <div class="row">
+					    <div class="col-sm-4"><%=translation.__("DATAORA")%></div>
+						<div class="col-sm-8" id="myEditData"></div>
+					  </div>
+                      <div class="row">
+					    <div class="col-sm-4"><%=translation.__("POSIZIONE")%></div>
+						<div class="col-sm-8" id="myEditPosizione"></div>
+					  </div>
+				   
+                   </div>
+                   <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal"><%=translation.__("CHIUDI")%></button>
+                      <button type="button" class="btn btn-default" data-dismiss="modal" onclick="editComment()"><%=translation.__("SALVA")%></button>
+                   </div>
+                </div>
+             </div>
+          </div>
+          <!-- Fine dialoghi Modal -->
         </div>
         <!-- Visualizza la mappa -->
         <div class="col-md-9 my-second" id="MiaPosizioneMap">
@@ -94,7 +166,7 @@
 		     /*
 		     	var position={'coords':{'latitude':45.803,'longitude':11.4513}};
 				showPosition(position);
-             */
+			 */
 	         if(navigator.geolocation)
 	         {
 			    //callback viene eseguita dopo che l'utente ha dato il consenso
@@ -116,7 +188,9 @@
        }
 	   //*********************************************************************
 	   /*
-	      Mostra le coordinate e carica la mappa
+	      Mostra le coordinate e carica la mappa con la traccia la tabella 
+		  dei commenti e i markers
+		  
 	   */
        function showPosition(position)
        {
@@ -130,7 +204,7 @@
 	         {
                 txtCoord=txtCoord+"Sud <br>";		    
 	         }
-	         document.getElementById("mialatitudine").innerHTML+=txtCoord;
+	         document.getElementById("mialatitudine").innerHTML=txtCoord;
 	         txtCoord=parseFloat(position.coords.longitude).toFixed(2)+"° ";
 	         if(position.coords.longitude >= 0)
 	         {
@@ -141,15 +215,11 @@
                 txtCoord=txtCoord+"Ovest <br>";		    
 	         }
 			 //Visualizza le coordinate attuali
-	         document.getElementById("mialongitudine").innerHTML+=txtCoord;
+	         document.getElementById("mialongitudine").innerHTML=txtCoord;
 			 var title=getParameterByName('title');
 			 var maptitle=getParameterByName('mapTitle');
 			 //Carica la mappa il marker della posizione attuale e il tracciato
-		     var data={'mapValue':{'lat': position.coords.latitude,'lng':position.coords.longitude,'title':title,'maptitle':maptitle},'id':'MiaPosizioneMap','showMarker':'SI','AJaxCallBack':'/getTracePosition'};
-			 ajaxCall(data);
-			 //Visualizza la tabella con i commenti e la mappa con i markers
-	         var user=document.getElementById("currentUser").innerHTML;
-	         data={'user':user,'maptitle':maptitle,'id_tab':'TabellaCommenti','id_map':'MiaPosizioneMap','AJaxCallBack':'/getComments'};
+		     var data={'lat': position.coords.latitude,'lng':position.coords.longitude,'title':title,'maptitle':maptitle,'id_map':'MiaPosizioneMap','id_tab':'TabellaCommenti','showMarker':'SI','AJaxCallBack':'/getCommentiTracciaMarkers'};
 			 ajaxCall(data);
 	      }
 	      catch(err)
@@ -183,19 +253,193 @@
 	   }
 	   //*********************************************************************
 	   /*
-	      Effettua una chiamata ajax per salvare il commento
+	      Effettua una chiamata ajax per salvare il commento e ridisegnare
+		  la tabella con i commenti e i tracciati nella mappa
 	   */
 	   function saveComment(position)
 	   {
 	      try{
 	         var user=document.getElementById("currentUser").innerHTML;
 	         var comment=document.getElementById("dialogcomment").value;
-		     var data={'user':user,'maptitle':getParameterByName('mapTitle'),'comment':comment,'lat': position.coords.latitude,'lng':position.coords.longitude,'id_tab':'TabellaCommenti','id_map':'MiaPosizioneMap','AJaxCallBack':'/saveComment'};
+			 var title=getParameterByName('title');
+			 var maptitle=getParameterByName('mapTitle');
+		     var data={'user':user,'title':title,'maptitle':maptitle,'comment':comment,'lat': position.coords.latitude,'lng':position.coords.longitude,'id_tab':'TabellaCommenti','id_map':'MiaPosizioneMap','showMarker':'SI','AJaxCallBack':'/saveComment'};
 			 ajaxCall(data);
 		  }	 
 	      catch(err)
 	      {
 	         alert("mapManage::saveComment: "+err);
+	      }
+	      return;
+	   }
+	   //*********************************************************************
+	   /*
+	      Effettuato un click per cancellare un commento
+	   */
+	   function clickDelete_TabellaCommenti(id_comment)
+	   {
+	      try{
+		     //Fa una richiesta Ajax per avere i dati sul commento selezionato
+             var xhttp = new XMLHttpRequest();
+             xhttp.onreadystatechange = function() 
+             {
+                if (this.readyState == XMLHttpRequest.DONE && this.status == 200) 
+	            {
+                    $("#myDeleteComment").modal("show");				
+                    $("#myDeleteComment").appendTo("body");					
+                    var uluru = JSON.parse(this.responseText);
+					var strTmp=" "+uluru.user;
+                    document.getElementById('myDeleteUser').innerHTML=strTmp;
+                    strTmp=" "+uluru.comment;
+                    document.getElementById('myDeleteUserComment').innerHTML=strTmp;
+		            var dataTmp = new Date(uluru.data);
+					strTmp=" "+prefixZeros(dataTmp.getDate(),2)+"/"+prefixZeros(dataTmp.getMonth()+1,2)+"/"+dataTmp.getFullYear()+" "+dataTmp.getHours()+":"+dataTmp.getMinutes()+":"+dataTmp.getSeconds();
+                    document.getElementById('myDeleteData').innerHTML=strTmp;
+	                var txtLatCoord=parseFloat(uluru.lat).toFixed(2)+"° ";
+	                if(uluru.lat >= 0)
+	                {
+                        txtLatCoord=txtLatCoord+"Nord <br>";		    
+	                }
+	                else
+	                {
+                       txtLatCoord=txtLatCoord+"Sud <br>";		    
+	                }
+	                var txtLngCoord=parseFloat(uluru.lng).toFixed(2)+"° ";
+	                if(uluru.lng >= 0)
+	                {
+                       txtLngCoord=txtLngCoord+"Est <br>";		    
+	                }
+	                else
+	                {
+                       txtLngCoord=txtLngCoord+"Ovest <br>";		    
+	                }
+					strTmp=" "+txtLatCoord+" "+txtLngCoord;
+					document.getElementById('myDeletePosizione').innerHTML=strTmp;
+					document.getElementById('myDeleteId').innerHTML=uluru.id;
+			    }
+			 }; 	
+             xhttp.open("POST","/getCommentbyId");
+             xhttp.setRequestHeader("Content-Type", "application/json");   
+			 var data={'id':id_comment}
+             xhttp.send(JSON.stringify(data));   
+		  }	 
+	      catch(err)
+	      {
+	         alert("clickDelete_TabellaCommenti: "+err);
+	      }
+	      return;
+	   }
+	   //*********************************************************************
+	   /*
+	      Elimina il Commento Selezionato
+	   */
+	   function eraseComment()
+	   {
+	      try{
+		     var id_str=document.getElementById('myDeleteId').innerHTML;
+		     var data={'id':id_str};
+             var xhttp = new XMLHttpRequest();
+             xhttp.onreadystatechange = function() 
+             {
+                if (this.readyState == XMLHttpRequest.DONE && this.status == 200) 
+	            {
+				   doOperation();
+			    }
+			 }; 	
+             xhttp.open("POST","/deleteCommentbyId");
+             xhttp.setRequestHeader("Content-Type", "application/json");   
+             xhttp.send(JSON.stringify(data));   
+		  }	 
+	      catch(err)
+	      {
+	         alert("eraseComment: "+err);
+	      }
+	      return;
+	   }
+	   //*********************************************************************
+	   /*
+	      Effettuato un click per modificare un commento
+		  
+		  id_comment e' l'id del commento
+	   */
+	   function clickEdit_TabellaCommenti(id_comment)
+	   {
+	      try{
+		     //Fa una richiesta Ajax per avere i dati sul commento selezionato
+             var xhttp = new XMLHttpRequest();
+             xhttp.onreadystatechange = function() 
+             {
+                if(this.readyState == XMLHttpRequest.DONE && this.status == 200) 
+	            {
+                    $("#myEditComment").modal("show");	
+                    $("#myEditComment").appendTo("body");					
+                    var uluru = JSON.parse(this.responseText);
+					var strTmp=" "+uluru.user;
+                    document.getElementById('myEditUser').innerHTML=strTmp;
+                    strTmp=" "+uluru.comment;
+                    document.getElementById('myEditUserComment').value=strTmp;
+		            var dataTmp = new Date(uluru.data);
+					strTmp=" "+prefixZeros(dataTmp.getDate(),2)+"/"+prefixZeros(dataTmp.getMonth()+1,2)+"/"+dataTmp.getFullYear()+" "+dataTmp.getHours()+":"+dataTmp.getMinutes()+":"+dataTmp.getSeconds();
+                    document.getElementById('myEditData').innerHTML=strTmp;
+	                var txtLatCoord=parseFloat(uluru.lat).toFixed(2)+"° ";
+	                if(uluru.lat >= 0)
+	                {
+                        txtLatCoord=txtLatCoord+"Nord <br>";		    
+	                }
+	                else
+	                {
+                       txtLatCoord=txtLatCoord+"Sud <br>";		    
+	                }
+	                var txtLngCoord=parseFloat(uluru.lng).toFixed(2)+"° ";
+	                if(uluru.lng >= 0)
+	                {
+                       txtLngCoord=txtLngCoord+"Est <br>";		    
+	                }
+	                else
+	                {
+                       txtLngCoord=txtLngCoord+"Ovest <br>";		    
+	                }
+					strTmp=" "+txtLatCoord+" "+txtLngCoord;
+					document.getElementById('myEditPosizione').innerHTML=strTmp;
+					document.getElementById('myEditId').innerHTML=uluru.id;
+			    }
+			 }; 	
+             xhttp.open("POST","/getCommentbyId");
+             xhttp.setRequestHeader("Content-Type", "application/json");   
+			 var data={'id':id_comment}
+             xhttp.send(JSON.stringify(data));   
+		  }	 
+	      catch(err)
+	      {
+	         alert("clickEdit_TabellaCommenti: "+err);
+	      }
+	      return;
+	   }
+	   //*********************************************************************
+	   /*
+	      Aggiorna il Commento Selezionato
+	   */
+	   function editComment()
+	   {
+	      try{
+		     var id_str=document.getElementById('myEditId').innerHTML;
+			 var comment_str=document.getElementById('myEditUserComment').value;
+		     var data={'id':id_str,'comment':comment_str};
+             var xhttp = new XMLHttpRequest();
+             xhttp.onreadystatechange = function() 
+             {
+                if (this.readyState == XMLHttpRequest.DONE && this.status == 200) 
+	            {
+				   doOperation();
+			    }
+			 }; 	
+             xhttp.open("POST","/updateCommentbyId");
+             xhttp.setRequestHeader("Content-Type", "application/json");   
+             xhttp.send(JSON.stringify(data));   
+		  }	 
+	      catch(err)
+	      {
+	         alert("editComment: "+err);
 	      }
 	      return;
 	   }

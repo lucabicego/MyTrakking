@@ -196,7 +196,18 @@ var QueryArrayData=function(dataReq,res)
 //Estrapola un array di documenti che contengono i Waypoints da visualizzare nella mappa
 //Il punto con ilmarker viene passato sa dataReq
 //dataReq contiene i seguenti valori:
-//'mapValue':{'lat':,'lng':,'title':,'maptitle':},'id':,'showMarker':'SI','AJaxCallBack':'/getTracePosition'
+//
+//Parametri in ingresso:
+//
+//dataReq.mapValue.title	
+//dataReq.mapValue.maptitle
+//
+//Parametri Restituiti:
+//
+//'mapValue':{'lat':lat,'lng':lng,'title':,'maptitle':}
+//'id':id
+//'showMarker':'SI',
+//'AJaxCallBack':'/getTracePosition'
 var QueryArrayDataPosition=function(dataReq,res)
 {
    //console.log("title: "+dataReq.mapValue.title+" maptitle: "+dataReq.mapValue.maptitle);	
@@ -479,7 +490,7 @@ var mapComment = new Schema({
     latitude: Number,
     longitude: Number
   },
-  createdAt: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now }
 });
 //***************************************************************************************************************
 var MapComments = mongoose.model('comments', mapComment);
@@ -492,7 +503,7 @@ var QueryArrayComments=function(dataReq,res)
    {
       if(err) 
 	  { 
-           console.log("MapComments.find :error");
+           console.log("QueryArrayComments::MapComments.find :error");
 	  }
 	  else
 	  {
@@ -513,7 +524,185 @@ var QueryArrayComments=function(dataReq,res)
 	  }		  
    });
 }
+//***************************************************************************************************************
+/*
+  Questa funzione riceve in ingresso una coordinata e il nome della tracciato
+  Restituisce i WayPoints della traccia e i commenti associati alla traccia
+  
+  Parametri in ingresso:
 
+  dataReq.title			= titolo
+  dataReq.maptitle		= nome della mappa
+  dataReq.lat			= latitudine del punto di partenza
+  dataReq.lng			= longitudine del punto di partenza
+  dataReq.showMarker	= Se vale Si significa che si vuole visualizzare i markers	
+  dataReq.id_tab		= id della tabella
+  dataReq.id_map		= id della mappa
+  dataReq.AJaxCallBack
+  
+  Parametri Restituiti:
+
+  'lat':lat,'lng':lng,'maptitle':maptitle,'showMarker':'SI'
+  'Waypoints':{'lat':lat,'lng':lng'}
+  'Comments':{'user':user,'id_comment':id,'comment':commet,'data':data,'lat':lat,'lng':lng}
+  'AJaxCallBack':'/getCommentiTracciaMarkers'
+
+*/
+var CommentiTracciaMarkers=function(dataReq,res)
+{
+   //console.log("CommentiTracciaMarkers --> title: "+dataReq.title+" maptitle: "+dataReq.maptitle);	
+   MapPolylines.find({'title': dataReq.title,'maptitle':dataReq.maptitle}, {_id: 0 }).exec(function(err, MapData)
+   {
+      if(err) 
+	  { 
+           console.log("CommentiTracciaMarkers::MapPoly.find :error");
+	  }
+	  else
+	  {
+		  var i=0;
+	      //Invia le coordinate del punto di Partenza	
+	      var data = {'lat': dataReq.lat,'lng':dataReq.lng,'maptitle':dataReq.maptitle,'showMarker':dataReq.showMarker,'id_tab':dataReq.id_tab,'id_map':dataReq.id_map,'AJaxCallBack':'/getCommentiTracciaMarkers'};
+		  //Crea un array
+		  data.Waypoints=new Array();
+		  //Vengono aggiunti i Waypoints letti dal db all'array.
+		  for(i=0;i<MapData.length;i++)
+		  {
+		      data.Waypoints.push({'lat':MapData[i].position.latitude,'lng':MapData[i].position.longitude});
+			  //console.log("data.Waypoints["+i+"]{"+data.Waypoints[i].lat+","+data.Waypoints[i].lng+"}");
+		  }
+		  //Vengono estrapolati i commenti
+          MapComments.find({'maptitle':dataReq.maptitle}).exec(function(err, MapData)
+          {
+             if(err) 
+	         { 
+                console.log("CommentiTracciaMarkers::MapComments.find :error");
+	         }
+	         else
+	         {
+		        var i=0;
+		        //Crea un array
+		        data.Comments=new Array();
+		        //Vengono aggiunti i Commenti degli utenti letti dal db all'array.
+		        for(i=0;i<MapData.length;i++)
+		        {
+		           data.Comments.push({'user':MapData[i].user,'id_comment':MapData[i].id,'comment':MapData[i].comment,'data':MapData[i].createdAt,'lat':MapData[i].position.latitude,'lng':MapData[i].position.longitude});
+			       //console.log("data.Comments["+i+"]{"+data.Comments[i].user+","+data.Comments[i].id_comment+","+data.Comments[i].comment+","+data.Comments[i].lat+","+data.Comments[i].lng+","+data.Comments[i].data+"}");
+		        }
+                res.header('Content-type','application/json');
+	            res.header('Charset','utf8');
+	            res.send(JSON.stringify(data));
+	         }		  
+          });
+	  }		  
+   });
+}
+
+//***************************************************************************************************************
+/*
+   Restituisce i valori del commento in base all'ID
+   
+   Parametri in ingresso:
+   dataReq.id		= id del commento
+   
+   Parametri Restituiti:
+
+   data.id			= id del documento
+   data.user   		= nome utente che ha creato il commento
+   data.comment		= commento
+   data.data		= data creazione del commento
+   data.lat			= latitutine
+   data.lng			= longitudine
+*/   
+var QueryCommentById=function(dataReq,res)
+{
+   var o_id = new mongoose.Types.ObjectId(dataReq.id);
+   MapComments.findOne({'_id':o_id}).exec(function(err, CommentData)
+   {
+      if(err) 
+	  { 
+           console.log("QueryCommentById::MapComments.find :error");
+	  }
+	  else
+	  {
+	      var data={'id':dataReq.id,'user':CommentData.user,'comment':CommentData.comment,'data':CommentData.createdAt,'lat':CommentData.position.latitude,'lng':CommentData.position.longitude};
+		  //console.log("QueryCommentsById{"+data.user+","+data.comment+","+data.lat+","+data.lng+","+data.data+"}");
+          res.header('Content-type','application/json');
+	      res.header('Charset','utf8');
+	      res.send(JSON.stringify(data));
+	  }		  
+   });
+}
+
+//***************************************************************************************************************
+/*
+   Elimina commento in base all'ID
+   
+   Parametri in ingresso:
+   dataReq.id		= id del commento
+   
+   Parametri Restituiti:
+
+*/   
+var DeleteCommentById=function(dataReq,res)
+{
+   var o_id = new mongoose.Types.ObjectId(dataReq.id);
+   MapComments.find({'_id':o_id}).remove().exec(function(err)
+   {
+      if(err) 
+	  { 
+           console.log("DeleteCommentById::MapComments.remove :error");
+	  }
+	  else
+	  {
+		  //console.log("Eliminato id: "+dataReq.id);
+		  var data={'id':dataReq.id,'Status':'Executed'} 
+          res.header('Content-type','application/json');
+	      res.header('Charset','utf8');
+	      res.send(JSON.stringify(data));
+	  }		  
+   });
+}
+
+//***************************************************************************************************************
+/*
+   Aggiorna il commento in base all'ID
+   
+   Parametri in ingresso:
+   dataReq.id		= id del commento
+   dataReq.comment	= commento
+   
+   Parametri Restituiti:
+
+*/   
+var UpdateCommentById=function(dataReq,res)
+{
+   var o_id = new mongoose.Types.ObjectId(dataReq.id);
+   MapComments.findOne({'_id':o_id},function(err,CommentData)
+   {
+      if(err) 
+	  { 
+           console.log("UpdateCommentById::MapComments.findOne: "+err);
+	  }
+	  else
+	  {
+		  CommentData.comment=dataReq.comment;
+          CommentData.save(function (err)
+		  {
+             if(err)
+		     {
+                console.log("UpdateCommentById::CommentData.save: "+err);
+			 }		 
+		     console.log("UpdateId id: "+dataReq.id);
+		     var data={'id':dataReq.id,'Status':'Executed'} 
+             res.header('Content-type','application/json');
+	         res.header('Charset','utf8');
+	         res.send(JSON.stringify(data));
+          });		  
+	  }		  
+   });
+}
+
+//***************************************************************************************************************
 //Funzioni che vengono esportata ai restanti moduli
 module.exports = 
 {
@@ -524,5 +713,9 @@ QueryArrayDataPosition,
 QueryNearMaps,
 User,
 MapComments,
-QueryArrayComments
+QueryArrayComments,
+CommentiTracciaMarkers,
+QueryCommentById,
+DeleteCommentById,
+UpdateCommentById
 };
