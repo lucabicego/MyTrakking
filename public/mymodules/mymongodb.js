@@ -568,20 +568,21 @@ var CommentiTracciaMarkers=function(dataReq,res)
 		  for(i=0;i<MapData.length;i++)
 		  {
 		      data.Waypoints.push({'lat':MapData[i].position.latitude,'lng':MapData[i].position.longitude});
-			  //console.log("data.Waypoints["+i+"]{"+data.Waypoints[i].lat+","+data.Waypoints[i].lng+"}");
+			  console.log("data.Waypoints["+i+"]{"+data.Waypoints[i].lat+","+data.Waypoints[i].lng+"}");
 		  }
 		  //Vengono estrapolati i commenti
           MapComments.find({'maptitle':dataReq.maptitle}).exec(function(err, MapData)
           {
              if(err) 
 	         { 
-                console.log("CommentiTracciaMarkers::MapComments.find :error");
+                console.log("CommentiTracciaMarkers::MapComments.find: "+err);
 	         }
 	         else
 	         {
 		        var i=0;
 		        //Crea un array
 		        data.Comments=new Array();
+				console.log("MapData.length = "+MapData.length);
 		        //Vengono aggiunti i Commenti degli utenti letti dal db all'array.
 		        for(i=0;i<MapData.length;i++)
 		        {
