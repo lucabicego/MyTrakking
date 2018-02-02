@@ -321,10 +321,6 @@ function showMapTraceMarkerCommenti(uluru)
 {
    try{
 	  var i=0; 
-	  if(uluru.Comments.length == 0)
-	  {
-		  return;
-	  }
 	  var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       var myOptions = {center: new google.maps.LatLng(uluru.lat,uluru.lng),zoom: 12,mapTypeId: google.maps.MapTypeId.ROADMAP};
 	  var map = new google.maps.Map(document.getElementById(uluru.id_map),myOptions);

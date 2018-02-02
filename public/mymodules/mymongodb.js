@@ -550,12 +550,12 @@ var QueryArrayComments=function(dataReq,res)
 */
 var CommentiTracciaMarkers=function(dataReq,res)
 {
-   //console.log("CommentiTracciaMarkers --> title: "+dataReq.title+" maptitle: "+dataReq.maptitle);	
+   console.log("CommentiTracciaMarkers --> title: "+dataReq.title+" maptitle: "+dataReq.maptitle);	
    MapPolylines.find({'title': dataReq.title,'maptitle':dataReq.maptitle}, {_id: 0 }).exec(function(err, MapData)
    {
       if(err) 
 	  { 
-           console.log("CommentiTracciaMarkers::MapPoly.find :error");
+           console.log("CommentiTracciaMarkers::MapPoly.find: "+err);
 	  }
 	  else
 	  {
@@ -586,7 +586,7 @@ var CommentiTracciaMarkers=function(dataReq,res)
 		        for(i=0;i<MapData.length;i++)
 		        {
 		           data.Comments.push({'user':MapData[i].user,'id_comment':MapData[i].id,'comment':MapData[i].comment,'data':MapData[i].createdAt,'lat':MapData[i].position.latitude,'lng':MapData[i].position.longitude});
-			       //console.log("data.Comments["+i+"]{"+data.Comments[i].user+","+data.Comments[i].id_comment+","+data.Comments[i].comment+","+data.Comments[i].lat+","+data.Comments[i].lng+","+data.Comments[i].data+"}");
+			       console.log("data.Comments["+i+"]{"+data.Comments[i].user+","+data.Comments[i].id_comment+","+data.Comments[i].comment+","+data.Comments[i].lat+","+data.Comments[i].lng+","+data.Comments[i].data+"}");
 		        }
                 res.header('Content-type','application/json');
 	            res.header('Charset','utf8');
