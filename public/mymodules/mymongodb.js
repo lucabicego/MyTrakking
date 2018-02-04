@@ -568,8 +568,9 @@ var CommentiTracciaMarkers=function(dataReq,res)
 		  for(i=0;i<MapData.length;i++)
 		  {
 		      data.Waypoints.push({'lat':MapData[i].position.latitude,'lng':MapData[i].position.longitude});
-			  console.log("data.Waypoints["+i+"]{"+data.Waypoints[i].lat+","+data.Waypoints[i].lng+"}");
+			  //console.log("data.Waypoints["+i+"]{"+data.Waypoints[i].lat+","+data.Waypoints[i].lng+"}");
 		  }
+		  console.log("CommentiTracciaMarkers --> trovati "+MapData.length+" punti disegno traccia");
 		  //Vengono estrapolati i commenti
           MapComments.find({'maptitle':dataReq.maptitle}).exec(function(err, MapData)
           {
@@ -586,8 +587,9 @@ var CommentiTracciaMarkers=function(dataReq,res)
 		        for(i=0;i<MapData.length;i++)
 		        {
 		           data.Comments.push({'user':MapData[i].user,'id_comment':MapData[i].id,'comment':MapData[i].comment,'data':MapData[i].createdAt,'lat':MapData[i].position.latitude,'lng':MapData[i].position.longitude});
-			       console.log("data.Comments["+i+"]{"+data.Comments[i].user+","+data.Comments[i].id_comment+","+data.Comments[i].comment+","+data.Comments[i].lat+","+data.Comments[i].lng+","+data.Comments[i].data+"}");
+			       //console.log("data.Comments["+i+"]{"+data.Comments[i].user+","+data.Comments[i].id_comment+","+data.Comments[i].comment+","+data.Comments[i].lat+","+data.Comments[i].lng+","+data.Comments[i].data+"}");
 		        }
+		        console.log("CommentiTracciaMarkers --> trovati "+MapData.length+" commenti per la traccia");
                 res.header('Content-type','application/json');
 	            res.header('Charset','utf8');
 	            res.send(JSON.stringify(data));
