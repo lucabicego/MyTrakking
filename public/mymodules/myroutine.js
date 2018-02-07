@@ -344,7 +344,9 @@ function showMapTraceMarkerCommenti(uluru)
                strokeColor: "blue",
                scale: 3
             },			
-            map: map
+            map: map,
+			title:"Mia Posizione Attuale",
+			visible:true
          });		 
 	  }
 	  if(uluru.Comments == undefined)
@@ -355,21 +357,27 @@ function showMapTraceMarkerCommenti(uluru)
 	  {
 		  return;
 	  }
-	  //Visualizza i markers   
+	  //Visualizza i markers assegnandogli una label   
 	  var infowindow = new google.maps.InfoWindow;
 	  for(i=0;i<uluru.Comments.length;i++)
 	  {
-            marker = new google.maps.Marker({
+		    var str=uluru.Comments[i].user+": "+uluru.Comments[i].comment;   
+	        marker = new google.maps.Marker({
                position: new google.maps.LatLng(uluru.Comments[i].lat, uluru.Comments[i].lng),
-               map: map
-            });		 
-	  }
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-                infowindow.setContent(labels[i % labels.length]);
-                infowindow.open(map, marker);
-            }
-      })(marker, i));	  
+               map: map,
+			   label:labels[i% labels.length],
+			   title:str,
+			   visible:true
+            });
+			//Aggiunge l'evento OnClick
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+               return function() 
+			   {
+                  infowindow.setContent(marker.getTitle());
+                  infowindow.open(map, marker);
+               }
+			})(marker, i));
+      }
 	}
 	catch(err)
 	{

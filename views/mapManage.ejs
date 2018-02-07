@@ -19,7 +19,7 @@
 		  <p><button type='button' class='btn btn-success' data-toggle="modal" data-target="#myNewComment"><%=translation.__("INSERISCICOMMENTO")%></button></p>
           <!-- Dialogo Modale per Inserire un Commento -->
           <div class="modal fade" id="myNewComment" role="dialog">
-             <div class="modal-dialog">
+             <div class="modal-dialog modal-dialog-centered">
              <!-- Modal content-->
                 <div class="modal-content">
                    <div class="modal-header">
@@ -39,7 +39,7 @@
           </div>
           <!-- Dialogo Modale per Eliminare un Commento -->
           <div class="modal fade" id="myDeleteComment" role="dialog">
-             <div class="modal-dialog">
+             <div class="modal-dialog modal-dialog-centered">
              <!-- Modal content-->
                 <div class="modal-content">
                    <div class="modal-header">
@@ -52,16 +52,10 @@
                       <div class="row">
 					    <div class="col-sm-4"><%=translation.__("USER")%></div>
 						<div class="col-sm-8" id="myDeleteUser"></div>
-					  </div>
-                      <div class="row">
 					    <div class="col-sm-4"><%=translation.__("COMMENTO")%></div>
 						<div class="col-sm-8" id="myDeleteUserComment"></div>
-					  </div>
-                      <div class="row">
 					    <div class="col-sm-4"><%=translation.__("DATAORA")%></div>
 						<div class="col-sm-8" id="myDeleteData"></div>
-					  </div>
-                      <div class="row">
 					    <div class="col-sm-4"><%=translation.__("POSIZIONE")%></div>
 						<div class="col-sm-8" id="myDeletePosizione"></div>
 					  </div>
@@ -77,7 +71,7 @@
           <div class="modal fade" id="myEditComment" role="dialog">
              <div class="modal-dialog">
              <!-- Modal content-->
-                <div class="modal-content">
+                <div class="modal-content modal-dialog-centered">
                    <div class="modal-header">
                      <button type="button" class="close" data-dismiss="modal">&times;</button>
                      <h4 class="modal-title"><%=translation.__("MODIFICACOMMENTO")%></h4>
@@ -87,20 +81,13 @@
                       <div class="row">
 					    <div class="col-sm-4"><%=translation.__("USER")%></div>
 						<div class="col-sm-8" id="myEditUser"></div>
-					  </div>
-                      <div class="row">
 					    <div class="col-sm-4"><%=translation.__("COMMENTO")%></div>
 						<div class="col-sm-8" ><input id="myEditUserComment"></input></div>
-					  </div>
-                      <div class="row">
 					    <div class="col-sm-4"><%=translation.__("DATAORA")%></div>
 						<div class="col-sm-8" id="myEditData"></div>
-					  </div>
-                      <div class="row">
 					    <div class="col-sm-4"><%=translation.__("POSIZIONE")%></div>
 						<div class="col-sm-8" id="myEditPosizione"></div>
 					  </div>
-				   
                    </div>
                    <div class="modal-footer">
                       <button type="button" class="btn btn-default" data-dismiss="modal"><%=translation.__("CHIUDI")%></button>
@@ -114,28 +101,37 @@
         <!-- Visualizza la mappa -->
         <div class="col-md-9 my-second" id="MiaPosizioneMap">
         </div>
-		<!-- Visualizza la tabella dei Commenti -->
-        <div class="col-md-12">
-          <h2 class="text-center"><%=translation.__("ICOMMENTI")%></h2>
-          <div>
-             <table width='100%' cellspacing='0' class='table table-striped'>
-                <thead>
-				   <th><%=translation.__('COMMENTO')%></th>
-				   <th><%=translation.__('LATLONG')%></th>
-                   <th><%=translation.__('DATAORA')%></th>
-                   <th><%=translation.__('USER')%></th>
-                </thead>
-		        <tbody id="TabellaCommenti">
-                </tbody>
-                <tfoot>
-				   <th><%=translation.__('COMMENTO')%></th>
-				   <th><%=translation.__('LATLONG')%></th>
-                   <th><%=translation.__('DATAORA')%></th>
-                   <th><%=translation.__('USER')%></th>
-                </tfoot>
-		    </table>		
+		<!-- Visualizza la tabella dei Commenti con il pulsante di mostra nascondi -->
+        <div class="panel-group">
+           <div class="panel panel-default">
+              <div class="panel-heading">
+                 <a data-toggle="collapse" href="#TabCommCollapse1" class="btn btn-outline-info""><%=translation.__("MOSTRATABELLACOMMENTI")%></a>
+              </div>
+              <div id="TabCommCollapse1" class="panel-collapse collapse">
+                 <div class="col-md-12 ">
+                    <h2 class="text-center"><%=translation.__("ICOMMENTI")%></h2>
+                 <div>
+                    <table width='100%' cellspacing='0' class='table table-striped'>
+                       <thead>
+				          <th><%=translation.__('COMMENTO')%></th>
+				          <th><%=translation.__('LATLONG')%></th>
+                          <th><%=translation.__('DATAORA')%></th>
+                          <th><%=translation.__('USER')%></th>
+                       </thead>
+		               <tbody id="TabellaCommenti">
+                       </tbody>
+                       <tfoot>
+				          <th><%=translation.__('COMMENTO')%></th>
+				          <th><%=translation.__('LATLONG')%></th>
+                          <th><%=translation.__('DATAORA')%></th>
+                          <th><%=translation.__('USER')%></th>
+                       </tfoot>
+		            </table>		
+		         </div>
+              </div>
+		   </div>
 		  </div>
-        </div>
+         </div> 		  
       </div>
     </div> 
     <script src="js/myroutine.js"></script>
@@ -164,9 +160,10 @@
        {
 	      try{
 		     /*
+			    Forza una posizione per il debug
 		     	var position={'coords':{'latitude':45.803,'longitude':11.4513}};
 				showPosition(position);
-			 */
+			 */	
 	         if(navigator.geolocation)
 	         {
 			    //callback viene eseguita dopo che l'utente ha dato il consenso
