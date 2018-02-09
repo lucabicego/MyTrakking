@@ -445,6 +445,16 @@
 	      }
 	      return;
 	   }
+	   //*********************************************************************
+	   /*
+	      Rivisualizza la posizione 
+	   */
+	   function redisplayPosition()
+       {
+	      doOperation();
+	   }	   
+	   //Imposta un intervallo del timer pari ad 1 minuto
+	   window.setInterval(redisplayPosition, 60000);
        window.onload= doOperation;	
 	</script>   
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1QXRond8kCPr7sKf_9BQc5bcnA2hgUyQ&callback=initMap" async defer></script>
