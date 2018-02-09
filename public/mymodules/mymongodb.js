@@ -559,16 +559,16 @@ var CommentiTracciaMarkers=function(dataReq,res)
 	  }
 	  else
 	  {
-		  var i=0;
+		  var mi=0;
 	      //Invia le coordinate del punto di Partenza	
 	      var data = {'lat': dataReq.lat,'lng':dataReq.lng,'maptitle':dataReq.maptitle,'showMarker':dataReq.showMarker,'id_tab':dataReq.id_tab,'id_map':dataReq.id_map,'AJaxCallBack':'/getCommentiTracciaMarkers'};
 		  //Crea un array
 		  data.Waypoints=new Array();
 		  //Vengono aggiunti i Waypoints letti dal db all'array.
-		  for(i=0;i<MapData.length;i++)
+		  for(mi=0;mi<MapData.length;mi++)
 		  {
-		      data.Waypoints.push({'lat':MapData[i].position.latitude,'lng':MapData[i].position.longitude});
-			  //console.log("data.Waypoints["+i+"]{"+data.Waypoints[i].lat+","+data.Waypoints[i].lng+"}");
+		      data.Waypoints.push({'lat':MapData[mi].position.latitude,'lng':MapData[mi].position.longitude});
+			  //console.log("data.Waypoints["+mi+"]{"+data.Waypoints[mi].lat+","+data.Waypoints[mi].lng+"}");
 		  }
 		  console.log("CommentiTracciaMarkers --> trovati "+MapData.length+" punti disegno traccia");
 		  //Vengono estrapolati i commenti

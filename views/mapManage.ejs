@@ -373,10 +373,8 @@
              {
                 if(this.readyState == XMLHttpRequest.DONE && this.status == 200) 
 	            {
-				    /*
                     $("#myEditComment").modal("show");	
                     $("#myEditComment").appendTo("body");					
-					*/
                     var uluru = JSON.parse(this.responseText);
 					var strTmp=" "+uluru.user;
                     document.getElementById('myEditUser').innerHTML=strTmp;
@@ -406,8 +404,6 @@
 					strTmp=" "+txtLatCoord+" "+txtLngCoord;
 					document.getElementById('myEditPosizione').innerHTML=strTmp;
 					document.getElementById('myEditId').innerHTML=uluru.id;
-                    $("#myEditComment").modal("show");	
-                    $("#myEditComment").appendTo("body");					
 			    }
 			 }; 	
              xhttp.open("POST","/getCommentbyId");

@@ -201,6 +201,12 @@ webServer.prototype.initRouting = function()
 	      response.setLocale(request.cookies.translation);
           response.render("CaltranoSunioCostola",{translation:response});
     });
+    //Pagina dettagli Percorso
+    app.get("/CaltranoColombara", function(request, response)
+	   {
+	      response.setLocale(request.cookies.translation);
+          response.render("CaltranoColombara",{translation:response});
+    });
 	//Pagina per il percorso Novegno Priaforà
     app.get("/NovegnoPriafora", function(request, response)
 	   {

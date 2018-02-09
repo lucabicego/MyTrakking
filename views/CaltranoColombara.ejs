@@ -1,0 +1,139 @@
+<% include header %>
+    <!-- Intestazione -->
+    <div class="my-jumbotron-colombara">
+      <div class="container">
+        <h1 class="display-2 my-white">My Trekking</h1>
+        <p class="my-white"><%=translation.__("INCIPIT")%></p>
+      </div>
+    </div>
+	<!-- Vari campi che descrivono il percorso -->
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2><%=translation.__("CALTRANOCOLOMBARA")%></h2>
+		  <br/>
+        </div>
+		<!-- Qui descrivo come arrivarci e pongo un riferimento alla mappa -->
+		<div class="col-md-12 text-left">
+		  <br/> 
+          <h3><%=translation.__("COMEARRIVARCI")%></h3>
+		</div>
+		<div class="row">
+           <div class="col-md-4 my-col-padding">
+		      <%=translation.__("COMEARRIVARCI-1")%>
+           </div>
+           <div class="col-md-8 my-second" id="ComeArrivareColombara" >
+           </div>
+		   <div class="col-md-12 text-right">
+		     <br/>
+		     <%=translation.__("PERCORSOPARTENZA")%>
+		     <br/>
+		     <br/>
+		   </div>
+	    </div>
+        <div class="row">
+		   <div class="col-md-12 text-left">
+		      <br/> 
+              <h3><%=translation.__("DESCRIZIONEPERCORSO")%></h3>
+		   </div>
+           <div class="col-md-8 my-col-padding">
+		      <%=translation.__("CALTRANOCOLOMBARA3")%>
+		      <%=translation.__("CALTRANOCOLOMBARA4")%>
+		      <%=translation.__("CALTRANOCOLOMBARA5")%>
+           </div>
+           <div class="col-md-4 text-center">
+		      <figure>
+			  <img src='/images/CaltranoColombaraParcheggio.jpg' class="img-thumbnail" alt="Partenza parcheggio" > 
+			  <br/>
+			  <figcaption><%=translation.__("CALTRANOCOLOMBARA6")%><figcaption>
+			  </figure>
+           </div>
+        </div>
+        <div class="row">
+           <div class="col-md-8 my-col-padding">
+		      <%=translation.__("CALTRANOCOLOMBARA7")%>
+		      <%=translation.__("CALTRANOCOLOMBARA8")%>
+           </div>
+           <div class="col-md-4 text-center">
+		      <figure>
+			  <img src='/images/CaltranoColombaraCippo.jpg' class="img-thumbnail" alt="Cippo Commemorativo" > 
+			  <br/>
+			  <figcaption><%=translation.__("CALTRANOCOLOMBARA9")%><figcaption>
+			  </figure>
+           </div>
+        </div>
+        <div class="row">
+           <div class="col-md-8 my-col-padding">
+		      <%=translation.__("CALTRANOCOLOMBARA10")%>
+		      <%=translation.__("CALTRANOCOLOMBARA11")%>
+           </div>
+           <div class="col-md-4 text-center">
+		      <figure>
+			  <img src='/images/CaltranoColombaraCroceFerro.jpg' class="img-thumbnail" alt="Croce Ferro" > 
+			  <br/>
+			  <figcaption><%=translation.__("CALTRANOCOLOMBARA12")%><figcaption>
+			  </figure>
+           </div>
+        </div>
+        <div class="row">
+           <div class="col-md-8 my-col-padding">
+		      <%=translation.__("CALTRANOCOLOMBARA13")%>
+           </div>
+           <div class="col-md-4 text-center">
+		      <figure>
+			  <img src='/images/CaltranoColombaraTrenti.jpg' class="img-thumbnail" alt="Incrocio via Trenti" > 
+			  <br/>
+			  <figcaption><%=translation.__("CALTRANOCOLOMBARA14")%><figcaption>
+			  </figure>
+           </div>
+        </div>
+		<div class="col-md-12 text-left">
+		   <br/> 
+           <h3><%=translation.__("DETTAGLIPERCORSO")%></h3>
+		</div>
+        <div class="row">
+           <div class="col-md-8">
+		      <ul>
+		         <li><%=translation.__("CALTRANOCOLOMBARA15")%></li>
+		         <li><%=translation.__("CALTRANOCOLOMBARA16")%></li>
+		         <li><%=translation.__("CALTRANOCOLOMBARA17")%></li>
+			  </ul>
+           </div>
+           <div class="col-md-4 text-center">
+		      <figure>
+			  <img src='/images/CaltranoColombaraProfilo.jpg' class="img-thumbnail" alt="Profilo Altimetrico CaltranoColombara" > 
+			  <br/>
+			  <figcaption><%=translation.__("PROFILOALTIMETRICO")%><figcaption>
+			  </figure>
+           </div>
+        </div>
+        <div class="col-md-12 text-center">
+		         <h3><%=translation.__("TRACCIATOPERCORSO")%></h3>
+        </div>
+        <div class="col-md-12 my-second" id="TracciatoCaltranoColombara">
+        </div>
+      </div>
+    </div> 
+    <script src="js/myroutine.js"></script>
+    <script type="text/javascript">
+       var loadMap = function() 
+       {
+	      try{
+		     //Definisci il punto di Vista
+		     var data={'mapValue':{'title':'PartenzaColombara', 'maptitle':'CaltranoColombara'},'id':'ComeArrivareColombara','showMarker':'SI','AJaxCallBack':'/getGeoPoints'};
+		     //Fa una chiamata ajax per richiedere le coordinate
+		     ajaxCall(data);
+			 //Carica la mappa del tracciato
+		     data={'mapValue':{'title':'CaltranoColombaraPLT','maptitle':'CaltranoColombara'},'id':'TracciatoCaltranoColombara','showMarker':'NO','AJaxCallBack':'/getGeoTrace'};
+		     //Fa una chiamata ajax per richiedere le coordinate
+		     ajaxCall(data);
+	      }
+	      catch(err)
+	      {
+	         alert(err);
+	      }
+       };
+       window.onload= loadMap;	
+	</script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1QXRond8kCPr7sKf_9BQc5bcnA2hgUyQ&callback=initMap" async defer></script>
+  <% include footer %>
