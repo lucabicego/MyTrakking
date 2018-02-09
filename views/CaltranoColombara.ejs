@@ -120,11 +120,11 @@
        {
 	      try{
 		     //Definisci il punto di Vista
-		     var data={'mapValue':{'title':'PartenzaColombara', 'maptitle':'CaltranoColombara'},'id':'ComeArrivareColombara','showMarker':'SI','AJaxCallBack':'/getGeoPoints'};
+		     var data={'mapValue':{'title':'PartenzaColombara', 'maptitle':'CaltranoColombara'},'id':'ComeArrivareColombara','showMarker':'SI','zoom':13,'AJaxCallBack':'/getGeoPoints'};
 		     //Fa una chiamata ajax per richiedere le coordinate
 		     ajaxCall(data);
 			 //Carica la mappa del tracciato
-		     data={'mapValue':{'title':'CaltranoColombaraPLT','maptitle':'CaltranoColombara'},'id':'TracciatoCaltranoColombara','showMarker':'NO','AJaxCallBack':'/getGeoTrace'};
+		     data={'mapValue':{'title':'CaltranoColombaraPLT','maptitle':'CaltranoColombara'},'id':'TracciatoCaltranoColombara','showMarker':'NO','zoom':14,'AJaxCallBack':'/getGeoTrace'};
 		     //Fa una chiamata ajax per richiedere le coordinate
 		     ajaxCall(data);
 	      }

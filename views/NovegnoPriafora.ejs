@@ -121,11 +121,11 @@
        {
 	      try{
 		     //Definisci il punto di Vista
-		     var data={'mapValue':{'title':'PartenzaCerbaro', 'maptitle':'NovegnoPriafora'},'id':'ComeArrivareCerbaro','showMarker':'SI','AJaxCallBack':'/getGeoPoints'};
+		     var data={'mapValue':{'title':'PartenzaCerbaro', 'maptitle':'NovegnoPriafora'},'id':'ComeArrivareCerbaro','showMarker':'SI','zoom':15,'AJaxCallBack':'/getGeoPoints'};
 		     //Fa una chiamata ajax per richiedere le coordinate
 		     ajaxCall(data);
 			 //Carica la mappa del tracciato
-		     data={'mapValue':{'title':'435480455433PLT','maptitle':'NovegnoPriafora'},'id':'TracciatoNovegnoPriafora','showMarker':'NO','AJaxCallBack':'/getGeoTrace'};
+		     data={'mapValue':{'title':'435480455433PLT','maptitle':'NovegnoPriafora'},'id':'TracciatoNovegnoPriafora','showMarker':'NO','zoom':12,'AJaxCallBack':'/getGeoTrace'};
 		     //Fa una chiamata ajax per richiedere le coordinate
 		     ajaxCall(data);
 	      }

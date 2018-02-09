@@ -109,11 +109,11 @@
        {
 	      try{
 		     //Carica la mappa del punto di partenza
-		     var data={'mapValue':{'title':'PartenzaCimitero','maptitle':'CaltranoSunioCostola'},'id':'ComeArrivareCimitero','showMarker':'SI','AJaxCallBack':'/getGeoPoints'};
+		     var data={'mapValue':{'title':'PartenzaCimitero','maptitle':'CaltranoSunioCostola'},'id':'ComeArrivareCimitero','showMarker':'SI','zoom':13,'AJaxCallBack':'/getGeoPoints'};
 		     //Fa una chiamata ajax per richiedere le coordinate
 		     ajaxCall(data);
 			 //Carica la mappa del tracciato
-		     data={'mapValue':{'title':'671677PLT','maptitle':'CaltranoSunioCostola'},'id':'TracciatoCaltranoSunio','showMarker':'NO','AJaxCallBack':'/getGeoTrace'};
+		     data={'mapValue':{'title':'671677PLT','maptitle':'CaltranoSunioCostola'},'id':'TracciatoCaltranoSunio','showMarker':'NO','zoom':12,'AJaxCallBack':'/getGeoTrace'};
 		     //Fa una chiamata ajax per richiedere le coordinate
 		     ajaxCall(data);
 	      }

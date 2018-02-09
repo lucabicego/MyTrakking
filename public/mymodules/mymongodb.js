@@ -7,7 +7,7 @@
  *
  * All rights reserved.
  *
- * NOTE: This sofware module can be reused / distributed with written 
+ * NOTE: This software module can be reused / distributed with written 
  * authorisation of the copyright holder
  *
  ****************************************************************************/
@@ -152,7 +152,7 @@ var QueryData=function(dataReq,res)
 	  else
 	  {
 	      //Invia le coordinate del punto di Partenza	
-	      var data = {'mapValue':{'lat': MapData.position.latitude,'lng':MapData.position.longitude}};
+	      var data = {'mapValue':{'lat': MapData.position.latitude,'lng':MapData.position.longitude},'zoom':dataReq.zoom};
 	      data.id=dataReq.id;
 	      data.showMarker=dataReq.showMarker;
           res.header('Content-type','application/json');
@@ -175,7 +175,7 @@ var QueryArrayData=function(dataReq,res)
 	  {
 		  var i=0;
 	      //Invia le coordinate del punto di Partenza	
-	      var data = {'mapValue':{'lat': MapData[0].position.latitude,'lng':MapData[0].position.longitude},'id':dataReq.id};
+	      var data = {'mapValue':{'lat': MapData[0].position.latitude,'lng':MapData[0].position.longitude},'id':dataReq.id,'zoom':dataReq.zoom};
 	      data.showMarker=dataReq.showMarker;
 		  //Crea un array
 		  data.Waypoints=new Array();

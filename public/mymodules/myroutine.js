@@ -7,7 +7,7 @@
  *
  * All rights reserved.
  *
- * NOTE: This sofware module can be reused / distributed with written 
+ * NOTE: This software module can be reused / distributed with written 
  * authorisation of the copyright holder
  *
  ****************************************************************************/
@@ -81,12 +81,17 @@ function ajaxCall(data)
 //*******************************************************************************************************************
 /*
    Visualizza la mappa indicando in uluru le coordinate della mappa da visualizzare
+   
+   uluru.mapValue.lat			= latitudine per il punto centrale della mappa
+   uluru.mapValue.lng			= longitudine per il punto centrale della mappa
+   uluru.zoom					= zoom della mappa
+   uluru.id						= id dell'oggetto DOM dove visualizzare la mappa
 */
 function showMap(uluru)
 {
 	try{
 		//Carica la mappa. La variabile datacontiene le coordinate della mappa da visualizzare
-        var myOptions = {center: new google.maps.LatLng(uluru.mapValue),zoom: 12,mapTypeId: google.maps.MapTypeId.ROADMAP};
+        var myOptions = {center: new google.maps.LatLng(uluru.mapValue),zoom: uluru.zoom,mapTypeId: google.maps.MapTypeId.ROADMAP};
         var map = new google.maps.Map(document.getElementById(uluru.id),myOptions);
 		//Vede se inserisce un marker
 		if(uluru.showMarker == 'SI')
@@ -108,6 +113,7 @@ function showMap(uluru)
    	uluru.mapValue.lat			= latitudine per il punto centrale della mappa
 	uluru.mapValue.lng			= longitudine per il punto centrale della mappa
 	uluru.id					= id oggetto DOM dove visualizzare la mappa
+	uluru.zoom					= zoom della mappa
 	uluru.showMarker			= vale SI/No per visualizzare il marker
 	uluru.Maypoints[1..n].lat	= latitudine dei punti che mostrano il percorso
 	uluru.Maypoints[1..n].lng	= longitudine dei punti che mostrano il percorso
@@ -116,7 +122,7 @@ function showMapTrace(uluru)
 {
 	try{
 		//Carica la mappa. La variabile data contiene le coordinate del punto
-        var myOptions = {center: new google.maps.LatLng(uluru.mapValue),zoom: 12,mapTypeId: google.maps.MapTypeId.ROADMAP};
+        var myOptions = {center: new google.maps.LatLng(uluru.mapValue),zoom: uluru.zoom,mapTypeId: google.maps.MapTypeId.ROADMAP};
          window.map = new google.maps.Map(document.getElementById(uluru.id),myOptions);
 		//Vede se inserisce un marker
 		if(uluru.showMarker == 'SI')

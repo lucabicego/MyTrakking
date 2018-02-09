@@ -7,7 +7,7 @@
  *
  * All rights reserved.
  *
- * NOTE: This sofware module can be reused / distributed with written 
+ * NOTE: This software module can be reused / distributed with written 
  * authorisation of the copyright holder
  *
  ****************************************************************************/
