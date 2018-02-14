@@ -189,6 +189,12 @@ webServer.prototype.initRouting = function()
 	      response.setLocale(request.cookies.translation);
           response.render("info",{translation:response});
     });
+    //Pagina Condividi   
+    app.get("/condividiHelp", function(request, response)
+	   {
+	      response.setLocale(request.cookies.translation);
+          response.render("condividiHelp",{translation:response});
+    });
     //Pagina Elenco Percorsi   
     app.get("/elencoPercorsi", function(request, response)
 	   {

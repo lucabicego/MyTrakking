@@ -164,11 +164,10 @@
        function getLocation(callback)
        {
 	      try{
-		     /*
-			    Forza una posizione per il debug
+			    //Forza una posizione per il debug
 		     	var position={'coords':{'latitude':45.803,'longitude':11.4513}};
 				showPosition(position);
-			 */	
+			 /*
 	         if(navigator.geolocation)
 	         {
 			    //callback viene eseguita dopo che l'utente ha dato il consenso
@@ -181,6 +180,7 @@
 		        //ERRORE-04 = GeoLocation non supportata!
 		         x.innerHtmp=translation.__("ERRORE-04");
 	         }
+			 */
 	      }
 	      catch(err)
 	      {
