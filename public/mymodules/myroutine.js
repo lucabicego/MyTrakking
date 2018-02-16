@@ -245,9 +245,9 @@ function getComments(uluru)
    VIsualizza una tabella che contiene i commenti
    Valori contenuti in uluru
 
-   uluru.maptitle				= titolo della mappa
    uluru.id_tab					= id dell'oggetto DOM che visualizza la tabella dei commenti
    uluru.id_map					= id dell'oggetto DOM che visualizza la mappa
+   uluru.Comments[i].maptitle	= titolo della mappa
    uluru.Comments[i].user		= utente che ha inserito il commento
    uluru.Comments[i].id_comment	= id del commento inserito dall'utente
    uluru.Comments[i].comment	= commento inserito dall'utente
@@ -271,6 +271,7 @@ function showTabellaCommenti(uluru)
 	     var txtCoord=parseFloat(uluru.Comments[i].lat).toFixed(2)+"° / ";
 		 txtCoord=txtCoord+parseFloat(uluru.Comments[i].lng).toFixed(2)+"°";
          htmlStr+="<tr scope='row'>";
+         htmlStr+="<td>"+uluru.Comments[i].maptitle+"</td>";
          htmlStr+="<td>"+uluru.Comments[i].comment+"</td>";
          htmlStr+="<td>"+txtCoord+"</td>";
 		 var dataTmp = new Date(uluru.Comments[i].data);
