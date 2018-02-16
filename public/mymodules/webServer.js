@@ -195,6 +195,12 @@ webServer.prototype.initRouting = function()
 	      response.setLocale(request.cookies.translation);
           response.render("condividiHelp",{translation:response});
     });
+    //Pagina Vedi Commenti   
+    app.get("/vediCommentiHelp", function(request, response)
+	   {
+	      response.setLocale(request.cookies.translation);
+          response.render("vediCommentiHelp",{translation:response});
+    });
     //Pagina Elenco Percorsi   
     app.get("/elencoPercorsi", function(request, response)
 	   {

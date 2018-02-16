@@ -215,7 +215,7 @@ function showTabellaPercorsi(uluru)
 }
 //*********************************************************************
 /*
-   Richiede l'elenco dei commenti e dei tratticati dela mappa
+   Richiede l'elenco dei commenti e dei tracciati della mappa
    
    Valori contenuti in uluru
    
@@ -261,8 +261,6 @@ function showTabellaCommenti(uluru)
    try{
 	  var i=0; 
       var htmlStr="";
-	  //Ricava l'utente
-	  var user=document.getElementById("currentUser").innerHTML;
 	  if(uluru.Comments == undefined)
 	  {
 		  return;
@@ -278,19 +276,6 @@ function showTabellaCommenti(uluru)
 		 var dataTmp = new Date(uluru.Comments[i].data);
          htmlStr+="<td>"+prefixZeros(dataTmp.getDate(),2)+"/"+prefixZeros(dataTmp.getMonth()+1,2)+"/"+dataTmp.getFullYear()+" "+dataTmp.getHours()+":"+dataTmp.getMinutes()+":"+dataTmp.getSeconds()+"</td>";
          htmlStr+="<td>"+uluru.Comments[i].user+"</td>";
-		 if(user == uluru.Comments[i].user)
-		 {
-            htmlStr+="<td><button type='button' class='btn btn-warning' onclick='clickEdit_";
-			htmlStr+=uluru.id_tab;
-			htmlStr+="(\"";
-			htmlStr+=uluru.Comments[i].id_comment;
-			htmlStr+="\")'>Edit</button></td>";
-            htmlStr+="<td><button type='button' class='btn btn-danger' onclick='clickDelete_";
-			htmlStr+=uluru.id_tab;
-			htmlStr+="(\"";
-			htmlStr+=uluru.Comments[i].id_comment;
-			htmlStr+="\")'>Delete</button></td>";
-		 }	
 		 htmlStr+="</tr>";
 	  }
 	  document.getElementById(uluru.id_tab).innerHTML=htmlStr;

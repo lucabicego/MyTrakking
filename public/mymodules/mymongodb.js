@@ -496,33 +496,84 @@ var mapComment = new Schema({
 var MapComments = mongoose.model('comments', mapComment);
 //***************************************************************************************************************
 //***************************************************************************************************************
-//Estrapola un array di commenti
+/*
+  Estrapola un array di commenti
+  Parametri in ingresso:
+  
+  dataReq.maptitle 				= titolo della mappa. Se vale ALL significa fai vedere tutti i commenti
+  dataReq.id_tab				= id dell'oggetto dom dove visualizzare la tabella dei commenti
+  dataReq.id_map				= id dell'oggetto dom dove visualizzare la mappa
+  
+  Parametri Restituiti
+  
+  data.maptitle					= titolo della mappa	
+  data.id_tab					= id oggetto dom dove visualizzare la tabella dei commenti
+  data.id_map					= id oggetto dom dove visualizzare la mappa	
+  data.Comments[i].user			= nome utente
+  data.Comments[i].comment		= commento
+  data.Comments[i].createdAt	= data di creazione
+  data.Comments[i].lat			= latitudine
+  data.Comments[i].lng			= longitudine
+  
+*/  
 var QueryArrayComments=function(dataReq,res)
 {
-   MapComments.find({'maptitle':dataReq.maptitle}, {_id: 0 }).exec(function(err, MapData)
-   {
-      if(err) 
-	  { 
-           console.log("QueryArrayComments::MapComments.find :error");
-	  }
-	  else
-	  {
-		  var i=0;
-	      //Invia il titolo della mappa	
-	      var data = {'maptitle':dataReq.maptitle,'id_tab':dataReq.id_tab,'id_map':dataReq.id_map};
-		  //Crea un array
-		  data.Comments=new Array();
-		  //Vengono aggiunti i Commenti degli utenti letti dal db all'array.
-		  for(i=0;i<MapData.length;i++)
-		  {
+   if(dataReq.maptitle != 'ALL')
+   {	   
+      MapComments.find({'maptitle':dataReq.maptitle}, {_id: 0 }).exec(function(err, MapData)
+      {
+         if(err) 
+	     { 
+            console.log("QueryArrayComments::MapComments.find :error = "+err);
+	     }
+	     else
+	     {
+		    var i=0;
+	        //Invia il titolo della mappa	
+	        var data = {'maptitle':dataReq.maptitle,'id_tab':dataReq.id_tab,'id_map':dataReq.id_map};
+		    //Crea un array
+		    data.Comments=new Array();
+		    //Vengono aggiunti i Commenti degli utenti letti dal db all'array.
+		    for(i=0;i<MapData.length;i++)
+		    {
 		      data.Comments.push({'user':MapData[i].user,'comment':MapData[i].comment,'data':MapData[i].createdAt,'lat':MapData[i].position.latitude,'lng':MapData[i].position.longitude});
 			  //console.log("data.Comments["+i+"]{"+data.Comments[i].user+","+data.Comments[i].comment+","+data.Comments[i].lat+","+data.Comments[i].lng+","+data.Comments[i].data+"}");
-		  }
-          res.header('Content-type','application/json');
-	      res.header('Charset','utf8');
-	      res.send(JSON.stringify(data));
-	  }		  
-   });
+		    }
+            res.header('Content-type','application/json');
+	        res.header('Charset','utf8');
+	        res.send(JSON.stringify(data));
+	     }		  
+      });
+   }
+   else
+   {
+	  //Estrapola tuttii commenti indipendentemente dal nome della mappa ordinandoli per data di creazione 
+      MapComments.find().sort({'created':'asc'}).exec(function(err, MapData)
+      {
+         if(err) 
+	     { 
+            console.log("QueryArrayComments::MapComments.find :error = "+err);
+	     }
+	     else
+	     {
+		    var i=0;
+	        //Invia il titolo della mappa	
+	        var data = {'maptitle':dataReq.maptitle,'id_tab':dataReq.id_tab,'id_map':dataReq.id_map};
+			//console.log("data.maptitle = "+data.maptitle+", data.id_tab = "+data.id_tab+", data.id_map = "+data.id_map);
+		    //Crea un array
+		    data.Comments=new Array();
+		    //Vengono aggiunti i Commenti degli utenti letti dal db all'array.
+		    for(i=0;i<MapData.length;i++)
+		    {
+		      data.Comments.push({'user':MapData[i].user,'comment':MapData[i].comment,'data':MapData[i].createdAt,'lat':MapData[i].position.latitude,'lng':MapData[i].position.longitude});
+			  //console.log("data.Comments["+i+"]{"+data.Comments[i].user+","+data.Comments[i].comment+","+data.Comments[i].lat+","+data.Comments[i].lng+","+data.Comments[i].data+"}");
+		    }
+            res.header('Content-type','application/json');
+	        res.header('Charset','utf8');
+	        res.send(JSON.stringify(data));
+	     }		  
+      });
+   } 	   
 }
 //***************************************************************************************************************
 /*

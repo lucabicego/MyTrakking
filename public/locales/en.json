@@ -128,6 +128,10 @@
 "USER":"User",
 "VEDI":"View", 
 "VEDI-1":"See the comments of those who have already walked along a path", 
+"VEDICOMMENTIHELP11":"This screen shows a table that lists the comments posted by those who have walked the paths presented in this web portal. ",
+"VEDICOMMENTIHELP12":"Comments can only be entered by users who have registered on this portal. Each row contains the coordinates (Latitude and Longitude) of the place, ",
+"VEDICOMMENTIHELP13":"the text of the comment, the time and date of insertion of the comment and the name of the person who created the comment. ",
+
 "VEDIDETTAGI":"See Details",
 "671-673-681-677":"Caltrano - Capitello Costola - Malga Sunio",
 "671-673-681-677-1":"Starting from the cemetery of Caltrano, follow the path CAI no. 671.",
