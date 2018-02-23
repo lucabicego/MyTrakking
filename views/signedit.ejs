@@ -16,6 +16,7 @@
               <input name="username" type="text" class="form-control my-sm-1" placeholder=<%= currentUser.name() || "" %>  value=<%= currentUser.name() || "" %> readonly>
 			  <%=translation.__("NUOVAPASSWORD")%>
               <input name="password" type="password" class="form-control my-sm-1" placeholder="Password" required autofocus>
+			  <%=translation.__("SCEGLIFOTOPROFILO")%>
               <input name="imageurl" type="file" class="form-control my-sm-1" placeholder=<%= currentUser.imageUrl() || "" %> value=<%= currentUser.imageUrl() || "" %> >
               <input type="submit" value='<%=translation.__("MODIFICA")%>' class="btn btn-outline-success my-2 my-sm-2">
            </form>
