@@ -65,7 +65,10 @@ userSchema.methods.imageUrl = function() {
    return this.imageurl;
 };
 //***************************************************************************************************************
-//Questa funzione effettua il salvataggio dell'hash della password
+//Funzione utilizzata per bycrypt
+var noop = function() {};
+//***************************************************************************************************************
+//Questa funzione effettua il salvataggio dell'oggetto user effettuando l'hash della password
 userSchema.pre("save", function(done) {
    var user = this;
    if (!user.isModified("password")) 

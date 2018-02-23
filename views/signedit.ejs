@@ -12,21 +12,25 @@
 	    </div>
         <div class="col-md-4">
            <form action="/signedit" method="post">
-              <label class="form-control my-sm-1" placeholder="Username"><%= currentUser.name() || "" %></label>
+			  <%=translation.__("NOMEUTENTE")%>
+              <input name="username" type="text" class="form-control my-sm-1" placeholder=<%= currentUser.name() || "" %>  value=<%= currentUser.name() || "" %> readonly>
+			  <%=translation.__("NUOVAPASSWORD")%>
               <input name="password" type="password" class="form-control my-sm-1" placeholder="Password" required autofocus>
-              <input type="submit" value="<%=translation.__("MODIFICA")%>" class="btn btn-outline-success my-2 my-sm-2">
+              <input name="imageurl" type="file" class="form-control my-sm-1" placeholder=<%= currentUser.imageUrl() || "" %> value=<%= currentUser.imageUrl() || "" %> >
+              <input type="submit" value='<%=translation.__("MODIFICA")%>' class="btn btn-outline-success my-2 my-sm-2">
            </form>
-		<div>
+		</div>
         <div class="col-md-4">		
 		   <img class="img-responsive center-block" id="pictureuser">
 		   <div>
               <form class="form-inline my-2 my-lg-0" action="/takePicture" method="get">
-                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><%=translation.__("SCATTAFOTO")%></button>
+                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><%=translation.__("MODIFICAFOTO")%></button>
               </form>		   
 		   </div>
 		</div>
 	  </div> 
     </div>
+    <script src="js/myroutine.js"></script>
     <script type="text/javascript">
 	//Acquisice la foto dell'utente
     var loadUserPicture = function() 
@@ -34,7 +38,7 @@
 	   try{
 		  //Carica la foto dell'utente
 		  var data={'username':'new-undef','id':'pictureuser','AJaxCallBack':'/getUserPicture'};
-		  //Fa una chiamata ajax per richiedere le coordinate
+		  //Fa una chiamata ajax per richiedere la foto del profilo utente
 		  ajaxCall(data);
 	   }
 	   catch(err)

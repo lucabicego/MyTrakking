@@ -155,8 +155,13 @@ webServer.prototype.initRouting = function()
    {
       var username = request.body.username;
       var password = request.body.password;
+	  var imageurl=request.body.imageurl;
+	  if(imageurl.length == 0)
+	  {
+		  imageurl="new-undef";
+	  } 	  
 	  //Verifica che non ci sia già l'utente, altrimenti lo salva
-      MyMongo.User.findOne({ username: username }, 
+      MyMongo.User.findOne({ username: username}, 
          function(err, user) 
 	     {
             if (err) 
@@ -171,10 +176,44 @@ webServer.prototype.initRouting = function()
                return response.redirect("/signup");
             }
 	        //Salva il nuovo utente
-            var newUser = new MyMongo.User({username: username,password: password});
+            var newUser = new MyMongo.User({username: username,password: password,imageurl: imageurl});
             newUser.save(next);
           });
        },passport.authenticate("login", {successRedirect: "/",failureRedirect: "/signup",failureFlash: true})
+    );
+   app.post("/signedit", function(request, response, next) 
+   {
+      var username = request.body.username;
+      var password = request.body.password;
+	  var imageurl=request.body.imageurl;
+	  if(imageurl.length == 0)
+	  {
+		  imageurl="new-undef";
+	  } 	  
+	  //Verifica che non ci sia già l'utente e modifica la password
+      MyMongo.User.findOne({ username: username }, 
+         function(err, user) 
+	     {
+            if (err) 
+	        { 
+               return next(err); 
+	        }
+	        //Ritorna dall'interrogazione un utente 
+            if (user) 
+	        {
+			   //Utente esiste gia' quindi procedo a salvare i nuovi valori
+               user.password=password;
+               user.imageurl=imageurl;
+               user.save(next);			   
+            }
+			else
+		    {
+			   //Utente inesistente  
+               request.flash("error", translation.__("ERRORE-05"));
+               return response.redirect("/signedit");
+			}		
+          });
+       },passport.authenticate("login", {successRedirect: "/",failureRedirect: "/signedit",failureFlash: true})
     );
     //Eseguito dopo il login   
     app.post("/login",passport.authenticate("login", {successRedirect: "/",failureRedirect: "/login",failureFlash: true}));  
