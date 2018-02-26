@@ -48,13 +48,13 @@ function ajaxCall(data)
 		    }
             else if(data.AJaxCallBack == '/getComments')		 
 		    {
-			   //Mostra la tabella commenti	
-		       showTabellaCommenti(uluru);
+			   //Mostra la tabella commenti	con i titoli della mappa per ogni tabella
+		       showTabellaCommenti(uluru,"SI");
 		    }
             else if(data.AJaxCallBack == '/getCommentiTracciaMarkers')		 
 		    {
-			   //Mostra la tabella commenti	
-		       showTabellaCommenti(uluru);
+			   //Mostra la tabella commenti	senza visualizzare il nome della mappa per ogni riga tabella
+		       showTabellaCommenti(uluru,"NO");
 			   //Mostra nella mappa i markers dove sono stati inseriti i commenti
                showMapTraceMarkerCommenti(uluru);			   
 		    }
@@ -256,7 +256,7 @@ function getComments(uluru)
    uluru.Comments[i].lng		= longitudine dove è stato inserito il commento   
 
 */
-function showTabellaCommenti(uluru)
+function showTabellaCommenti(uluru,showMapTitle)
 {  
    try{
 	  var i=0; 
@@ -271,13 +271,28 @@ function showTabellaCommenti(uluru)
 	     var txtCoord=parseFloat(uluru.Comments[i].lat).toFixed(2)+"° / ";
 		 txtCoord=txtCoord+parseFloat(uluru.Comments[i].lng).toFixed(2)+"°";
          htmlStr+="<tr scope='row'>";
-         htmlStr+="<td>"+uluru.Comments[i].maptitle+"</td>";
+		 if(showMapTitle == "SI")
+		 {
+            htmlStr+="<td>"+uluru.Comments[i].maptitle+"</td>";
+		 }
          htmlStr+="<td>"+uluru.Comments[i].comment+"</td>";
          htmlStr+="<td>"+txtCoord+"</td>";
 		 var dataTmp = new Date(uluru.Comments[i].data);
          htmlStr+="<td>"+prefixZeros(dataTmp.getDate(),2)+"/"+prefixZeros(dataTmp.getMonth()+1,2)+"/"+dataTmp.getFullYear()+" "+dataTmp.getHours()+":"+dataTmp.getMinutes()+":"+dataTmp.getSeconds()+"</td>";
          htmlStr+="<td>"+uluru.Comments[i].user+"</td>";
-		 htmlStr+="</tr>";
+		 if(showMapTitle == "NO")
+		 {
+            var user=document.getElementById("currentUser").innerHTML;			 
+			if(user != undefined)
+			{
+		       if(user == uluru.Comments[i].user) 
+		       {
+                  htmlStr+="<td><button type='button' class='btn btn-warning' onclick=''>Edit</button></td>";
+                  htmlStr+="<td><button type='button' class='btn btn-danger' onclick=''>Delete</button></td>";
+			   }
+			}
+		 }	 
+ 		 htmlStr+="</tr>"		 
 	  }
 	  document.getElementById(uluru.id_tab).innerHTML=htmlStr;
 	}
