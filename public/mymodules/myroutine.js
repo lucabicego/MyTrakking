@@ -287,8 +287,16 @@ function showTabellaCommenti(uluru,showMapTitle)
 			{
 		       if(user == uluru.Comments[i].user) 
 		       {
-                  htmlStr+="<td><button type='button' class='btn btn-warning' onclick=''>Edit</button></td>";
-                  htmlStr+="<td><button type='button' class='btn btn-danger' onclick=''>Delete</button></td>";
+                  htmlStr+="<td><button type='button' class='btn btn-warning' onclick='clickEdit_";
+                  htmlStr+=uluru.id_tab;
+			      htmlStr+="(\"";
+			      htmlStr+=uluru.Comments[i].id_comment;
+                  htmlStr+="\")'>Edit</button></td>";		
+                  htmlStr+="<td><button type='button' class='btn btn-danger' onclick='clickDelete_";
+			      htmlStr+=uluru.id_tab;
+			      htmlStr+="(\"";
+			      htmlStr+=uluru.Comments[i].id_comment;
+                  htmlStr+="\")'>Delete</button></td>";
 			   }
 			}
 		 }	 
