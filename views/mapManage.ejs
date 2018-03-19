@@ -173,7 +173,7 @@
 	         {
 			    //callback viene eseguita dopo che l'utente ha dato il consenso
 				//ad accedere alla prorpia posizione
-		        navigator.geolocation.getCurrentPosition(callback,errorPosition,{enableHighAccuracy: false,timeout: 10000});
+		        navigator.geolocation.getCurrentPosition(callback,errorPosition,{enableHighAccuracy: true,timeout: 10000,maximumAge: 10000});
 	         }
 	         else
 	         {
