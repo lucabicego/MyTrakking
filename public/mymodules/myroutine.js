@@ -322,8 +322,8 @@ function showTabellaCommenti(uluru,showMapTitle)
    uluru.id_tab					= id dell'oggetto DOM che visualizza la tabella dei commenti
    uluru.id_map					= id dell'oggetto DOM che visualizza la mappa
    uluru.showMarker				= se vale si Mostra il marker della posizione di partenza
-   uluru.Maypoints[1..n].lat	= latitudine dei punti che mostrano il percorso
-   uluru.Maypoints[1..n].lng	= longitudine dei punti che mostrano il percorso
+   uluru.Waypoints[1..n].lat	= latitudine dei punti che mostrano il percorso
+   uluru.Waypoints[1..n].lng	= longitudine dei punti che mostrano il percorso
    uluru.Comments[i].user		= utente che ha inserito il commento
    uluru.Comments[i].id_comment	= id del commento inserito dall'utente
    uluru.Comments[i].comment	= commento inserito dall'utente
