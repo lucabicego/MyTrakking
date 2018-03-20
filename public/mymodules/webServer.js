@@ -264,6 +264,12 @@ webServer.prototype.initRouting = function()
 	      response.setLocale(request.cookies.translation);
           response.render("NovegnoPriafora",{translation:response});
     });
+	//Pagina per il percorso Crema
+    app.get("/Crema", function(request, response)
+	   {
+	      response.setLocale(request.cookies.translation);
+          response.render("Crema",{translation:response});
+    });
 	//Fa comparire una schermata dove è possibile farsi una selfie
     app.get("/takePicture", function(request, response)
 	   {
